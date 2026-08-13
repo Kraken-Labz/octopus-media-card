@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+.coverage
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
+.python/
+.tools/
+htmlcov/
+
+# Frontend
+node_modules/
+.vite/
+frontend/node_modules/
+frontend/.pnpm-store/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+frontend/.vite/
+frontend/.playwright-browsers/
+*.tsbuildinfo
+dist/*-dev.zip
+
+# Local Codex and transient files
+.codex/
+*.log
+*.tmp
+*.temp
+*.bak
+*.bak-*
+*.bak.*
+screenshots/phase-3c21-friendly-device-lab.png
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+*.token
+*.tokens
+*.credentials
+*.credential
+*credentials*.json
+*token*.json
+*diagnostics*.json
+private-fixtures/
+
+# Editors and operating systems
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

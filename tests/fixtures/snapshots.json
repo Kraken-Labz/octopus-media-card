@@ -1,0 +1,170 @@
+{
+  "recent_empty": {
+    "mode": "recent",
+    "items": []
+  },
+  "recent_three_movies": {
+    "mode": "recent",
+    "items": [
+      {
+        "ref": "media_recent_01",
+        "type": "movie",
+        "title": "The Clockwork Island",
+        "subtitle": "A fictional feature",
+        "year": 2030,
+        "season": null,
+        "episode": null,
+        "episode_count": 0,
+        "added_at": "2030-04-05T10:00:00Z",
+        "rating": 8.1,
+        "poster_ref": "image_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "still_ref": null,
+        "backdrop_ref": null
+      },
+      {
+        "ref": "media_recent_02",
+        "type": "movie",
+        "title": "Lanterns Beyond Europa",
+        "subtitle": "A fictional feature",
+        "year": 2029,
+        "season": null,
+        "episode": null,
+        "episode_count": 0,
+        "added_at": "2030-04-05T09:00:00Z",
+        "rating": 7.4,
+        "poster_ref": "image_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+        "still_ref": null,
+        "backdrop_ref": null
+      },
+      {
+        "ref": "media_recent_03",
+        "type": "movie",
+        "title": "Paper Moons of Meridian",
+        "subtitle": "A fictional feature",
+        "year": 2028,
+        "season": null,
+        "episode": null,
+        "episode_count": 0,
+        "added_at": "2030-04-05T08:00:00Z",
+        "rating": null,
+        "poster_ref": null,
+        "still_ref": null,
+        "backdrop_ref": null
+      }
+    ]
+  },
+  "recent_grouped_episodes": {
+    "mode": "recent",
+    "items": [
+      {
+        "ref": "media_group_01",
+        "type": "series",
+        "title": "Harbor of Small Comets",
+        "subtitle": "Season 2, four new episodes",
+        "year": 2030,
+        "season": 2,
+        "episode": null,
+        "episode_count": 4,
+        "added_at": "2030-04-04T20:00:00Z",
+        "rating": null,
+        "poster_ref": "image_CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC",
+        "still_ref": null,
+        "backdrop_ref": null
+      }
+    ]
+  },
+  "upcoming_radarr_sonarr": {
+    "mode": "upcoming",
+    "items": [
+      {
+        "ref": "media_upcoming_01",
+        "source": "radarr",
+        "type": "movie",
+        "title": "Signal Garden",
+        "subtitle": "Digital release",
+        "release_at": "2030-04-06T03:00:00Z",
+        "monitored": true,
+        "downloaded": false,
+        "status": "announced",
+        "relative_day": "tomorrow",
+        "days_remaining": 1,
+        "poster_ref": "image_DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+      },
+      {
+        "ref": "media_upcoming_02",
+        "source": "sonarr",
+        "type": "episode",
+        "title": "Atlas of Quiet Stars",
+        "subtitle": "S01E07",
+        "release_at": "2030-04-07T01:30:00Z",
+        "monitored": true,
+        "downloaded": false,
+        "status": "continuing",
+        "relative_day": "future",
+        "days_remaining": 2,
+        "poster_ref": null
+      }
+    ]
+  },
+  "playing_empty": {
+    "mode": "playing",
+    "items": []
+  },
+  "playing_one": {
+    "mode": "playing",
+    "items": [
+      {
+        "ref": "session_fixture_01",
+        "device_name": "Test Display A",
+        "device_alias": "Fixture Room",
+        "user_name": "Demo Viewer",
+        "state": "playing",
+        "type": "movie",
+        "title": "The Clockwork Island",
+        "subtitle": "2030",
+        "position_seconds": 720,
+        "duration_seconds": 5400,
+        "progress": 13.33,
+        "poster_ref": "image_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "still_ref": null,
+        "backdrop_ref": null,
+        "updated_at": "2030-04-05T12:00:00Z"
+      }
+    ]
+  },
+  "playing_multiple": {
+    "mode": "playing",
+    "items": [
+      { "ref": "session_fixture_01", "device_name": "Test Display A", "state": "playing" },
+      { "ref": "session_fixture_02", "device_name": "Test Display B", "state": "paused" }
+    ]
+  },
+  "stale": {
+    "mode": "recent",
+    "stale": true,
+    "partial": false,
+    "items": [{ "ref": "media_recent_01", "title": "The Clockwork Island" }]
+  },
+  "partial_failure": {
+    "mode": "upcoming",
+    "stale": true,
+    "partial": true,
+    "availability": {
+      "sonarr": { "state": "offline", "last_success_at": "2030-04-05T11:30:00Z", "error": "timeout" }
+    },
+    "items": [{ "ref": "media_upcoming_01", "source": "radarr", "title": "Signal Garden" }]
+  },
+  "extremely_long_title": {
+    "mode": "recent",
+    "items": [
+      {
+        "ref": "media_long_01",
+        "title": "A Deliberately Extremely Long Fictional Title About Cartographers Mapping Every Quiet Constellation"
+      }
+    ]
+  },
+  "missing_image": {
+    "mode": "recent",
+    "items": [{ "ref": "media_missing_image_01", "title": "Posterless Fiction", "poster_ref": null, "still_ref": null, "backdrop_ref": null }]
+  }
+}

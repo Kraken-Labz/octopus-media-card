@@ -1,0 +1,6 @@
+homeassistant>=2026.7.0,<2026.8.0
+mypy>=1.16,<2
+pytest==9.0.3
+pytest-cov>=7,<8
+pytest-homeassistant-custom-component>=0.13.338,<0.14
+ruff>=0.12,<0.13

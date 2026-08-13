@@ -1,0 +1,14 @@
+{
+  "codeowners": ["@phgsbr"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "after_dependencies": ["calendar", "radarr", "sonarr"],
+  "documentation": "https://github.com/phgsbr/octopus-media-card",
+  "domain": "octopus_media",
+  "integration_type": "service",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/phgsbr/octopus-media-card/issues",
+  "name": "Octopus Media Card",
+  "requirements": [],
+  "version": "0.0.0"
+}

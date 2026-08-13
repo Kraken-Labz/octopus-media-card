@@ -1,0 +1,76 @@
+{
+  "title": "Octopus Media Card",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Jellyfin",
+        "description": "Enter a Jellyfin server URL and an API key. The key stays in the Home Assistant backend.",
+        "data": {
+          "url": "Jellyfin URL",
+          "api_key": "API key",
+          "verify_ssl": "Verify TLS certificate",
+          "timeout": "Request timeout (seconds)"
+        }
+      },
+      "select_user": {
+        "title": "Select Jellyfin user",
+        "description": "Choose the Home Assistant instance name and the Jellyfin user used for recent media.",
+        "data": {
+          "instance_name": "Instance name",
+          "jellyfin_user_id": "User"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect Jellyfin",
+        "description": "Update and validate the Jellyfin connection credentials.",
+        "data": {
+          "url": "Jellyfin URL",
+          "api_key": "API key",
+          "verify_ssl": "Verify TLS certificate",
+          "timeout": "Request timeout (seconds)"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Enter a valid HTTP or HTTPS URL and a non-empty API key.",
+      "invalid_auth": "Jellyfin rejected the API key or its permissions.",
+      "cannot_connect": "Home Assistant could not reach Jellyfin.",
+      "timeout": "Jellyfin did not respond within the configured timeout.",
+      "invalid_response": "Jellyfin returned an invalid response.",
+      "unexpected_http": "Jellyfin returned an unexpected HTTP status.",
+      "no_users": "No enabled Jellyfin users are available.",
+      "wrong_server": "The credentials belong to a different Jellyfin installation.",
+      "user_not_found": "The configured Jellyfin user is no longer available.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This Jellyfin installation is already configured.",
+      "reauth_successful": "Jellyfin credentials were updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Jellyfin options",
+        "description": "Configure Jellyfin behavior and select the existing Radarr and Sonarr integrations used by Upcoming.",
+        "data": {
+          "instance_name": "Instance name",
+          "playing_interval": "Playing refresh interval (seconds)",
+          "recent_interval": "Recent refresh interval (seconds)",
+          "recent_count": "Maximum recent items",
+          "group_episodes": "Group episodes by series",
+          "language": "Language",
+          "date_format": "Date format",
+          "device_aliases": "Device ID/name to alias mapping",
+          "radarr_config_entry_id": "Existing Radarr integration",
+          "sonarr_config_entry_id": "Existing Sonarr integration"
+        }
+      }
+    },
+    "error": {
+      "not_found": "The selected integration was not found.",
+      "not_loaded": "The selected integration is not loaded.",
+      "action_unavailable": "The required public Home Assistant action is unavailable."
+    }
+  }
+}

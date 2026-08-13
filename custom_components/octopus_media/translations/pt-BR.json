@@ -1,0 +1,76 @@
+{
+  "title": "Octopus Media Card",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Conectar ao Jellyfin",
+        "description": "Informe a URL do Jellyfin e uma API key. A chave permanece no backend do Home Assistant.",
+        "data": {
+          "url": "URL do Jellyfin",
+          "api_key": "API key",
+          "verify_ssl": "Verificar certificado TLS",
+          "timeout": "Timeout da requisição (segundos)"
+        }
+      },
+      "select_user": {
+        "title": "Selecionar usuário Jellyfin",
+        "description": "Escolha o nome da instância no Home Assistant e o usuário Jellyfin usado pelas mídias recentes.",
+        "data": {
+          "instance_name": "Nome da instância",
+          "jellyfin_user_id": "Usuário"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconectar ao Jellyfin",
+        "description": "Atualize e valide as credenciais da conexão Jellyfin.",
+        "data": {
+          "url": "URL do Jellyfin",
+          "api_key": "API key",
+          "verify_ssl": "Verificar certificado TLS",
+          "timeout": "Timeout da requisição (segundos)"
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Informe uma URL HTTP ou HTTPS válida e uma API key não vazia.",
+      "invalid_auth": "O Jellyfin rejeitou a API key ou suas permissões.",
+      "cannot_connect": "O Home Assistant não conseguiu alcançar o Jellyfin.",
+      "timeout": "O Jellyfin não respondeu dentro do timeout configurado.",
+      "invalid_response": "O Jellyfin retornou uma resposta inválida.",
+      "unexpected_http": "O Jellyfin retornou um status HTTP inesperado.",
+      "no_users": "Nenhum usuário Jellyfin habilitado está disponível.",
+      "wrong_server": "As credenciais pertencem a outra instalação Jellyfin.",
+      "user_not_found": "O usuário Jellyfin configurado não está mais disponível.",
+      "unknown": "Ocorreu um erro inesperado."
+    },
+    "abort": {
+      "already_configured": "Esta instalação Jellyfin já está configurada.",
+      "reauth_successful": "As credenciais Jellyfin foram atualizadas."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções do Jellyfin",
+        "description": "Configure o comportamento do Jellyfin e selecione as integrações existentes do Radarr e Sonarr usadas pelo Upcoming.",
+        "data": {
+          "instance_name": "Nome da instância",
+          "playing_interval": "Intervalo de reprodução (segundos)",
+          "recent_interval": "Intervalo de recentes (segundos)",
+          "recent_count": "Máximo de itens recentes",
+          "group_episodes": "Agrupar episódios por série",
+          "language": "Idioma",
+          "date_format": "Formato de data",
+          "device_aliases": "Mapa de ID/nome do dispositivo para alias",
+          "radarr_config_entry_id": "Integração Radarr existente",
+          "sonarr_config_entry_id": "Integração Sonarr existente"
+        }
+      }
+    },
+    "error": {
+      "not_found": "A integração selecionada não foi encontrada.",
+      "not_loaded": "A integração selecionada não está carregada.",
+      "action_unavailable": "A ação pública necessária do Home Assistant não está disponível."
+    }
+  }
+}
