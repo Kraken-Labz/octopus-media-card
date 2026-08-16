@@ -21,6 +21,8 @@ export class MediaStrip extends LitElement {
   @property({ type: Boolean }) showRatings = true;
   @property({ type: Boolean }) showBadges = true;
   @property({ type: Boolean }) showArrows = true;
+  @property({ type: Boolean }) autoScroll = false;
+  @property({ type: Number }) autoScrollInterval = 6;
   @property({ type: String }) variant: "recent" | "upcoming" = "recent";
   @property({ type: Boolean }) partial = false;
   @property({ type: Boolean }) stale = false;
@@ -31,12 +33,22 @@ export class MediaStrip extends LitElement {
   private itemSignature = "";
   private resizeObserver?: ResizeObserver;
   private scrollFrame?: number;
+  private autoScrollTimer?: number;
+  private autoScrollPaused = false;
+
+  private reducedMotion(): boolean {
+    return (
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
 
   override disconnectedCallback(): void {
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
     if (this.scrollFrame !== undefined) cancelAnimationFrame(this.scrollFrame);
     this.scrollFrame = undefined;
+    this.stopAutoScroll();
     super.disconnectedCallback();
   }
 
@@ -47,12 +59,14 @@ export class MediaStrip extends LitElement {
       this.resizeObserver.observe(track);
     }
     this.resetForItems();
+    this.reconcileAutoScroll();
   }
 
   protected override updated(): void {
     const signature = this.items.map((item) => item.ref).join("|");
     if (signature !== this.itemSignature) this.resetForItems(signature);
     queueMicrotask(() => this.updateNavigation());
+    this.reconcileAutoScroll();
   }
 
   protected override render() {
@@ -69,6 +83,12 @@ export class MediaStrip extends LitElement {
         @keydown=${this.onKeyDown}
         @scroll=${this.onScroll}
         @wheel=${this.onWheel}
+        @pointerenter=${this.onPointerEnterTrack}
+        @pointerleave=${this.onPointerLeaveTrack}
+        @pointerdown=${this.onPointerDownTrack}
+        @pointerup=${this.onPointerUpTrack}
+        @focusin=${this.onFocusInTrack}
+        @focusout=${this.onFocusOutTrack}
       >
         ${this.items.map(
           (item) => html`
@@ -190,11 +210,22 @@ export class MediaStrip extends LitElement {
   };
 
   private readonly onWheel = (event: WheelEvent): void => {
+    this.pauseAutoScroll();
     const track = this.track();
     if (!track || Math.abs(event.deltaX) >= Math.abs(event.deltaY) || event.deltaY === 0) return;
     if (track.scrollWidth <= track.clientWidth) return;
     event.preventDefault();
     track.scrollLeft += event.deltaY;
+  };
+
+  private readonly onPointerEnterTrack = (): void => this.pauseAutoScroll();
+  private readonly onPointerLeaveTrack = (): void => this.resumeAutoScroll();
+  private readonly onPointerDownTrack = (): void => this.pauseAutoScroll();
+  private readonly onPointerUpTrack = (): void => this.resumeAutoScroll();
+  private readonly onFocusInTrack = (): void => this.pauseAutoScroll();
+  private readonly onFocusOutTrack = (event: FocusEvent): void => {
+    const next = event.relatedTarget;
+    if (!(next instanceof Node) || !this.track()?.contains(next)) this.resumeAutoScroll();
   };
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
@@ -214,9 +245,51 @@ export class MediaStrip extends LitElement {
     const track = this.track();
     if (!track) return;
     track.scrollBy({
-      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+      behavior: this.reducedMotion() ? "auto" : "smooth",
       left: direction * track.clientWidth * 0.82,
     });
+  }
+
+  private reconcileAutoScroll(): void {
+    this.stopAutoScroll();
+    if (!this.autoScroll || this.items.length < 2 || this.reducedMotion()) {
+      return;
+    }
+    const track = this.track();
+    if (!track || track.scrollWidth <= track.clientWidth + 2 || this.autoScrollPaused) return;
+    this.autoScrollTimer = window.setInterval(
+      () => this.advanceAutoScroll(),
+      Math.max(2, this.autoScrollInterval) * 1000,
+    );
+  }
+
+  private stopAutoScroll(): void {
+    if (this.autoScrollTimer !== undefined) window.clearInterval(this.autoScrollTimer);
+    this.autoScrollTimer = undefined;
+  }
+
+  private pauseAutoScroll(): void {
+    this.autoScrollPaused = true;
+    this.stopAutoScroll();
+  }
+
+  private resumeAutoScroll(): void {
+    if (!this.autoScrollPaused) return;
+    this.autoScrollPaused = false;
+    this.reconcileAutoScroll();
+  }
+
+  private advanceAutoScroll(): void {
+    const track = this.track();
+    if (!track || track.scrollWidth <= track.clientWidth + 2) {
+      this.stopAutoScroll();
+      return;
+    }
+    const first = this.renderRoot.querySelector<HTMLElement>(".poster");
+    if (!first) return;
+    const step = first.offsetWidth + this.gap;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - step - 2;
+    track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: "smooth" });
   }
 
   private announceFocus(item: MediaItem): void {
@@ -411,6 +484,10 @@ export class MediaStrip extends LitElement {
       position: absolute;
       right: 0;
     }
+    :host([variant="upcoming"]) .copy-gradient {
+      height: 56%;
+      padding: 24px 7px 7px;
+    }
     .title {
       color: rgb(242 244 248 / 88%);
       display: -webkit-box;
@@ -423,6 +500,32 @@ export class MediaStrip extends LitElement {
       overflow: hidden;
       overflow-wrap: anywhere;
     }
+    :host([data-appearance="light"]) .title,
+    :host([data-appearance="light"]) .poster:hover .title,
+    :host([data-appearance="light"]) .poster:focus-visible .title,
+    :host([data-appearance="light"]) .poster[data-focused="true"] .title {
+      color: var(--octopus-media-title, #172832);
+    }
+    :host([data-appearance="light"]) .metadata,
+    :host([data-appearance="light"]) .episode-subtitle {
+      color: var(--octopus-media-muted, #5d7179);
+    }
+    @media (prefers-color-scheme: light) {
+      :host([data-appearance="auto"]) .title,
+      :host([data-appearance="auto"]) .poster:hover .title,
+      :host([data-appearance="auto"]) .poster:focus-visible .title,
+      :host([data-appearance="auto"]) .poster[data-focused="true"] .title {
+        color: var(--octopus-media-title, #172832);
+      }
+      :host([data-appearance="auto"]) .metadata,
+      :host([data-appearance="auto"]) .episode-subtitle {
+        color: var(--octopus-media-muted, #5d7179);
+      }
+    }
+    :host([variant="upcoming"]) .title {
+      font-size: 11px;
+      line-height: 1.1;
+    }
     .metadata {
       color: rgb(203 213 226 / 66%);
       font-size: 8.5px;
@@ -431,6 +534,10 @@ export class MediaStrip extends LitElement {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+    :host([variant="upcoming"]) .metadata {
+      color: rgb(210 220 232 / 78%);
+      font-size: 9px;
     }
     :host([wide]) .metadata {
       color: rgb(111 220 231 / 82%);
@@ -483,6 +590,19 @@ export class MediaStrip extends LitElement {
         0 15px 29px rgb(0 0 0 / 52%),
         0 0 0 1px rgb(97 211 226 / 12%),
         0 0 17px color-mix(in srgb, var(--octopus-media-accent, #aa75f2) 28%, transparent);
+    }
+    :host([variant="upcoming"]) .frame,
+    :host([variant="upcoming"]) .poster:hover .frame,
+    :host([variant="upcoming"]) .poster:focus-visible .frame,
+    :host([variant="upcoming"]) .poster[data-focused="true"] .frame {
+      border-color: transparent;
+      box-shadow: 0 8px 18px rgb(0 0 0 / 34%);
+    }
+    :host([variant="upcoming"]) .poster:hover,
+    :host([variant="upcoming"]) .poster:focus-visible,
+    :host([variant="upcoming"]) .poster[data-focused="true"] {
+      filter: brightness(1.03);
+      transform: translateY(-2px) scale(1.01);
     }
     .poster:hover .title,
     .poster:focus-visible .title,

@@ -66,6 +66,40 @@ export const cardStyles = css`
     background: linear-gradient(155deg, #101a27, #080d15 76%);
     box-shadow: 0 14px 34px rgb(0 0 0 / 22%);
   }
+  .card[data-appearance="light"] {
+    --octopus-bg: #eef4f5;
+    --octopus-surface: rgb(255 255 255 / 86%);
+    --octopus-surface-elevated: #ffffff;
+    --octopus-text: #172832;
+    --octopus-muted: #5d7179;
+    --octopus-border: rgb(43 104 111 / 18%);
+    background:
+      radial-gradient(circle at 14% -24%, rgb(62 190 193 / 18%), transparent 42%),
+      radial-gradient(circle at 92% 112%, rgb(139 92 246 / 10%), transparent 46%),
+      linear-gradient(145deg, #ffffff 0%, var(--octopus-bg) 72%);
+    color: var(--octopus-text);
+    box-shadow:
+      0 14px 34px rgb(26 73 81 / 14%),
+      inset 0 1px rgb(255 255 255 / 80%);
+  }
+  @media (prefers-color-scheme: light) {
+    .card[data-appearance="auto"] {
+      --octopus-bg: #eef4f5;
+      --octopus-surface: rgb(255 255 255 / 86%);
+      --octopus-surface-elevated: #ffffff;
+      --octopus-text: #172832;
+      --octopus-muted: #5d7179;
+      --octopus-border: rgb(43 104 111 / 18%);
+      background:
+        radial-gradient(circle at 14% -24%, rgb(62 190 193 / 18%), transparent 42%),
+        radial-gradient(circle at 92% 112%, rgb(139 92 246 / 10%), transparent 46%),
+        linear-gradient(145deg, #ffffff 0%, var(--octopus-bg) 72%);
+      color: var(--octopus-text);
+      box-shadow:
+        0 14px 34px rgb(26 73 81 / 14%),
+        inset 0 1px rgb(255 255 255 / 80%);
+    }
+  }
   .card[data-concept="gallery-clean"]::after {
     opacity: 0.18;
   }
@@ -189,11 +223,11 @@ export const cardStyles = css`
   .card[data-mode="upcoming"] {
     border: 0;
     box-shadow: none;
-    grid-template-rows: 22px 122px;
-    min-height: 160px;
+    grid-template-rows: 22px minmax(0, 1fr);
+    min-height: 190px;
   }
   .card[data-mode="upcoming"].fixed {
-    height: 160px;
+    height: var(--octopus-card-height);
   }
   .card[data-mode="upcoming"] .heading {
     background: transparent;

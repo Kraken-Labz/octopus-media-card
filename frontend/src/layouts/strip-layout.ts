@@ -18,6 +18,7 @@ export const renderStripLayout: LayoutRenderer = ({
     <octopus-media-strip
       class="layout strip"
       data-layout="strip"
+      data-appearance=${config.appearance}
       .hass=${hass}
       .items=${items}
       .entryId=${entryId}
@@ -31,6 +32,8 @@ export const renderStripLayout: LayoutRenderer = ({
       .showRatings=${config.show_ratings}
       .showBadges=${config.show_badges}
       .showArrows=${config.show_arrows}
+      .autoScroll=${config.auto_scroll}
+      .autoScrollInterval=${config.auto_scroll_interval}
     ></octopus-media-strip>
   `;
 };

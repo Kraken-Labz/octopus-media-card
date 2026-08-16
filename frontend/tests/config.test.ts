@@ -17,6 +17,19 @@ describe("normalizeConfig", () => {
     expect(config.show_user).toBe(true);
     expect(config.show_progress).toBe(true);
     expect(config.show_time).toBe(true);
+    expect(config.appearance).toBe("auto");
+    expect(config.auto_scroll).toBe(false);
+    expect(config.auto_scroll_interval).toBe(6);
+  });
+
+  it.each(["dark", "light", "auto"] as const)("accepts appearance %s", (appearance) => {
+    expect(
+      normalizeConfig({
+        type: "custom:octopus-media-card",
+        entry_id: "fixture_entry_001",
+        appearance,
+      }).appearance,
+    ).toBe(appearance);
   });
 
   it("accepts the playing hero YAML contract", () => {

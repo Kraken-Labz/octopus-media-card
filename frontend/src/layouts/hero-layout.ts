@@ -30,6 +30,7 @@ export const renderHeroLayout: LayoutRenderer = (context) => {
     return html`
       <octopus-playing-hero
         .config=${config}
+        data-appearance=${config.appearance}
         .entryId=${entryId}
         .focusedRef=${focusedItemRef}
         .hass=${hass}

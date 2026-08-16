@@ -1008,6 +1008,46 @@ export class PlayingHero extends LitElement {
       line-height: 1.3;
       margin: 0;
     }
+    :host([data-appearance="light"]) .playing-hero,
+    :host([data-appearance="light"]) .playing-state {
+      color: #172832;
+      background:
+        radial-gradient(circle at 11% 32%, rgb(21 163 177 / 16%), transparent 36%),
+        radial-gradient(circle at 88% 40%, rgb(121 58 191 / 12%), transparent 42%),
+        linear-gradient(108deg, #e8f3f3, #f4f1f7 50%, #eee7f4);
+      border-color: rgb(43 104 111 / 20%);
+    }
+    :host([data-appearance="light"]) h3,
+    :host([data-appearance="light"]) .playing-state strong {
+      color: #172832;
+    }
+    :host([data-appearance="light"]) .editorial-meta,
+    :host([data-appearance="light"]) .session-meta,
+    :host([data-appearance="light"]) .session-meta span,
+    :host([data-appearance="light"]) .playing-state p {
+      color: #5d7179;
+    }
+    @media (prefers-color-scheme: light) {
+      :host([data-appearance="auto"]) .playing-hero,
+      :host([data-appearance="auto"]) .playing-state {
+        color: #172832;
+        background:
+          radial-gradient(circle at 11% 32%, rgb(21 163 177 / 16%), transparent 36%),
+          radial-gradient(circle at 88% 40%, rgb(121 58 191 / 12%), transparent 42%),
+          linear-gradient(108deg, #e8f3f3, #f4f1f7 50%, #eee7f4);
+        border-color: rgb(43 104 111 / 20%);
+      }
+      :host([data-appearance="auto"]) h3,
+      :host([data-appearance="auto"]) .playing-state strong {
+        color: #172832;
+      }
+      :host([data-appearance="auto"]) .editorial-meta,
+      :host([data-appearance="auto"]) .session-meta,
+      :host([data-appearance="auto"]) .session-meta span,
+      :host([data-appearance="auto"]) .playing-state p {
+        color: #5d7179;
+      }
+    }
     @container (min-width: 560px) {
       .session-content {
         gap: 24px;

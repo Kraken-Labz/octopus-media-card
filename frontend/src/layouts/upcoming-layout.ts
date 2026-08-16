@@ -19,6 +19,7 @@ export const renderUpcomingLayout: LayoutRenderer = ({
     <octopus-media-strip
       class="layout upcoming"
       data-layout="upcoming"
+      data-appearance=${config.appearance}
       variant="upcoming"
       .partial=${partial ?? false}
       .stale=${stale ?? false}
@@ -34,6 +35,8 @@ export const renderUpcomingLayout: LayoutRenderer = ({
       .showRatings=${false}
       .showBadges=${config.show_badges}
       .showArrows=${config.show_arrows}
+      .autoScroll=${config.auto_scroll}
+      .autoScrollInterval=${config.auto_scroll_interval}
     ></octopus-media-strip>
   `;
 };

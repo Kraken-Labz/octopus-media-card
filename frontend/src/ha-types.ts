@@ -14,6 +14,7 @@ export interface HomeAssistant {
   };
   connection: HomeAssistantConnection;
   language: string;
+  themes?: { darkMode?: boolean };
 }
 
 export interface LovelaceCardConfig {

@@ -16,6 +16,7 @@ export type CardLayout = (typeof LAYOUTS)[number];
 export type CardTheme = (typeof THEMES)[number];
 export type VisualConcept = (typeof VISUAL_CONCEPTS)[number];
 export type CardHeight = "auto" | number;
+export type CardAppearance = "auto" | "dark" | "light";
 
 export interface OctopusMediaCardConfig extends LovelaceCardConfig {
   entry_id: string;
@@ -45,6 +46,9 @@ export interface OctopusMediaCardConfig extends LovelaceCardConfig {
   show_progress: boolean;
   show_time: boolean;
   thumbnail_size: "small" | "medium" | "large";
+  appearance: CardAppearance;
+  auto_scroll: boolean;
+  auto_scroll_interval: number;
 }
 
 export const SCAFFOLD_ENTRY_ID = "select_entry";
@@ -76,6 +80,9 @@ export const DEFAULT_CONFIG: OctopusMediaCardConfig = {
   show_progress: true,
   show_time: true,
   thumbnail_size: "medium",
+  appearance: "auto",
+  auto_scroll: false,
+  auto_scroll_interval: 6,
 };
 
 const isOneOf = <T extends string>(value: unknown, values: readonly T[]): value is T =>
@@ -115,6 +122,12 @@ export function normalizeConfig(input: unknown): OctopusMediaCardConfig {
     throw new Error("Invalid visual concept");
   }
   if (
+    value.appearance !== undefined &&
+    !isOneOf(value.appearance, ["auto", "dark", "light"] as const)
+  ) {
+    throw new Error("Invalid appearance");
+  }
+  if (
     value.title_position !== undefined &&
     !isOneOf(value.title_position, ["overlay", "below"] as const)
   ) {
@@ -142,6 +155,14 @@ export function normalizeConfig(input: unknown): OctopusMediaCardConfig {
     sections: sections.length > 0 ? [...sections] : [...DEFAULT_CONFIG.sections],
     item_count: boundedInteger(value.item_count, DEFAULT_CONFIG.item_count, 1, 50),
     cycle_interval: boundedInteger(value.cycle_interval, DEFAULT_CONFIG.cycle_interval, 5, 3600),
+    appearance: value.appearance ?? DEFAULT_CONFIG.appearance,
+    auto_scroll: value.auto_scroll === true,
+    auto_scroll_interval: boundedInteger(
+      value.auto_scroll_interval,
+      DEFAULT_CONFIG.auto_scroll_interval,
+      2,
+      3600,
+    ),
     posters_visible:
       value.posters_visible === undefined || value.posters_visible === "auto"
         ? "auto"

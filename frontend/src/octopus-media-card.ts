@@ -110,6 +110,7 @@ export class OctopusMediaCard extends LitElement {
     const config = this.config ?? DEFAULT_CONFIG;
     const language = this.hassValue?.language;
     const mode = this.effectiveMode(config);
+    const effectiveConfig = { ...config, appearance: this.resolveAppearance(config.appearance) };
     const title =
       config.title ??
       (mode === "upcoming" ? this.t("upcoming", language).toUpperCase() : this.t(mode, language));
@@ -130,6 +131,7 @@ export class OctopusMediaCard extends LitElement {
       <article
         class=${`card ${fixedHeight ? "fixed" : ""}`}
         data-theme=${config.theme}
+        data-appearance=${effectiveConfig.appearance}
         data-concept=${config.visual_concept}
         data-title-position=${config.title_position}
         data-header-alignment=${config.header_alignment}
@@ -162,7 +164,7 @@ export class OctopusMediaCard extends LitElement {
               </header>`
         }
         <section class="content">
-          ${this.renderContent(config, mode, language, resolvedLayout, effectiveHeight)}
+          ${this.renderContent(effectiveConfig, mode, language, resolvedLayout, effectiveHeight)}
         </section>
       </article>
     `;
@@ -327,6 +329,11 @@ export class OctopusMediaCard extends LitElement {
 
   private effectiveMode(config: OctopusMediaCardConfig): Exclude<CardMode, "carousel"> {
     return config.mode === "carousel" ? (config.sections[0] ?? "recent") : config.mode;
+  }
+
+  private resolveAppearance(appearance: OctopusMediaCardConfig["appearance"]): "dark" | "light" {
+    if (appearance !== "auto") return appearance;
+    return this.hassValue?.themes?.darkMode === false ? "light" : "dark";
   }
 
   private resolveLayout(
