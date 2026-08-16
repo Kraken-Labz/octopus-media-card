@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { calculateStripGeometry } from "../src/layouts/strip-geometry";
+import {
+  calculateCanonicalStripGeometry,
+  calculateStripGeometry,
+} from "../src/layouts/strip-geometry";
 
 describe("official strip geometry", () => {
   it.each([
@@ -35,5 +38,16 @@ describe("official strip geometry", () => {
     expect(geometry.visibleFullItems).toBe(itemCount);
     expect(geometry.peekWidth).toBe(0);
     expect(geometry.posterWidth / geometry.posterHeight).toBeCloseTo(2 / 3, 8);
+  });
+
+  it("keeps Recent and Upcoming on the same canonical density despite different item counts", () => {
+    const recent = calculateCanonicalStripGeometry(500, 260, "auto", 12);
+    const upcoming = calculateCanonicalStripGeometry(500, 260, "auto", 3);
+
+    expect(upcoming.posterWidth).toBeCloseTo(recent.posterWidth, 8);
+    expect(upcoming.posterHeight).toBeCloseTo(recent.posterHeight, 8);
+    expect(upcoming.gap).toBe(recent.gap);
+    expect(upcoming.visibleFullItems).toBe(3);
+    expect(upcoming.peekWidth).toBe(0);
   });
 });

@@ -183,6 +183,13 @@ export class MediaImage extends LitElement {
     img[data-state="loading"] {
       opacity: 0.72;
     }
+    :host([data-appearance="light"]) img,
+    :host([data-appearance="light"]) img[data-state="idle"],
+    :host([data-appearance="light"]) img[data-state="loading"] {
+      filter: none;
+      mix-blend-mode: normal;
+      opacity: 1;
+    }
     @media (prefers-reduced-motion: reduce) {
       img {
         transition: none;

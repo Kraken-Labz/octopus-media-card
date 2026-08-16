@@ -119,6 +119,7 @@ export class OctopusMediaCard extends LitElement {
     const effectiveHeight = fixedHeight ? configuredHeight : this.containerHeight;
     const resolvedLayout = this.resolveLayout(config, mode, effectiveHeight);
     const officialStrip = resolvedLayout === "strip";
+    const headerTitle = officialStrip ? (mode === "recent" ? "RECENT" : "UPCOMING") : title;
     const officialPlayingHero = mode === "playing" && resolvedLayout === "hero";
     const style = [
       fixedHeight ? `--octopus-card-height:${String(configuredHeight)}px` : "",
@@ -149,11 +150,11 @@ export class OctopusMediaCard extends LitElement {
             ? nothing
             : html`<header>
                 <span class="heading">
-                  <ha-icon icon="mdi:octopus" aria-hidden="true"></ha-icon>
-                  <h2>${title}</h2>
+                  ${officialStrip ? nothing : html`<ha-icon icon="mdi:octopus" aria-hidden="true"></ha-icon>`}
+                  <h2>${headerTitle}</h2>
                 </span>
                 ${
-                  this.snapshot && mode !== "upcoming"
+                  this.snapshot && officialStrip
                     ? html`<span
                         class="context"
                         aria-label=${`${String(this.itemsForMode(mode).length)} itens`}

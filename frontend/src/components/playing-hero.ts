@@ -82,6 +82,7 @@ export class PlayingHero extends LitElement {
   @property({ type: String }) entryId = "";
   @property({ type: String }) focusedRef?: string;
   @property({ type: String }) language?: string;
+  @property({ type: String, attribute: "data-appearance" }) appearance: "dark" | "light" = "dark";
   @property({ type: String }) heroState: PlayingHeroState = "ready";
   @property({ type: Boolean }) stale = false;
   @property({ type: Boolean }) partial = false;
@@ -239,6 +240,7 @@ export class PlayingHero extends LitElement {
           <div class="poster-shell">
             <octopus-media-image
               class="poster-art"
+              data-appearance=${this.appearance}
               .hass=${this.hass}
               .entryId=${this.entryId}
               .imageRef=${item.poster_ref ?? undefined}
@@ -1017,6 +1019,26 @@ export class PlayingHero extends LitElement {
         linear-gradient(108deg, #e8f3f3, #f4f1f7 50%, #eee7f4);
       border-color: rgb(43 104 111 / 20%);
     }
+    :host([data-appearance="light"]) .session {
+      background: linear-gradient(112deg, rgb(250 255 255 / 80%), rgb(234 243 246 / 72%));
+    }
+    :host([data-appearance="light"]) .backdrop {
+      display: none;
+    }
+    :host([data-appearance="light"]) .color-wash {
+      background:
+        linear-gradient(
+          90deg,
+          rgb(239 252 252 / 90%),
+          rgb(244 248 252 / 78%) 42%,
+          rgb(244 238 252 / 72%)
+        ),
+        radial-gradient(circle at 22% 54%, rgb(36 198 199 / 18%), transparent 34%),
+        radial-gradient(circle at 84% 38%, rgb(142 74 212 / 14%), transparent 40%);
+    }
+    :host([data-appearance="light"]) .vignette {
+      box-shadow: inset 0 0 48px 8px rgb(38 95 102 / 10%);
+    }
     :host([data-appearance="light"]) h3,
     :host([data-appearance="light"]) .playing-state strong {
       color: #172832;
@@ -1026,6 +1048,31 @@ export class PlayingHero extends LitElement {
     :host([data-appearance="light"]) .session-meta span,
     :host([data-appearance="light"]) .playing-state p {
       color: #5d7179;
+    }
+    :host([data-appearance="light"]) .playback-eyebrow,
+    :host([data-appearance="light"]) .session-meta ha-icon,
+    :host([data-appearance="light"]) .percentage {
+      color: #147b80;
+    }
+    :host([data-appearance="light"]) .media-kind,
+    :host([data-appearance="light"]) .technical-chips span,
+    :host([data-appearance="light"]) .session-meta span,
+    :host([data-appearance="light"]) .session-arrows button {
+      background: rgb(255 255 255 / 62%);
+      border-color: rgb(30 139 145 / 18%);
+      color: #45616a;
+    }
+    :host([data-appearance="light"]) .editorial-meta,
+    :host([data-appearance="light"]) .editorial-meta.episode,
+    :host([data-appearance="light"]) .editorial-line,
+    :host([data-appearance="light"]) .session-meta,
+    :host([data-appearance="light"]) .times,
+    :host([data-appearance="light"]) .progress-summary {
+      color: #4a646d;
+    }
+    :host([data-appearance="light"]) .progress-track {
+      background: rgb(35 100 109 / 14%);
+      border-color: rgb(30 139 145 / 16%);
     }
     @media (prefers-color-scheme: light) {
       :host([data-appearance="auto"]) .playing-hero,

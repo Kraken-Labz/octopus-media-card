@@ -18,27 +18,28 @@ export function calculateStripGeometry(
   containerHeight: number,
   postersVisible: "auto" | number = "auto",
   itemCount = Number.POSITIVE_INFINITY,
+  densityItemCount = itemCount,
 ): StripGeometry {
   const narrow = containerWidth < 560;
   const horizontalChrome = narrow ? NARROW_HORIZONTAL_CHROME : WIDE_HORIZONTAL_CHROME;
   const usefulWidth = Math.max(1, containerWidth - horizontalChrome);
   const defaultFullItems = narrow ? 3 : 5;
   const requestedFullItems = postersVisible === "auto" ? defaultFullItems : postersVisible;
-  let targetFullItems = Math.max(1, Math.min(requestedFullItems, Math.max(1, itemCount)));
+  let targetFullItems = Math.max(1, Math.min(requestedFullItems, Math.max(1, densityItemCount)));
   const gap = narrow ? 10 : 12;
   const availablePosterHeight = Math.max(1, containerHeight - FOCUS_CLEARANCE_AND_HEADER);
   const heightForTarget = (fullItems: number): number => {
-    const hasNextItem = itemCount > fullItems;
+    const hasNextItem = densityItemCount > fullItems;
     const peekFraction = hasNextItem ? TARGET_PEEK_FRACTION : 0;
     const gaps = hasNextItem ? fullItems : Math.max(0, fullItems - 1);
     return Math.max(1, ((usefulWidth - gaps * gap) / (fullItems + peekFraction)) * 1.5);
   };
   let heightForTargetDensity = heightForTarget(targetFullItems);
-  const defaultTarget = Math.min(defaultFullItems, Math.max(1, itemCount));
+  const defaultTarget = Math.min(defaultFullItems, Math.max(1, densityItemCount));
   if (
     targetFullItems < defaultTarget &&
     heightForTargetDensity > availablePosterHeight &&
-    itemCount > targetFullItems
+    densityItemCount > targetFullItems
   ) {
     targetFullItems = defaultTarget;
     heightForTargetDensity = heightForTarget(targetFullItems);
@@ -63,4 +64,23 @@ export function calculateStripGeometry(
     usefulWidth,
     visibleFullItems,
   };
+}
+
+/**
+ * Keeps strip card density stable between media sources while the real item
+ * count still controls overflow, navigation, and the absence of a fake peek.
+ */
+export function calculateCanonicalStripGeometry(
+  containerWidth: number,
+  containerHeight: number,
+  postersVisible: "auto" | number = "auto",
+  itemCount = Number.POSITIVE_INFINITY,
+): StripGeometry {
+  return calculateStripGeometry(
+    containerWidth,
+    containerHeight,
+    postersVisible,
+    itemCount,
+    Number.POSITIVE_INFINITY,
+  );
 }

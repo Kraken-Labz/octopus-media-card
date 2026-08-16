@@ -125,15 +125,26 @@ def normalize_sonarr(
     for raw in raw_episodes:
         if raw.get("monitored") is False:
             continue
-        event_date = _parse_date(raw.get("airDateUtc") or raw.get("airDate"), timezone)
+        event_date = _parse_date(
+            raw.get("airDateUtc")
+            or raw.get("airDate")
+            or raw.get("air_date_utc")
+            or raw.get("air_date"),
+            timezone,
+        )
         if event_date is None or event_date <= reference:
             continue
         raw_series = raw.get("series")
         series: dict[str, Any] = raw_series if isinstance(raw_series, dict) else {}
         if series.get("monitored") is False:
             continue
-        series_id = _string(raw.get("seriesId")) or _integer_string(raw.get("seriesId"))
-        title = _string(series.get("title")) or _string(raw.get("seriesTitle"))
+        series_id_value = raw.get("seriesId") or raw.get("series_id")
+        series_id = _string(series_id_value) or _integer_string(series_id_value)
+        title = (
+            _string(series.get("title"))
+            or _string(raw.get("seriesTitle"))
+            or _string(raw.get("series_title"))
+        )
         episode_title = _string(raw.get("title"))
         if series_id is None or title is None or episode_title is None:
             partial = True
@@ -148,14 +159,14 @@ def normalize_sonarr(
             subtitle=episode_title,
             release_at=_iso(event_date),
             monitored=True,
-            downloaded=bool(raw.get("hasFile")),
+            downloaded=bool(raw.get("hasFile", raw.get("has_file"))),
             status=_string(raw.get("status")),
             relative_day=RelativeDay.FUTURE,
             days_remaining=max(0, (event_date.date() - reference.date()).days),
             poster_ref=poster_ref,
             date_kind="air",
-            season_number=_integer(raw.get("seasonNumber")),
-            episode_number=_integer(raw.get("episodeNumber")),
+            season_number=_integer(raw.get("seasonNumber", raw.get("season_number"))),
+            episode_number=_integer(raw.get("episodeNumber", raw.get("episode_number"))),
             episode_title=episode_title,
             image=(
                 {"source": "sonarr", "item_id": series_id, "kind": "poster"}

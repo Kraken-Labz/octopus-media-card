@@ -99,6 +99,35 @@ def test_sonarr_series_poster_uses_same_opaque_reference_path() -> None:
     assert item.image == {"source": "sonarr", "item_id": "7", "kind": "poster"}
 
 
+def test_sonarr_home_assistant_action_shape_is_normalized() -> None:
+    """Accept the snake_case episode mapping returned by sonarr.get_upcoming."""
+    batch = normalize_sonarr(
+        [
+            {
+                "id": 1101,
+                "series_id": 7,
+                "season_number": 4,
+                "episode_number": 3,
+                "title": "Episode title",
+                "air_date_utc": "2030-01-12T01:00:00Z",
+                "has_file": False,
+                "monitored": True,
+                "series_title": "Series A",
+                "images": {"poster": "https://images.example.test/series.jpg"},
+            }
+        ],
+        now=NOW,
+    )
+
+    assert len(batch.items) == 1
+    item = batch.items[0]
+    assert item.ref == "sonarr:1101"
+    assert item.title == "Series A"
+    assert item.season_number == 4
+    assert item.episode_number == 3
+    assert item.release_at == "2030-01-12T01:00:00Z"
+
+
 def test_radarr_requires_exact_summary_key_without_fallback() -> None:
     batch = normalize_radarr(
         {"Movie": {"id": 1, "title": "Movie", "monitored": True}},

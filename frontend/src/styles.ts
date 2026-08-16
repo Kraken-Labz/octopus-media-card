@@ -18,6 +18,10 @@ export const cardStyles = css`
     --octopus-media-title: var(--octopus-text);
     --octopus-media-text: var(--octopus-text);
     --octopus-media-muted: var(--octopus-muted);
+    --octopus-strip-background: #06080d;
+    --octopus-strip-border: color-mix(in srgb, var(--divider-color, #778198) 38%, transparent);
+    --octopus-strip-eyebrow: var(--octopus-accent-secondary);
+    --octopus-strip-context-text: rgb(188 223 228 / 72%);
     display: block;
     min-width: 0;
   }
@@ -73,6 +77,13 @@ export const cardStyles = css`
     --octopus-text: #172832;
     --octopus-muted: #5d7179;
     --octopus-border: rgb(43 104 111 / 18%);
+    --octopus-strip-background:
+      radial-gradient(circle at 12% -18%, rgb(44 194 196 / 18%), transparent 44%),
+      radial-gradient(circle at 88% 118%, rgb(143 92 246 / 12%), transparent 48%),
+      linear-gradient(145deg, #faffff, #e4f0f2 74%);
+    --octopus-strip-border: rgb(32 104 112 / 18%);
+    --octopus-strip-eyebrow: #147b80;
+    --octopus-strip-context-text: #46616a;
     background:
       radial-gradient(circle at 14% -24%, rgb(62 190 193 / 18%), transparent 42%),
       radial-gradient(circle at 92% 112%, rgb(139 92 246 / 10%), transparent 46%),
@@ -211,8 +222,8 @@ export const cardStyles = css`
     z-index: -1;
   }
   .card[data-layout="strip"] {
-    background: #06080d;
-    border-color: color-mix(in srgb, var(--divider-color, #778198) 38%, transparent);
+    background: var(--octopus-strip-background);
+    border-color: var(--octopus-strip-border);
     border-radius: 14px;
     box-shadow: none;
     gap: 0;
@@ -220,26 +231,22 @@ export const cardStyles = css`
     isolation: isolate;
     padding: 0 9px;
   }
-  .card[data-mode="upcoming"] {
-    border: 0;
-    box-shadow: none;
-    grid-template-rows: 22px minmax(0, 1fr);
-    min-height: 190px;
-  }
-  .card[data-mode="upcoming"].fixed {
-    height: var(--octopus-card-height);
-  }
-  .card[data-mode="upcoming"] .heading {
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    padding: 2px 2px 0;
-  }
-  .card[data-mode="upcoming"] .heading ha-icon {
-    color: var(--octopus-media-accent, #aa75f2);
-  }
-  .card[data-mode="upcoming"] .context {
+  .card[data-layout="strip"][data-appearance="light"] .ambient-background {
     display: none;
+  }
+  .card[data-layout="strip"][data-appearance="light"] .ambient-color {
+    background:
+      radial-gradient(circle at 13% 35%, rgb(32 188 193 / 12%), transparent 38%),
+      radial-gradient(circle at 82% 18%, rgb(143 92 246 / 10%), transparent 42%),
+      linear-gradient(
+        105deg,
+        rgb(251 255 255 / 48%),
+        rgb(232 243 245 / 24%) 52%,
+        rgb(244 237 251 / 34%)
+      );
+  }
+  .card[data-layout="strip"][data-appearance="light"] .ambient-vignette {
+    box-shadow: inset 0 0 42px 8px rgb(37 101 108 / 7%);
   }
   .card[data-layout="strip"][data-wide="true"] {
     padding-inline: 35px;
@@ -259,14 +266,10 @@ export const cardStyles = css`
   }
   .card[data-layout="strip"] .heading {
     align-items: center;
-    backdrop-filter: blur(8px);
-    background: rgb(5 9 16 / 28%);
-    border: 1px solid rgb(188 143 241 / 10%);
-    border-radius: 999px;
     display: flex;
-    gap: 5px;
+    gap: 0;
     min-width: 0;
-    padding: 2px 6px 2px 4px;
+    padding: 2px 2px 0;
   }
   .card[data-layout="strip"] ha-icon {
     color: var(--octopus-media-accent, #aa75f2);
@@ -274,27 +277,23 @@ export const cardStyles = css`
     width: 14px;
   }
   .card[data-layout="strip"] h2 {
-    font-size: 12.5px;
-    font-weight: 620;
-    line-height: 1;
+    color: var(--octopus-strip-eyebrow);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    line-height: 1.1;
+    text-transform: uppercase;
   }
   .card[data-layout="strip"] .context {
-    background: rgb(13 17 28 / 62%);
-    border-color: rgb(174 128 237 / 20%);
-    color: rgb(228 218 244 / 72%);
-    font-size: 9px;
-    height: 15px;
-    min-width: 16px;
-  }
-  .card[data-mode="upcoming"] .heading {
-    backdrop-filter: none;
     background: transparent;
     border: 0;
     border-radius: 0;
-    padding: 2px 2px 0;
-  }
-  .card[data-mode="upcoming"] .context {
-    display: none;
+    color: var(--octopus-strip-context-text);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+    height: auto;
+    min-width: 0;
+    padding: 0 2px;
   }
   .card[data-layout="strip"] .content {
     gap: 0;

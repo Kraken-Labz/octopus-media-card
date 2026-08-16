@@ -121,3 +121,24 @@ autorização para usar produção como ambiente de desenvolvimento.
 Antes de qualquer operação mutável de engenharia, definir `TARGET = HA-LAB`
 ou `TARGET = HA-PROD`. Se `TARGET = HA-PROD`, parar e pedir autorização
 específica.
+
+## Shared HA-LAB environment
+
+HA-LAB is shared by multiple development projects.
+
+The Octopus project owns only its own integration, frontend bundle,
+configuration entries, test helpers, and OCTOPUS LAB dashboards/views.
+
+Another frontend project — the kitchen dashboard — is developed in the
+same HA-LAB and must not be modified, removed, reset, migrated, cleaned,
+or used as an Octopus test target.
+
+Before changing any global Home Assistant frontend resource, Lovelace
+resource, theme, HACS component, /config/www asset, or shared dashboard
+configuration, determine whether it belongs to or is used by another
+project.
+
+Do not perform broad cleanup or reset operations in HA-LAB.
+
+When ownership is unclear, preserve the existing resource and use an
+Octopus-specific resource/name/path instead.

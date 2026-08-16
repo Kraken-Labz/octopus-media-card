@@ -64,7 +64,7 @@ class OctopusMediaImageView(HomeAssistantView):
                 key,
                 lambda: (
                     _async_get_provider_image(hass, descriptor)
-                    if descriptor.source is MediaSource.RADARR
+                    if descriptor.source in {MediaSource.RADARR, MediaSource.SONARR}
                     else runtime.client.async_get_image(descriptor.candidates, parsed_variant)
                 ),
             )

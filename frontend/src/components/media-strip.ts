@@ -23,6 +23,7 @@ export class MediaStrip extends LitElement {
   @property({ type: Boolean }) showArrows = true;
   @property({ type: Boolean }) autoScroll = false;
   @property({ type: Number }) autoScrollInterval = 6;
+  @property({ type: String, attribute: "data-appearance" }) appearance: "dark" | "light" = "dark";
   @property({ type: String }) variant: "recent" | "upcoming" = "recent";
   @property({ type: Boolean }) partial = false;
   @property({ type: Boolean }) stale = false;
@@ -104,6 +105,7 @@ export class MediaStrip extends LitElement {
             >
               <span class="frame">
                 <octopus-media-image
+                  data-appearance=${this.appearance}
                   .hass=${this.hass}
                   .entryId=${this.entryId}
                   .imageRef=${item.poster_ref ?? undefined}
@@ -504,11 +506,43 @@ export class MediaStrip extends LitElement {
     :host([data-appearance="light"]) .poster:hover .title,
     :host([data-appearance="light"]) .poster:focus-visible .title,
     :host([data-appearance="light"]) .poster[data-focused="true"] .title {
-      color: var(--octopus-media-title, #172832);
+      color: rgb(255 255 255 / 94%);
     }
     :host([data-appearance="light"]) .metadata,
     :host([data-appearance="light"]) .episode-subtitle {
       color: var(--octopus-media-muted, #5d7179);
+    }
+    :host([data-appearance="light"]) .frame {
+      border-color: rgb(28 99 107 / 20%);
+      box-shadow: 0 8px 18px rgb(32 87 94 / 18%);
+    }
+    :host([data-appearance="light"]) .copy-gradient {
+      background: linear-gradient(
+        180deg,
+        rgb(2 8 12 / 0%) 0%,
+        rgb(2 8 12 / 12%) 34%,
+        rgb(2 8 12 / 46%) 58%,
+        rgb(2 8 12 / 82%) 100%
+      );
+    }
+    :host([data-appearance="light"]) .title,
+    :host([data-appearance="light"]) .poster:hover .title,
+    :host([data-appearance="light"]) .poster:focus-visible .title,
+    :host([data-appearance="light"]) .poster[data-focused="true"] .title,
+    :host([data-appearance="light"]) .metadata,
+    :host([data-appearance="light"]) .episode-subtitle {
+      color: rgb(255 255 255 / 94%);
+    }
+    :host([data-appearance="light"]) .badge {
+      background: rgb(250 255 255 / 78%);
+      border-color: rgb(30 139 145 / 22%);
+      color: #27434b;
+    }
+    :host([data-appearance="light"]) .arrow {
+      background: rgb(255 255 255 / 78%);
+      border-color: rgb(30 139 145 / 22%);
+      box-shadow: 0 5px 14px rgb(32 87 94 / 16%);
+      color: #24515a;
     }
     @media (prefers-color-scheme: light) {
       :host([data-appearance="auto"]) .title,
@@ -591,23 +625,33 @@ export class MediaStrip extends LitElement {
         0 0 0 1px rgb(97 211 226 / 12%),
         0 0 17px color-mix(in srgb, var(--octopus-media-accent, #aa75f2) 28%, transparent);
     }
-    :host([variant="upcoming"]) .frame,
-    :host([variant="upcoming"]) .poster:hover .frame,
-    :host([variant="upcoming"]) .poster:focus-visible .frame,
-    :host([variant="upcoming"]) .poster[data-focused="true"] .frame {
-      border-color: transparent;
-      box-shadow: 0 8px 18px rgb(0 0 0 / 34%);
+    :host([data-appearance="light"]) .poster:hover {
+      filter: none;
     }
-    :host([variant="upcoming"]) .poster:hover,
-    :host([variant="upcoming"]) .poster:focus-visible,
-    :host([variant="upcoming"]) .poster[data-focused="true"] {
-      filter: brightness(1.03);
-      transform: translateY(-2px) scale(1.01);
+    :host([data-appearance="light"]) .poster:hover .frame {
+      border-color: rgb(38 125 135 / 24%);
+      box-shadow: 0 11px 23px rgb(32 87 94 / 20%);
+    }
+    :host([data-appearance="light"]) .poster:focus-visible,
+    :host([data-appearance="light"]) .poster[data-focused="true"] {
+      filter: none;
+    }
+    :host([data-appearance="light"]) .poster:focus-visible .frame,
+    :host([data-appearance="light"]) .poster[data-focused="true"] .frame {
+      border-color: rgb(27 157 166 / 72%);
+      box-shadow:
+        0 10px 22px rgb(32 87 94 / 18%),
+        0 0 0 2px rgb(27 157 166 / 58%);
     }
     .poster:hover .title,
     .poster:focus-visible .title,
     .poster[data-focused="true"] .title {
       color: #fff;
+    }
+    :host([data-appearance="light"]) .poster:hover .title,
+    :host([data-appearance="light"]) .poster:focus-visible .title,
+    :host([data-appearance="light"]) .poster[data-focused="true"] .title {
+      color: var(--octopus-media-title, #172832);
     }
     .arrow {
       align-items: center;

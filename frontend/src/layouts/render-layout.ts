@@ -6,7 +6,6 @@ import type { LayoutContext } from "./layout-strategy";
 import { renderListLayout } from "./list-layout";
 import { renderPortraitLayout } from "./portrait-layout";
 import { renderStripLayout } from "./strip-layout";
-import { renderUpcomingLayout } from "./upcoming-layout";
 
 export function renderLayout(layout: Exclude<CardLayout, "auto">, context: LayoutContext) {
   switch (layout) {
@@ -26,5 +25,5 @@ export function renderLayout(layout: Exclude<CardLayout, "auto">, context: Layou
 }
 
 export function renderUpcoming(context: LayoutContext) {
-  return renderUpcomingLayout(context);
+  return renderStripLayout(context);
 }

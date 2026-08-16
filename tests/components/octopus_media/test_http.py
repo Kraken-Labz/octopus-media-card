@@ -2,7 +2,7 @@
 
 from collections.abc import Awaitable, Callable
 from types import SimpleNamespace
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 from aiohttp.test_utils import TestClient
 from aiohttp.web import Application, Request
@@ -11,6 +11,7 @@ from custom_components.octopus_media.exceptions import ImageNotFoundError, Image
 from custom_components.octopus_media.http import OctopusMediaImageView
 from custom_components.octopus_media.image_cache import ImageMemoryCache, ImagePayload
 from custom_components.octopus_media.image_store import (
+    ImageCandidate,
     ImageDescriptor,
     ImageKind,
     ImageReferenceStore,
@@ -110,6 +111,55 @@ async def test_image_view_returns_validated_bytes_etag_and_304(
     )
     assert repeated.status == 304
     client_api.async_get_image.assert_awaited_once()
+
+
+async def test_provider_artwork_path_is_used_for_sonarr(
+    hass: HomeAssistant,
+    hass_client: Callable[[], Awaitable[TestClient[Request, Application]]],
+) -> None:
+    """Sonarr posters use the registered provider URL through the safe proxy."""
+    store = ImageReferenceStore(
+        "fixture-secret", config_entry_id="fixture_entry_sonarr", server_id="fixture_server"
+    )
+    reference = store.register(
+        ImageDescriptor(
+            config_entry_id="fixture_entry_sonarr",
+            source=MediaSource.SONARR,
+            server_id="fixture_server",
+            candidates=(
+                ImageCandidate(
+                    "7",
+                    ImageKind.PRIMARY,
+                    "sonarr-revision",
+                    origin_url="https://sonarr.example.test/poster.jpg",
+                ),
+            ),
+            allowed_variants=(ImageVariant.POSTER_SMALL,),
+        )
+    )
+    entry = MockConfigEntry(
+        domain=DOMAIN, entry_id="fixture_entry_sonarr", title="Fixture Media", data={}
+    )
+    entry.add_to_hass(hass)
+    entry.runtime_data = SimpleNamespace(
+        image_store=store,
+        image_cache=ImageMemoryCache(),
+        client=SimpleNamespace(async_get_image=AsyncMock()),
+    )
+    assert await async_setup_component(hass, "http", {})
+    hass.http.register_view(OctopusMediaImageView())
+    client = await hass_client()
+    with patch(
+        "custom_components.octopus_media.http._async_get_provider_image",
+        new=AsyncMock(return_value=ImagePayload(b"sonarr-image", "image/jpeg")),
+    ) as provider_image:
+        response = await client.get(
+            f"/api/octopus_media/image/{entry.entry_id}/{reference}/poster-small"
+        )
+    assert response.status == 200
+    assert await response.read() == b"sonarr-image"
+    provider_image.assert_awaited_once()
+    entry.runtime_data.client.async_get_image.assert_not_awaited()
 
 
 async def test_image_view_sanitizes_missing_and_temporary_failures(
