@@ -27,11 +27,18 @@ def _sources(
     radarr: bool = False,
     sonarr: bool = False,
 ) -> dict[str, MockConfigEntry]:
-    entries = {
-        "jellyfin": MockConfigEntry(
-            domain="jellyfin", title="Fixture Jellyfin", state=ConfigEntryState.LOADED
-        ),
-    }
+    jellyfin = MockConfigEntry(
+        domain="jellyfin",
+        title="Fixture Jellyfin",
+        state=ConfigEntryState.LOADED,
+        data={"url": "https://jellyfin.invalid"},
+    )
+    jellyfin.runtime_data = SimpleNamespace(
+        api_client=SimpleNamespace(config=SimpleNamespace(data={"auth.token": "fixture-token"})),
+        user_id="fixture-user",
+        server_id="fixture-server",
+    )
+    entries = {"jellyfin": jellyfin}
     if radarr:
         entries["radarr"] = MockConfigEntry(
             domain="radarr", title="Fixture Radarr", state=ConfigEntryState.LOADED
@@ -66,7 +73,9 @@ async def _configure(
     with patch(
         "custom_components.octopus_media.async_setup_entry", new=AsyncMock(return_value=True)
     ):
-        return await hass.config_entries.flow.async_configure(result["flow_id"], data)
+        completed = await hass.config_entries.flow.async_configure(result["flow_id"], data)
+        await hass.async_block_till_done()
+        return completed
 
 
 async def test_install_with_each_provider_combination(hass: HomeAssistant) -> None:
@@ -128,6 +137,7 @@ async def test_reconfigure_changes_name_and_providers(hass: HomeAssistant) -> No
                 CONF_SONARR_CONFIG_ENTRY_ID: new["sonarr"].entry_id,
             },
         )
+        await hass.async_block_till_done()
     assert completed["type"] is FlowResultType.ABORT
     assert completed["reason"] == "reconfigure_successful"
     assert entry.entry_id == entry_id_before
@@ -159,6 +169,7 @@ async def test_options_flow_only_exposes_grouping(hass: HomeAssistant) -> None:
         completed = await hass.config_entries.options.async_configure(
             result["flow_id"], {CONF_GROUP_EPISODES: False}
         )
+        await hass.async_block_till_done()
     assert completed["type"] is FlowResultType.CREATE_ENTRY
     assert completed["data"][CONF_GROUP_EPISODES] is False
     assert completed["data"]["recent_interval"] == 180
