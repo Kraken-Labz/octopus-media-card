@@ -1,9 +1,27 @@
-# Octopus Media
+<p align="center">
+  <img src="custom_components/octopus_media/brand/logo.png" alt="Octopus Media" width="640">
+</p>
 
-Octopus Media is a Home Assistant custom integration for securely combining
-media data from Jellyfin, Radarr, and Sonarr.
+The **Made in Brazil** and **Built with Vibe Coding** badges are community-facing project notes, not certifications or endorsements.
 
-![Octopus Media branding](custom_components/octopus_media/brand/logo.png)
+<h1 align="center">🐙 Octopus Media</h1>
+
+<p align="center">A cinematic media integration and card for Home Assistant, built around Jellyfin, Radarr and Sonarr.</p>
+
+<p align="center">
+  <a href="https://www.home-assistant.io/"><img src="https://img.shields.io/badge/Home%20Assistant-Custom%20Integration-41BDF5" alt="Home Assistant custom integration"></a>
+  <a href="https://hacs.xyz/"><img src="https://img.shields.io/badge/HACS-Integration-18BC9C" alt="HACS integration"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/Made%20in-Brazil%20🇧🇷-009C3B" alt="Made in Brazil">
+  <img src="https://img.shields.io/badge/Built%20with-Vibe%20Coding-8A2BE2" alt="Built with Vibe Coding">
+  <a href="https://github.com/Kraken-Labz/octopus-media-card/actions/workflows/ci.yml"><img src="https://github.com/Kraken-Labz/octopus-media-card/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+</p>
+
+Octopus Media began as a personal homelab project. It was created first for its author's own setup and is now shared with the community because it may be useful to other Home Assistant users. It is not a commercial product and has no official affiliation with Home Assistant, Jellyfin, Radarr, or Sonarr.
+
+The project is openly developed with **Vibe Coding / AI-assisted development**. AI was used intensively as an implementation partner for coding, debugging, testing, and refactoring. Product direction, architecture, UX, visual language, test criteria, scenarios, and final approval remained human-directed.
+
+![Octopus Media overview in light and dark themes](docs/screenshots/overview-light-dark.png)
 
 ## Integration and card
 
@@ -19,24 +37,49 @@ The integration domain is `octopus_media`; the custom card type is
 
 ## Features
 
-- Jellyfin Recent media and current Playing sessions.
-- Radarr and Sonarr Upcoming movies and episodes.
+### Recently added
+
+Shows recent movies and episodes from Jellyfin, with poster artwork, titles, and available metadata.
+
+![Recently added in dark mode](docs/screenshots/recent-dark.png)
+
+### Upcoming
+
+Combines upcoming movies from Radarr and episodes from Sonarr. Movies show their title and date/time when available; episodes show the series title with `TxxExx · date · time` metadata.
+
+![Upcoming in dark mode](docs/screenshots/upcoming-dark.png)
+
+### Now Playing
+
+Shows the current Jellyfin playback session, including title, episode context, device, user, progress, and timing. The card is read-only and does not provide playback controls.
+
+![Now Playing in dark mode](docs/screenshots/playing-dark.png)
+
+### Light and Dark
+
+Use `auto`, `dark`, or `light` appearance. The interface changes theme tokens while posters and other artwork preserve their original colors.
+
+![Light and dark appearance comparison](docs/screenshots/overview-light-dark.png)
+
+### Auto-scroll
+
+Recent and Upcoming can advance one item at a time with a continuous loop. Auto-scroll pauses on hover, focus, and touch interaction, and respects reduced-motion preferences. Playing does not auto-scroll.
+
+### Other details
+
 - Shared poster-strip geometry for Recent and Upcoming.
 - Playing Hero with truthful playing, paused, empty, unavailable, and stale states.
-- `auto`, `dark`, and `light` appearance modes.
-- Optional item-by-item auto-scroll for Recent and Upcoming, with pause on interaction
-  and reduced-motion support.
 - English and Brazilian Portuguese interface translations.
 - Secure, opaque image references and authenticated image delivery.
-- Visual configuration editor with real previews and explicit recovery for removed
-  ConfigEntries.
+- Visual configuration editor with real previews and explicit recovery for removed ConfigEntries.
+- Local Octopus Media branding assets.
 
 ## Installation with HACS
 
 1. Open **HACS → Integrations**.
 2. Search for **Octopus Media**. Until the repository is included in the default HACS
-   catalog, add `Kraken-Labz/octopus-media-card` as a custom repository with category
-   **Integration**.
+   catalog, add `https://github.com/Kraken-Labz/octopus-media-card` as a custom repository
+   with category **Integration**.
 3. Install the integration and restart Home Assistant if HACS requests it.
 4. Go to **Settings → Devices & services → Add integration** and select **Octopus Media**.
 5. Select an existing Jellyfin ConfigEntry. Jellyfin is required; Radarr and Sonarr are
@@ -50,11 +93,24 @@ The card bundle is provided by the integration at:
 
 If the resource is not registered automatically by the current Home Assistant setup,
 add that URL under **Settings → Dashboards → Resources** as a JavaScript module.
+Manual installation is intended for development and fallback scenarios, not as the
+primary public path.
 
 ## Configuration
 
 Configure the integration through its Home Assistant UI flow. Do not put provider URLs,
 credentials, API keys, Jellyfin user IDs, or TLS settings in card YAML.
+
+The integration setup uses:
+
+- **Name** — the public name of this ConfigEntry.
+- **Jellyfin** — required; select an existing Home Assistant Jellyfin ConfigEntry.
+- **Radarr** — optional; select an existing ConfigEntry when available.
+- **Sonarr** — optional; select an existing ConfigEntry when available.
+
+Octopus Media reuses those existing Home Assistant entries. It does not ask for a second
+Jellyfin password, Radarr API key, or Sonarr API key. Use **Settings → Devices & services
+→ Octopus Media → Configure** to reconfigure the same entry without changing its ID.
 
 ### Add the card
 
@@ -143,6 +199,11 @@ silently reassigns an existing configuration by matching its title.
 
 Report bugs and feature requests in the
 [GitHub issue tracker](https://github.com/Kraken-Labz/octopus-media-card/issues).
+
+## Status
+
+The first public version is planned as **v0.1.0**. It is not considered published until
+the first GitHub Release is created.
 
 ## Development
 
