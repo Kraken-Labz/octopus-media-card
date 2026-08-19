@@ -4,7 +4,7 @@ from typing import Final
 
 DOMAIN: Final = "octopus_media"
 NAME: Final = "Octopus Media"
-VERSION: Final = "0.0.0"
+VERSION: Final = "0.1.0"
 
 CONF_SCAFFOLD: Final = "scaffold"
 CONF_REF_SECRET: Final = "ref_secret"

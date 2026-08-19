@@ -90,7 +90,7 @@ class FakeHomeAssistantJellyfin:
     """Expose only the official recently-added operation used by the adapter."""
 
     def __init__(self) -> None:
-        self.calls: list[tuple[str, dict[str, str]]] = []
+        self.calls: list[tuple[str, dict[str, Any]]] = []
 
     def get_recently_added(self, **params: Any) -> list[dict[str, Any]]:
         self.calls.append(("", params))

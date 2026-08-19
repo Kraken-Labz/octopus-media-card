@@ -1,132 +1,63 @@
-# Configuração do Octopus Media Card
+# Octopus Media Card configuration
 
-O card recebe somente identidade da ConfigEntry e preferências visuais. URL, credencial, API key,
-usuário Jellyfin, política TLS e timeout pertencem exclusivamente à integração.
+The card references an Octopus Media ConfigEntry. Provider URLs, credentials, API keys,
+Jellyfin IDs, and TLS settings belong to the integration UI and must not be placed in card
+configuration.
 
-## Exemplo mínimo
+## Minimal configuration
 
 ```yaml
 type: custom:octopus-media-card
-entry_id: ID_DA_CONFIG_ENTRY
+entry_id: YOUR_OCTOPUS_MEDIA_ENTRY_ID
 mode: recent
 layout: auto
+appearance: auto
 ```
 
-## Exemplo completo
+The visual editor is the recommended way to create a new card. It defaults to Recent,
+automatic appearance, the supported item count, and disabled auto-scroll.
 
-```yaml
-type: custom:octopus-media-card
-entry_id: ID_DA_CONFIG_ENTRY
-mode: recent
-layout: strip
-title: Recém-adicionados
-height: 240
-sections:
-  - recent
-  - upcoming
-  - playing
-item_count: 12
-posters_visible: auto
-density: auto
-header_alignment: start
-theme: midnight
-visual_concept: cinematic-overlay
-title_position: overlay
-accent_color: "#8b5cf6"
-autoplay: false
-cycle_interval: 10
-show_arrows: true
-show_indicators: true
-show_titles: true
-show_dates: true
-show_ratings: true
-show_badges: true
-thumbnail_size: medium
-```
+## Public settings
 
-## Modos e layouts
+| Setting | Values | Applies to |
+| --- | --- | --- |
+| `entry_id` | Octopus Media ConfigEntry ID | All modes |
+| `mode` | `recent`, `upcoming`, `playing` | All cards |
+| `layout` | `auto`, `strip`, `grid`, `hero`, `compact`, `portrait`, `list` | All modes, with mode-specific behavior |
+| `appearance` | `auto`, `dark`, `light` | All modes |
+| `item_count` | 1–50 | Recent and Upcoming |
+| `auto_scroll` | `true`/`false` | Recent and Upcoming |
+| `auto_scroll_interval` | 2–3600 seconds | Recent and Upcoming when enabled |
+| `height` | `auto` or at least 80 pixels | All modes |
 
-`mode` aceita `recent`, `upcoming` e `playing`. `layout` aceita `auto`, `strip`,
-`grid`, `hero`, `compact`, `portrait` e `list`.
+Legacy YAML fields remain parsed where compatibility requires them. The visual editor
+does not expose abandoned or non-functional presentation controls.
 
-`layout: auto` usa breakpoints com histerese de 12 px. Em recent/upcoming, containers de 280–699 px
-selecionam strip; containers de 700 px ou mais também selecionam strip quando a altura é menor que
-360 px. Em playing, 390×240 e dimensões maiores compatíveis selecionam o Playing Hero oficial;
-abaixo de 200 px de altura, `auto` usa uma composição mais compacta. Assim, 390×210 e 819×240
-continuam usando o mesmo strip oficial em recent, sem compartilhar sua geometria com playing.
+## Recent and Upcoming
 
-## Contrato específico do Playing Hero
+Recent and Upcoming share the same responsive media-strip and poster-card geometry.
+Recent uses Jellyfin recently added media. Upcoming uses Radarr movies and Sonarr episodes:
 
-```yaml
-type: custom:octopus-media-card
-entry_id: ID_DA_CONFIG_ENTRY
-mode: playing
-layout: hero
-height: 240
-show_titles: true
-show_badges: true
-show_device: true
-show_user: true
-show_progress: true
-show_time: true
-show_arrows: true
-show_indicators: true
-```
+- movies show title and available date/time;
+- episodes show the series title and `TxxExx · date · time` metadata.
 
-`layout: auto` também seleciona o hero oficial quando a largura e a altura são compatíveis:
+The strip preserves portrait 2:3 artwork, scrolling, keyboard navigation, focus behavior,
+and an intentional next-item peek when enough items exist.
 
-```yaml
-type: custom:octopus-media-card
-entry_id: ID_DA_CONFIG_ENTRY
-mode: playing
-layout: auto
-height: 240
-```
+## Playing
 
-- `show_device` usa somente o nome final normalizado pelo backend.
-- `show_user`, `show_progress` e `show_time` controlam apenas informação de leitura.
-- `show_arrows` e `show_indicators` aparecem somente quando há mais de uma sessão.
-- `autoplay` e `cycle_interval` alternam sessões; não comandam o Jellyfin.
-- não existem opções de play, pause, stop, seek, volume ou controle remoto.
-- `visual_concept` é uma paleta compatível; não é mais necessário para ativar o hero.
-- empty, unavailable e stale são estados distintos; stale congela o progresso local.
-- o hero ocupa uma superfície única, sem cabeçalho/cápsula externo;
-- `EM REPRODUÇÃO` é um eyebrow interno, localizado e não configurável, sem fundo, borda ou ação;
-- os chips de estado e tipo permanecem independentes do eyebrow;
-- hover visual só é aplicado a ponteiros finos compatíveis com hover.
+Playing uses the read-only Playing Hero when the selected layout resolves to `hero`.
+It shows current Jellyfin session data, including state, title, device, user, progress,
+and timing when available. It never provides playback controls and does not auto-scroll.
 
-## Contrato específico do strip
+## Appearance
 
-- `height`: altura externa exata quando numérica; `auto` usa a altura oferecida pelo dashboard.
-- `item_count`: inteiro de 1 a 50; apenas limita a coleção, sem duplicar itens.
-- `posters_visible`: `auto` ou inteiro de 1 a 5. É uma densidade-alvo; a proporção 2:3 e a altura
-  disponível são autoritativas. Se a altura impedir o alvo exato, o strip mostra os pôsteres
-  adicionais que couberem, sem esticar ou recortar a moldura.
-- `show_titles`, `show_dates`, `show_ratings`, `show_badges` e `show_arrows`: aplicados diretamente.
-- `accent_color`: controla ícone e contorno/glow de foco.
-- `header_alignment`: `start`, `center` ou `end`.
-- `theme` e `visual_concept`: preservados; alteram tokens/paleta, não a geometria oficial.
-- `title_position`: `overlay` e `below` continuam válidos no schema. No strip, `below` é adaptado
-  para overlay para preservar a geometria D2; os demais layouts continuam respeitando a opção.
-- `density`: preservado no YAML; no strip não altera a geometria porque conflitaria com a densidade
-  D2 aprovada. Continua disponível aos demais layouts.
-- `show_indicators`, `autoplay`, `cycle_interval` e `sections`: preservados para compatibilidade
-  com YAML legado; não são opções públicas do editor atual.
-- `thumbnail_size`: exclusivo do layout list.
+`auto` follows the Home Assistant theme when technically possible. `dark` and `light`
+change interface tokens only; posters and other artwork retain their original colors.
 
-Opções incompatíveis permanecem na configuração e não são apagadas pelo editor. As adaptações acima
-são explícitas para evitar comportamento silencioso.
+## Removed ConfigEntry recovery
 
-## Poucos e muitos itens
-
-- zero: estado vazio verdadeiro;
-- um ou dois: alinhamento à esquerda, largura 2:3 normal, sem duplicação, stretch ou `space-between`;
-- coleção suficiente: 3 itens completos em 390 px ou 5 em 800/819 px, com alvo de 22% do próximo;
-- coleção longa: swipe, trackpad, wheel horizontal, teclado e setas; cada instância começa em
-  `scrollLeft = 0`.
-
-## Editor visual
-
-O editor filtra modos pelas capabilities da ConfigEntry e oferece prévia determinística do strip
-em 390 e 800 px. A prévia usa títulos, metadados e placeholders fictícios; nunca lê itens, imagens
-ou credenciais do ambiente real.
+If the referenced ConfigEntry no longer exists, the card reports that the Octopus
+configuration was not found. Edit the card and select a current ConfigEntry explicitly.
+Entries are identified by `entry_id`, not by title, so the editor does not silently bind
+an old card to a different entry with the same name.

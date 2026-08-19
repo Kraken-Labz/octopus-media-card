@@ -1,6 +1,7 @@
 """Config, reconfigure, and options flow tests using existing ConfigEntries."""
 
 from types import SimpleNamespace
+from typing import Any, cast
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from custom_components.octopus_media.const import (
@@ -49,7 +50,7 @@ async def _configure(
     entries: dict[str, MockConfigEntry],
     *,
     name: str = DEFAULT_NAME,
-) -> dict[str, object]:
+) -> Any:
     data: dict[str, str] = {
         CONF_INSTANCE_NAME: name,
         CONF_JELLYFIN_CONFIG_ENTRY_ID: entries["jellyfin"].entry_id,
@@ -121,7 +122,7 @@ async def test_reconfigure_changes_name_and_providers(hass: HomeAssistant) -> No
         completed = await hass.config_entries.flow.async_configure(
             result["flow_id"],
             {
-                CONF_INSTANCE_NAME: "Octopus Media LAB",
+                CONF_INSTANCE_NAME: "Octopus Media Test",
                 CONF_JELLYFIN_CONFIG_ENTRY_ID: new["jellyfin"].entry_id,
                 CONF_RADARR_CONFIG_ENTRY_ID: new["radarr"].entry_id,
                 CONF_SONARR_CONFIG_ENTRY_ID: new["sonarr"].entry_id,
@@ -133,7 +134,7 @@ async def test_reconfigure_changes_name_and_providers(hass: HomeAssistant) -> No
     assert [
         item.entry_id for item in hass.config_entries.async_entries(DOMAIN)
     ] == octopus_ids_before
-    assert entry.title == "Octopus Media LAB"
+    assert entry.title == "Octopus Media Test"
     assert entry.data[CONF_RADARR_CONFIG_ENTRY_ID] == new["radarr"].entry_id
     assert entry.data[CONF_SONARR_CONFIG_ENTRY_ID] == new["sonarr"].entry_id
     assert entry.state is ConfigEntryState.LOADED
@@ -153,7 +154,8 @@ async def test_options_flow_only_exposes_grouping(hass: HomeAssistant) -> None:
         entry.add_to_hass(hass)
         result = await hass.config_entries.options.async_init(entry.entry_id)
         assert result["type"] is FlowResultType.FORM
-        assert set(result["data_schema"].schema) == {CONF_GROUP_EPISODES}
+        data_schema = cast(Any, result["data_schema"])
+        assert set(data_schema.schema) == {CONF_GROUP_EPISODES}
         completed = await hass.config_entries.options.async_configure(
             result["flow_id"], {CONF_GROUP_EPISODES: False}
         )

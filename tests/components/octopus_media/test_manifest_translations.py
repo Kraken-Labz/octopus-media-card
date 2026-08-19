@@ -26,17 +26,17 @@ def test_manifest_has_public_metadata() -> None:
     """The manifest has public repository metadata and no scaffold placeholders."""
     manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["domain"] == "octopus_media"
-    assert manifest["version"] == "0.0.0"
+    assert manifest["version"] == "0.1.0"
     assert manifest["config_flow"] is True
     assert manifest["requirements"] == []
     documentation = urlparse(manifest["documentation"])
     issue_tracker = urlparse(manifest["issue_tracker"])
     assert documentation.scheme == "https"
     assert documentation.netloc == "github.com"
-    assert documentation.path == "/phgsbr/octopus-media-card"
+    assert documentation.path == "/Kraken-Labz/octopus-media-card"
     assert issue_tracker.scheme == "https"
     assert issue_tracker.netloc == "github.com"
-    assert issue_tracker.path == "/phgsbr/octopus-media-card/issues"
+    assert issue_tracker.path == "/Kraken-Labz/octopus-media-card/issues"
     assert manifest["codeowners"] == ["@phgsbr"]
 
 

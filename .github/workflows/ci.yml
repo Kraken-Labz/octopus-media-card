@@ -49,13 +49,11 @@ jobs:
 
   validate:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      - name: HACS validation (provisional metadata may fail before publication)
+      - name: HACS validation
         uses: hacs/action@main
         with:
           category: integration
       - name: Hassfest
         uses: home-assistant/actions/hassfest@master
-

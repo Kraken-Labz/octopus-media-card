@@ -42,7 +42,7 @@ Não haverá push, publicação, release ou uso do ambiente real sem autorizaç�
 Todo trabalho deve ocorrer sob:
 
 ```text
-C:\Users\Pedro Henrique\Documents\Home Assistant\octopus-media-card
+<repository-root>
 ```
 
 É proibido:

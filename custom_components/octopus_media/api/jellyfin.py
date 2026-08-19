@@ -158,7 +158,9 @@ class JellyfinClient(BaseMediaClient):
             image_type_limit=1,
             enable_total_record_count=False,
         )
-        result = await self._hass.async_add_executor_job(request)
+        hass = self._hass
+        assert hass is not None
+        result = await hass.async_add_executor_job(request)
         return self._require_object_array(result, "recent items")
 
     async def async_get_sessions(self) -> list[JellyfinSession]:
