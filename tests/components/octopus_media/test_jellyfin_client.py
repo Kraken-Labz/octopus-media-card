@@ -79,6 +79,24 @@ class FakeSession:
         return result
 
 
+class FakeHass:
+    """Run executor jobs inline for the authenticated-client adapter test."""
+
+    async def async_add_executor_job(self, target: Any, *args: Any, **kwargs: Any) -> object:
+        return target(*args, **kwargs)
+
+
+class FakeHomeAssistantJellyfin:
+    """Expose only the official recently-added operation used by the adapter."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, dict[str, str]]] = []
+
+    def get_recently_added(self, **params: Any) -> list[dict[str, Any]]:
+        self.calls.append(("", params))
+        return [MOVIE]
+
+
 def client(session: FakeSession) -> JellyfinClient:
     """Build a client with an explicitly redacted test credential."""
     return JellyfinClient(
@@ -125,11 +143,30 @@ async def test_users_recent_and_sessions_are_typed_arrays() -> None:
     assert (await jellyfin.async_get_recent_items(USERS[0]["Id"], limit=12))[0]["Type"] == "Movie"
     assert (await jellyfin.async_get_sessions())[0]["DeviceName"] == "Test Display A"
     assert (await jellyfin.async_get_devices())[0]["CustomName"] == "Fixture Room"
+    assert session.calls[1][0] == f"https://media.invalid/base/Users/{USERS[0]['Id']}/Items/Latest"
     recent_params = cast(Mapping[str, str], session.calls[1][1]["params"])
-    assert recent_params["userId"] == USERS[0]["Id"]
     assert recent_params["groupItems"] == "false"
     assert "api_key" not in recent_params
     assert session.calls[3][0] == "https://media.invalid/base/Devices"
+
+
+async def test_recent_uses_loaded_home_assistant_client_operation() -> None:
+    session = FakeSession()
+    ha_jellyfin = FakeHomeAssistantJellyfin()
+    jellyfin = JellyfinClient(
+        cast(aiohttp.ClientSession, session),
+        APIClientConfig(url="https://media.invalid/base", api_key="<redacted>"),
+        home_assistant_api_client=type("ApiClient", (), {"jellyfin": ha_jellyfin})(),
+        hass=cast(Any, FakeHass()),
+    )
+
+    items = await jellyfin.async_get_recent_items(USERS[0]["Id"], limit=12)
+
+    assert items == [MOVIE]
+    assert len(session.calls) == 0
+    assert ha_jellyfin.calls[0][0] == ""
+    assert ha_jellyfin.calls[0][1]["media"] == ["Movie", "Episode"]
+    assert ha_jellyfin.calls[0][1]["limit"] == 12
 
 
 @pytest.mark.parametrize(

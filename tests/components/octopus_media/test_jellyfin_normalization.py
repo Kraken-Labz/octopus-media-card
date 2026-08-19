@@ -183,7 +183,7 @@ def test_grouping_preserves_newest_episode_and_counts_series() -> None:
     assert grouped.ref != EPISODE_NEWEST["SeriesId"]
 
 
-def test_missing_optional_fields_become_null_and_invalid_items_mark_partial() -> None:
+def test_missing_optional_fields_and_unsupported_items_are_not_partial() -> None:
     invalid = {"Id": "fixture-invalid", "Type": "Audio", "Name": "Ignored"}
     batch = normalize_recent_items(
         media_items(MISSING_FIELDS, invalid),
@@ -192,12 +192,25 @@ def test_missing_optional_fields_become_null_and_invalid_items_mark_partial() ->
         group_episodes=False,
         limit=12,
     )
-    assert batch.partial is True
+    assert batch.partial is False
     item = batch.items[0]
     assert item.added_at is None
     assert item.year is None
     assert item.rating is None
     assert item.poster_ref is None
+
+
+def test_malformed_supported_item_marks_partial() -> None:
+    malformed = {"Type": "Movie", "Name": "Missing ID"}
+    batch = normalize_recent_items(
+        media_items(MOVIE, malformed),
+        secret=SECRET,
+        image_store=ImageReferenceStore(SECRET),
+        group_episodes=False,
+        limit=12,
+    )
+    assert len(batch.items) == 1
+    assert batch.partial is True
 
 
 def test_media_references_are_deterministic_opaque_and_secret_bound() -> None:

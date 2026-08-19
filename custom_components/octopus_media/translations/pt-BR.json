@@ -1,76 +1,51 @@
 {
-  "title": "Octopus Media Card",
+  "title": "Octopus Media",
   "config": {
     "step": {
       "user": {
-        "title": "Conectar ao Jellyfin",
-        "description": "Informe a URL do Jellyfin e uma API key. A chave permanece no backend do Home Assistant.",
+        "title": "Configurar o Octopus Media",
+        "description": "Selecione as integrações existentes que serão usadas como fontes de mídia.",
         "data": {
-          "url": "URL do Jellyfin",
-          "api_key": "API key",
-          "verify_ssl": "Verificar certificado TLS",
-          "timeout": "Timeout da requisição (segundos)"
+          "instance_name": "Nome",
+          "jellyfin_config_entry_id": "Jellyfin",
+          "radarr_config_entry_id": "Radarr (opcional)",
+          "sonarr_config_entry_id": "Sonarr (opcional)"
         }
       },
-      "select_user": {
-        "title": "Selecionar usuário Jellyfin",
-        "description": "Escolha o nome da instância no Home Assistant e o usuário Jellyfin usado pelas mídias recentes.",
+      "reconfigure": {
+        "title": "Reconfigurar o Octopus Media",
+        "description": "Altere o nome e as fontes de mídia usadas pelo Octopus Media.",
         "data": {
-          "instance_name": "Nome da instância",
-          "jellyfin_user_id": "Usuário"
-        }
-      },
-      "reauth_confirm": {
-        "title": "Reconectar ao Jellyfin",
-        "description": "Atualize e valide as credenciais da conexão Jellyfin.",
-        "data": {
-          "url": "URL do Jellyfin",
-          "api_key": "API key",
-          "verify_ssl": "Verificar certificado TLS",
-          "timeout": "Timeout da requisição (segundos)"
+          "instance_name": "Nome",
+          "jellyfin_config_entry_id": "Jellyfin",
+          "radarr_config_entry_id": "Radarr (opcional)",
+          "sonarr_config_entry_id": "Sonarr (opcional)"
         }
       }
     },
     "error": {
-      "invalid_url": "Informe uma URL HTTP ou HTTPS válida e uma API key não vazia.",
-      "invalid_auth": "O Jellyfin rejeitou a API key ou suas permissões.",
-      "cannot_connect": "O Home Assistant não conseguiu alcançar o Jellyfin.",
-      "timeout": "O Jellyfin não respondeu dentro do timeout configurado.",
-      "invalid_response": "O Jellyfin retornou uma resposta inválida.",
-      "unexpected_http": "O Jellyfin retornou um status HTTP inesperado.",
-      "no_users": "Nenhum usuário Jellyfin habilitado está disponível.",
-      "wrong_server": "As credenciais pertencem a outra instalação Jellyfin.",
-      "user_not_found": "O usuário Jellyfin configurado não está mais disponível.",
-      "unknown": "Ocorreu um erro inesperado."
+      "jellyfin_not_configured": "Configure o Jellyfin no Home Assistant antes de adicionar o Octopus Media.",
+      "source_not_found": "A integração selecionada não foi encontrada.",
+      "source_not_loaded": "A integração selecionada não está carregada."
     },
     "abort": {
-      "already_configured": "Esta instalação Jellyfin já está configurada.",
-      "reauth_successful": "As credenciais Jellyfin foram atualizadas."
+      "jellyfin_not_configured": "Configure o Jellyfin no Home Assistant antes de adicionar o Octopus Media.",
+      "reconfigure_successful": "O Octopus Media foi reconfigurado."
     }
   },
   "options": {
     "step": {
       "init": {
-        "title": "Opções do Jellyfin",
-        "description": "Configure o comportamento do Jellyfin e selecione as integrações existentes do Radarr e Sonarr usadas pelo Upcoming.",
+        "title": "Opções do Octopus Media",
+        "description": "Configure as preferências do Octopus Media.",
         "data": {
-          "instance_name": "Nome da instância",
-          "playing_interval": "Intervalo de reprodução (segundos)",
-          "recent_interval": "Intervalo de recentes (segundos)",
-          "recent_count": "Máximo de itens recentes",
-          "group_episodes": "Agrupar episódios por série",
-          "language": "Idioma",
-          "date_format": "Formato de data",
-          "device_aliases": "Mapa de ID/nome do dispositivo para alias",
-          "radarr_config_entry_id": "Integração Radarr existente",
-          "sonarr_config_entry_id": "Integração Sonarr existente"
+          "group_episodes": "Agrupar episódios por série"
+        },
+        "data_description": {
+          "group_episodes": "Mostra apenas um episódio futuro por série no Upcoming."
         }
       }
     },
-    "error": {
-      "not_found": "A integração selecionada não foi encontrada.",
-      "not_loaded": "A integração selecionada não está carregada.",
-      "action_unavailable": "A ação pública necessária do Home Assistant não está disponível."
-    }
+    "error": {}
   }
 }

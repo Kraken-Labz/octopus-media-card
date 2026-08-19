@@ -612,11 +612,11 @@ export class PlayingHero extends LitElement {
       align-items: center;
       box-sizing: border-box;
       display: grid;
-      gap: 13px;
+      gap: 10px;
       grid-template-columns: minmax(100px, 31.5%) minmax(0, 1fr);
       height: 100%;
       min-width: 0;
-      padding: 10px 12px;
+      padding: 5px 12px;
     }
     .poster-shell {
       aspect-ratio: 2 / 3;
@@ -638,7 +638,7 @@ export class PlayingHero extends LitElement {
       display: grid;
       gap: 0;
       grid-template-rows: auto auto auto minmax(6px, 1fr) auto auto;
-      height: min(100%, 160px);
+      height: min(100%, 180px);
       min-width: 0;
       overflow: hidden;
     }
@@ -650,7 +650,7 @@ export class PlayingHero extends LitElement {
       grid-row: 1;
       letter-spacing: 0.14em;
       line-height: 1;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
       text-transform: uppercase;
     }
     .copy-topline,
@@ -724,7 +724,7 @@ export class PlayingHero extends LitElement {
       display: grid;
       gap: 3px;
       grid-row: 3;
-      margin-top: 6px;
+      margin-top: 4px;
       min-width: 0;
     }
     .editorial-meta {
@@ -836,7 +836,7 @@ export class PlayingHero extends LitElement {
       display: grid;
       gap: 4px;
       grid-row: 6;
-      margin-top: 8px;
+      margin-top: 5px;
       min-width: 0;
     }
     .progress-track {

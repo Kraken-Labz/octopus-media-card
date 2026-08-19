@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Mapping
+from functools import partial
 from typing import Any, cast
 
 import aiohttp
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from yarl import URL
 
 from ..const import JELLYFIN_USER_AGENT
@@ -22,7 +26,7 @@ from ..exceptions import (
 )
 from ..image_cache import IMAGE_MAX_BYTES, ImagePayload
 from ..image_store import IMAGE_VARIANT_SPECS, ImageCandidate, ImageVariant
-from .base import BaseMediaClient
+from .base import APIClientConfig, BaseMediaClient
 from .jellyfin_types import (
     JellyfinDevice,
     JellyfinMediaItem,
@@ -34,6 +38,51 @@ from .jellyfin_types import (
 
 class JellyfinClient(BaseMediaClient):
     """Call only the documented Jellyfin Phase 3A endpoints."""
+
+    def __init__(
+        self,
+        session: aiohttp.ClientSession,
+        config: APIClientConfig,
+        *,
+        home_assistant_api_client: Any | None = None,
+        hass: HomeAssistant | None = None,
+    ) -> None:
+        """Store the optional authenticated Home Assistant Jellyfin client."""
+        super().__init__(session, config)
+        self._home_assistant_api_client = home_assistant_api_client
+        self._hass = hass
+
+    @classmethod
+    def from_home_assistant_entry(
+        cls, hass: HomeAssistant, entry: ConfigEntry
+    ) -> tuple[JellyfinClient, str, str]:
+        """Reuse the authenticated client owned by HA's Jellyfin ConfigEntry."""
+        runtime = getattr(entry, "runtime_data", None)
+        api_client = getattr(runtime, "api_client", None)
+        config_data = getattr(getattr(api_client, "config", None), "data", {})
+        token = config_data.get("auth.token") or config_data.get("auth.access_token")
+        url = entry.data.get("url")
+        user_id = getattr(runtime, "user_id", None)
+        server_id = getattr(runtime, "server_id", None)
+        if not all(
+            isinstance(value, str) and value.strip() for value in (url, token, user_id, server_id)
+        ):
+            raise CannotConnectError("Jellyfin ConfigEntry is not ready")
+        return (
+            cls(
+                async_get_clientsession(hass),
+                APIClientConfig(
+                    url=str(url),
+                    api_key=str(token),
+                    verify_ssl=str(url).casefold().startswith("https://"),
+                    timeout=10,
+                ),
+                home_assistant_api_client=api_client,
+                hass=hass,
+            ),
+            str(user_id),
+            str(server_id),
+        )
 
     async def async_validate(self) -> JellyfinServerInfo:
         """Validate server identity and API key."""
@@ -67,10 +116,11 @@ class JellyfinClient(BaseMediaClient):
 
     async def async_get_recent_items(self, user_id: str, *, limit: int) -> list[JellyfinMediaItem]:
         """Return ungrouped Movie and Episode BaseItemDto values."""
+        if self._home_assistant_api_client is not None and self._hass is not None:
+            return await self._async_get_recent_items_from_home_assistant(user_id, limit=limit)
         payload = await self._async_get_json(
-            "Items/Latest",
+            f"Users/{user_id}/Items/Latest",
             params={
-                "userId": user_id,
                 "includeItemTypes": "Movie,Episode",
                 "fields": (
                     "DateCreated,ParentPrimaryImageItemId,ParentPrimaryImageTag,"
@@ -85,6 +135,31 @@ class JellyfinClient(BaseMediaClient):
             },
         )
         return self._require_object_array(payload, "recent items")
+
+    async def _async_get_recent_items_from_home_assistant(
+        self, user_id: str, *, limit: int
+    ) -> list[JellyfinMediaItem]:
+        """Use Home Assistant Jellyfin's public recently-added operation."""
+        jellyfin = getattr(self._home_assistant_api_client, "jellyfin", None)
+        get_recently_added = getattr(jellyfin, "get_recently_added", None)
+        if not callable(get_recently_added):
+            raise InvalidResponseError("Home Assistant Jellyfin client lacks get_recently_added")
+        request = partial(
+            get_recently_added,
+            media=["Movie", "Episode"],
+            limit=max(1, min(limit, 200)),
+            fields=[
+                "DateCreated",
+                "ParentPrimaryImageItemId",
+                "ParentPrimaryImageTag",
+                "SeriesPrimaryImageTag",
+            ],
+            enable_image_types=["Primary", "Backdrop"],
+            image_type_limit=1,
+            enable_total_record_count=False,
+        )
+        result = await self._hass.async_add_executor_job(request)
+        return self._require_object_array(result, "recent items")
 
     async def async_get_sessions(self) -> list[JellyfinSession]:
         """Return Jellyfin sessions; normalization filters active media."""

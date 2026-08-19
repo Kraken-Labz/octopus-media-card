@@ -46,7 +46,7 @@ thumbnail_size: medium
 
 ## Modos e layouts
 
-`mode` aceita `recent`, `upcoming`, `playing` e `carousel`. `layout` aceita `auto`, `strip`,
+`mode` aceita `recent`, `upcoming` e `playing`. `layout` aceita `auto`, `strip`,
 `grid`, `hero`, `compact`, `portrait` e `list`.
 
 `layout: auto` usa breakpoints com histerese de 12 px. Em recent/upcoming, containers de 280–699 px
@@ -110,8 +110,8 @@ height: 240
   para overlay para preservar a geometria D2; os demais layouts continuam respeitando a opção.
 - `density`: preservado no YAML; no strip não altera a geometria porque conflitaria com a densidade
   D2 aprovada. Continua disponível aos demais layouts.
-- `show_indicators`: reservado ao carousel e sem efeito no strip simples.
-- `autoplay`, `cycle_interval` e `sections`: reservados à alternância de seções do modo carousel.
+- `show_indicators`, `autoplay`, `cycle_interval` e `sections`: preservados para compatibilidade
+  com YAML legado; não são opções públicas do editor atual.
 - `thumbnail_size`: exclusivo do layout list.
 
 Opções incompatíveis permanecem na configuração e não são apagadas pelo editor. As adaptações acima

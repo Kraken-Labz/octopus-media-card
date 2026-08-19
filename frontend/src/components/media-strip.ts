@@ -19,7 +19,6 @@ export class MediaStrip extends LitElement {
   @property({ type: Boolean }) showTitles = true;
   @property({ type: Boolean }) showDates = true;
   @property({ type: Boolean }) showRatings = true;
-  @property({ type: Boolean }) showBadges = true;
   @property({ type: Boolean }) showArrows = true;
   @property({ type: Boolean }) autoScroll = false;
   @property({ type: Number }) autoScrollInterval = 6;
@@ -113,11 +112,6 @@ export class MediaStrip extends LitElement {
                   .alt=${item.title}
                 ></octopus-media-image>
                 ${
-                  this.variant === "recent" && this.showBadges
-                    ? html`<span class="badge">${this.badge(item)}</span>`
-                    : nothing
-                }
-                ${
                   this.showTitles
                     ? html`
                         <span class="copy-gradient">
@@ -149,7 +143,7 @@ export class MediaStrip extends LitElement {
               <button
                 class="arrow previous"
                 type="button"
-                aria-label="Voltar pôsteres"
+                aria-label=${translate(this.hass?.language, "previousPosters")}
                 ?hidden=${!this.canGoBack}
                 @click=${() => this.scrollByPage(-1)}
               >
@@ -158,7 +152,7 @@ export class MediaStrip extends LitElement {
               <button
                 class="arrow next"
                 type="button"
-                aria-label="Avançar pôsteres"
+                aria-label=${translate(this.hass?.language, "nextPosters")}
                 ?hidden=${!this.canGoForward}
                 @click=${() => this.scrollByPage(1)}
               >
@@ -310,15 +304,6 @@ export class MediaStrip extends LitElement {
     return metadata ? `${item.title}, ${metadata}` : item.title;
   }
 
-  private badge(item: MediaItem): string {
-    if (this.variant === "upcoming") return item.type === "episode" ? "EPISÓDIO" : "FILME";
-    if (item.type === "episode" && "season" in item && item.season !== null) {
-      const season = `T${String(item.season).padStart(2, "0")}`;
-      return item.episode === null ? season : `${season}E${String(item.episode).padStart(2, "0")}`;
-    }
-    return translate(this.hass?.language, item.type);
-  }
-
   private metadata(item: MediaItem): string {
     if (this.variant === "upcoming" && "release_at" in item) {
       const date = this.upcomingDate(item);
@@ -329,7 +314,9 @@ export class MediaStrip extends LitElement {
             : "";
         return [code, date].filter(Boolean).join(" · ");
       }
-      return [date, this.releaseType(item.release_type)].filter(Boolean).join(" · ");
+      return [date, this.wide ? this.releaseType(item.release_type) : undefined]
+        .filter(Boolean)
+        .join(" · ");
     }
     const parts: string[] = [];
     if (this.showDates) {
@@ -358,8 +345,8 @@ export class MediaStrip extends LitElement {
   }
 
   private upcomingDate(item: Extract<MediaItem, { release_at: string }>): string {
-    if (item.relative_day === "today") return "HOJE";
-    if (item.relative_day === "tomorrow") return "AMANHÃ";
+    if (item.relative_day === "today") return translate(this.hass?.language, "today");
+    if (item.relative_day === "tomorrow") return translate(this.hass?.language, "tomorrow");
     const value =
       item.all_day && /^\d{4}-\d{2}-\d{2}$/.test(item.release_at)
         ? new Date(`${item.release_at}T12:00:00Z`)
@@ -386,9 +373,16 @@ export class MediaStrip extends LitElement {
 
   private releaseType(value: string | null | undefined): string | undefined {
     if (!value) return undefined;
-    return { digital: "Digital", physical: "Físico", cinema: "Cinema", theatrical: "Cinema" }[
-      value.toLowerCase()
-    ];
+    const normalized = value.toLowerCase();
+    const key =
+      normalized === "digital"
+        ? "digital"
+        : normalized === "physical"
+          ? "physical"
+          : normalized === "cinema" || normalized === "theatrical"
+            ? "cinema"
+            : undefined;
+    return key ? translate(this.hass?.language, key) : undefined;
   }
 
   private formatDate(value: string): string {

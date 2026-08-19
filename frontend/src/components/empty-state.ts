@@ -4,12 +4,13 @@ import { customElement, property } from "lit/decorators.js";
 @customElement("octopus-empty-state")
 export class EmptyState extends LitElement {
   @property({ type: String }) message = "No media to display";
+  @property({ type: String }) secondary = "";
 
   protected override render() {
     return html`<div role="status">
       <span class="mark" aria-hidden="true"><ha-icon icon="mdi:octopus"></ha-icon></span>
       <strong>${this.message}</strong>
-      <small>Octopus Media</small>
+      <small>${this.secondary || "Octopus Media"}</small>
     </div>`;
   }
 

@@ -18,3 +18,16 @@ export function subscribeSnapshot(
     entry_id: entryId,
   });
 }
+
+export function isConfigEntryNotFound(error: unknown): boolean {
+  if (!error || typeof error !== "object") return false;
+  const code = (error as { code?: unknown }).code;
+  if (code === "not_found") return true;
+  const message =
+    error instanceof Error
+      ? error.message
+      : "message" in error && typeof error.message === "string"
+        ? error.message
+        : "";
+  return message.includes("Config entry is not loaded");
+}

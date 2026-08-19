@@ -8,7 +8,7 @@
   "integration_type": "service",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/phgsbr/octopus-media-card/issues",
-  "name": "Octopus Media Card",
+  "name": "Octopus Media",
   "requirements": [],
   "version": "0.0.0"
 }

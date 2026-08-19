@@ -1,6 +1,6 @@
 import type { LovelaceCardConfig } from "./ha-types";
 
-export const MODES = ["recent", "upcoming", "playing", "carousel"] as const;
+export const MODES = ["recent", "upcoming", "playing"] as const;
 export const LAYOUTS = ["auto", "strip", "grid", "hero", "compact", "portrait", "list"] as const;
 export const THEMES = ["auto", "midnight", "ocean", "jellyfin", "neutral"] as const;
 export const VISUAL_CONCEPTS = [
@@ -24,7 +24,7 @@ export interface OctopusMediaCardConfig extends LovelaceCardConfig {
   layout: CardLayout;
   title?: string;
   height: CardHeight;
-  sections: Exclude<CardMode, "carousel">[];
+  sections: CardMode[];
   item_count: number;
   posters_visible: "auto" | number;
   density: "auto" | "comfortable" | "compact";

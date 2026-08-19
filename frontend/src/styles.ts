@@ -172,6 +172,9 @@ export const cardStyles = css`
     overflow: visible;
     padding: 0;
   }
+  .card[data-playing-hero="true"]:not(.fixed) {
+    min-height: 210px;
+  }
   .card[data-playing-hero="true"]::after {
     display: none;
   }
@@ -230,6 +233,9 @@ export const cardStyles = css`
     grid-template-rows: 22px minmax(0, 1fr);
     isolation: isolate;
     padding: 0 9px;
+  }
+  .card[data-layout="strip"]:not(.fixed) {
+    min-height: 210px;
   }
   .card[data-layout="strip"][data-appearance="light"] .ambient-background {
     display: none;

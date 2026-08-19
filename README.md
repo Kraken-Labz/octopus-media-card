@@ -5,8 +5,7 @@ Octopus Media Card is a poster-focused Home Assistant custom card backed by a mi
 > **Current development status:** the approved Playing Hero V2.1 is the single official implementation
 > of `mode: playing` with `layout: hero`; `layout: auto` selects it at compatible heights from
 > 390 px wide. The D2 strip remains independently official and unchanged. `upcoming` is implemented
-> locally through Radarr/Sonarr providers, normalization and a shared coordinator. The carousel is
-> partial: it accepts carousel configuration but currently renders the first configured section only.
+> locally through Radarr/Sonarr providers, normalization and a shared coordinator.
 
 The states below describe the local development baseline. “Implemented” and “tested” refer to
 repository code and fixtures; this baseline has not yet been deployed to HA-LAB and is not a stable
@@ -17,7 +16,6 @@ published or released HACS version.
 - `recent`
 - `upcoming`
 - `playing`
-- `carousel`
 
 ## Layout contract
 

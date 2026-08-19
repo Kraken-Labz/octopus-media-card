@@ -14,7 +14,7 @@ export interface LayoutContext {
   heroState?: PlayingHeroState;
   items: MediaItem[];
   language?: string;
-  mode: Exclude<CardMode, "carousel">;
+  mode: CardMode;
   partial?: boolean;
   serviceOffline?: boolean;
   stale?: boolean;

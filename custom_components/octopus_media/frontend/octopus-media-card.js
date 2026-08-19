@@ -1,13 +1,13 @@
-const st = globalThis, xt = st.ShadowRoot && (st.ShadyCSS === void 0 || st.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, wt = /* @__PURE__ */ Symbol(), Ot = /* @__PURE__ */ new WeakMap();
+const nt = globalThis, wt = nt.ShadowRoot && (nt.ShadyCSS === void 0 || nt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, xt = /* @__PURE__ */ Symbol(), Ot = /* @__PURE__ */ new WeakMap();
 let Jt = class {
   constructor(t, i, a) {
-    if (this._$cssResult$ = !0, a !== wt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    if (this._$cssResult$ = !0, a !== xt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = t, this.t = i;
   }
   get styleSheet() {
     let t = this.o;
     const i = this.t;
-    if (xt && t === void 0) {
+    if (wt && t === void 0) {
       const a = i !== void 0 && i.length === 1;
       a && (t = Ot.get(i)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), a && Ot.set(i, t));
     }
@@ -17,25 +17,25 @@ let Jt = class {
     return this.cssText;
   }
 };
-const fe = (e) => new Jt(typeof e == "string" ? e : e + "", void 0, wt), C = (e, ...t) => {
+const fe = (e) => new Jt(typeof e == "string" ? e : e + "", void 0, xt), E = (e, ...t) => {
   const i = e.length === 1 ? e[0] : t.reduce((a, r, s) => a + ((o) => {
     if (o._$cssResult$ === !0) return o.cssText;
     if (typeof o == "number") return o;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + o + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(r) + e[s + 1], e[0]);
-  return new Jt(i, e, wt);
+  return new Jt(i, e, xt);
 }, me = (e, t) => {
-  if (xt) e.adoptedStyleSheets = t.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
+  if (wt) e.adoptedStyleSheets = t.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
   else for (const i of t) {
-    const a = document.createElement("style"), r = st.litNonce;
+    const a = document.createElement("style"), r = nt.litNonce;
     r !== void 0 && a.setAttribute("nonce", r), a.textContent = i.cssText, e.appendChild(a);
   }
-}, Rt = xt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
+}, Rt = wt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
   let i = "";
   for (const a of t.cssRules) i += a.cssText;
   return fe(i);
 })(e) : e;
-const { is: be, defineProperty: ve, getOwnPropertyDescriptor: ye, getOwnPropertyNames: xe, getOwnPropertySymbols: we, getPrototypeOf: $e } = Object, ht = globalThis, Mt = ht.trustedTypes, _e = Mt ? Mt.emptyScript : "", Se = ht.reactiveElementPolyfillSupport, Y = (e, t) => e, ot = { toAttribute(e, t) {
+const { is: be, defineProperty: ve, getOwnPropertyDescriptor: ye, getOwnPropertyNames: we, getOwnPropertySymbols: xe, getPrototypeOf: $e } = Object, ut = globalThis, zt = ut.trustedTypes, _e = zt ? zt.emptyScript : "", Se = ut.reactiveElementPolyfillSupport, Z = (e, t) => e, lt = { toAttribute(e, t) {
   switch (t) {
     case Boolean:
       e = e ? _e : null;
@@ -63,16 +63,16 @@ const { is: be, defineProperty: ve, getOwnPropertyDescriptor: ye, getOwnProperty
       }
   }
   return i;
-} }, $t = (e, t) => !be(e, t), zt = { attribute: !0, type: String, converter: ot, reflect: !1, useDefault: !1, hasChanged: $t };
-Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), ht.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let j = class extends HTMLElement {
+} }, $t = (e, t) => !be(e, t), Nt = { attribute: !0, type: String, converter: lt, reflect: !1, useDefault: !1, hasChanged: $t };
+Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), ut.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+let H = class extends HTMLElement {
   static addInitializer(t) {
     this._$Ei(), (this.l ??= []).push(t);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t, i = zt) {
+  static createProperty(t, i = Nt) {
     if (i.state && (i.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((i = Object.create(i)).wrapped = !0), this.elementProperties.set(t, i), !i.noAccessor) {
       const a = /* @__PURE__ */ Symbol(), r = this.getPropertyDescriptor(t, a, i);
       r !== void 0 && ve(this.prototype, t, r);
@@ -90,17 +90,17 @@ let j = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
-    return this.elementProperties.get(t) ?? zt;
+    return this.elementProperties.get(t) ?? Nt;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(Y("elementProperties"))) return;
+    if (this.hasOwnProperty(Z("elementProperties"))) return;
     const t = $e(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(Y("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(Y("properties"))) {
-      const i = this.properties, a = [...xe(i), ...we(i)];
+    if (this.hasOwnProperty(Z("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(Z("properties"))) {
+      const i = this.properties, a = [...we(i), ...xe(i)];
       for (const r of a) this.createProperty(r, i[r]);
     }
     const t = this[Symbol.metadata];
@@ -162,14 +162,14 @@ let j = class extends HTMLElement {
   _$ET(t, i) {
     const a = this.constructor.elementProperties.get(t), r = this.constructor._$Eu(t, a);
     if (r !== void 0 && a.reflect === !0) {
-      const s = (a.converter?.toAttribute !== void 0 ? a.converter : ot).toAttribute(i, a.type);
+      const s = (a.converter?.toAttribute !== void 0 ? a.converter : lt).toAttribute(i, a.type);
       this._$Em = t, s == null ? this.removeAttribute(r) : this.setAttribute(r, s), this._$Em = null;
     }
   }
   _$AK(t, i) {
     const a = this.constructor, r = a._$Eh.get(t);
     if (r !== void 0 && this._$Em !== r) {
-      const s = a.getPropertyOptions(r), o = typeof s.converter == "function" ? { fromAttribute: s.converter } : s.converter?.fromAttribute !== void 0 ? s.converter : ot;
+      const s = a.getPropertyOptions(r), o = typeof s.converter == "function" ? { fromAttribute: s.converter } : s.converter?.fromAttribute !== void 0 ? s.converter : lt;
       this._$Em = r;
       const p = o.fromAttribute(i, s.type);
       this[r] = p ?? this._$Ej?.get(r) ?? p, this._$Em = null;
@@ -246,70 +246,70 @@ let j = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-j.elementStyles = [], j.shadowRootOptions = { mode: "open" }, j[Y("elementProperties")] = /* @__PURE__ */ new Map(), j[Y("finalized")] = /* @__PURE__ */ new Map(), Se?.({ ReactiveElement: j }), (ht.reactiveElementVersions ??= []).push("2.1.2");
-const _t = globalThis, Nt = (e) => e, nt = _t.trustedTypes, Ft = nt ? nt.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, Qt = "$lit$", M = `lit$${Math.random().toFixed(9).slice(2)}$`, Xt = "?" + M, Ae = `<${Xt}>`, B = document, Z = () => B.createComment(""), K = (e) => e === null || typeof e != "object" && typeof e != "function", St = Array.isArray, ke = (e) => St(e) || typeof e?.[Symbol.iterator] == "function", mt = `[ 	
-\f\r]`, q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Dt = /-->/g, Bt = />/g, z = RegExp(`>|${mt}(?:([^\\s"'>=/]+)(${mt}*=${mt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Ht = /'/g, jt = /"/g, te = /^(?:script|style|textarea|title)$/i, Pe = (e) => (t, ...i) => ({ _$litType$: e, strings: t, values: i }), n = Pe(1), U = /* @__PURE__ */ Symbol.for("lit-noChange"), c = /* @__PURE__ */ Symbol.for("lit-nothing"), Ut = /* @__PURE__ */ new WeakMap(), F = B.createTreeWalker(B, 129);
+H.elementStyles = [], H.shadowRootOptions = { mode: "open" }, H[Z("elementProperties")] = /* @__PURE__ */ new Map(), H[Z("finalized")] = /* @__PURE__ */ new Map(), Se?.({ ReactiveElement: H }), (ut.reactiveElementVersions ??= []).push("2.1.2");
+const _t = globalThis, Ft = (e) => e, ct = _t.trustedTypes, Dt = ct ? ct.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, Xt = "$lit$", z = `lit$${Math.random().toFixed(9).slice(2)}$`, Qt = "?" + z, Ae = `<${Qt}>`, j = document, K = () => j.createComment(""), J = (e) => e === null || typeof e != "object" && typeof e != "function", St = Array.isArray, ke = (e) => St(e) || typeof e?.[Symbol.iterator] == "function", mt = `[ 	
+\f\r]`, q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ut = /-->/g, Lt = />/g, F = RegExp(`>|${mt}(?:([^\\s"'>=/]+)(${mt}*=${mt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), jt = /'/g, Bt = /"/g, te = /^(?:script|style|textarea|title)$/i, Pe = (e) => (t, ...i) => ({ _$litType$: e, strings: t, values: i }), n = Pe(1), W = /* @__PURE__ */ Symbol.for("lit-noChange"), l = /* @__PURE__ */ Symbol.for("lit-nothing"), Ht = /* @__PURE__ */ new WeakMap(), U = j.createTreeWalker(j, 129);
 function ee(e, t) {
   if (!St(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Ft !== void 0 ? Ft.createHTML(t) : t;
+  return Dt !== void 0 ? Dt.createHTML(t) : t;
 }
-const Ce = (e, t) => {
+const Ee = (e, t) => {
   const i = e.length - 1, a = [];
   let r, s = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", o = q;
   for (let p = 0; p < i; p++) {
-    const l = e[p];
-    let u, g, h = -1, y = 0;
-    for (; y < l.length && (o.lastIndex = y, g = o.exec(l), g !== null); ) y = o.lastIndex, o === q ? g[1] === "!--" ? o = Dt : g[1] !== void 0 ? o = Bt : g[2] !== void 0 ? (te.test(g[2]) && (r = RegExp("</" + g[2], "g")), o = z) : g[3] !== void 0 && (o = z) : o === z ? g[0] === ">" ? (o = r ?? q, h = -1) : g[1] === void 0 ? h = -2 : (h = o.lastIndex - g[2].length, u = g[1], o = g[3] === void 0 ? z : g[3] === '"' ? jt : Ht) : o === jt || o === Ht ? o = z : o === Dt || o === Bt ? o = q : (o = z, r = void 0);
-    const m = o === z && e[p + 1].startsWith("/>") ? " " : "";
-    s += o === q ? l + Ae : h >= 0 ? (a.push(u), l.slice(0, h) + Qt + l.slice(h) + M + m) : l + M + (h === -2 ? p : m);
+    const c = e[p];
+    let u, g, h = -1, w = 0;
+    for (; w < c.length && (o.lastIndex = w, g = o.exec(c), g !== null); ) w = o.lastIndex, o === q ? g[1] === "!--" ? o = Ut : g[1] !== void 0 ? o = Lt : g[2] !== void 0 ? (te.test(g[2]) && (r = RegExp("</" + g[2], "g")), o = F) : g[3] !== void 0 && (o = F) : o === F ? g[0] === ">" ? (o = r ?? q, h = -1) : g[1] === void 0 ? h = -2 : (h = o.lastIndex - g[2].length, u = g[1], o = g[3] === void 0 ? F : g[3] === '"' ? Bt : jt) : o === Bt || o === jt ? o = F : o === Ut || o === Lt ? o = q : (o = F, r = void 0);
+    const m = o === F && e[p + 1].startsWith("/>") ? " " : "";
+    s += o === q ? c + Ae : h >= 0 ? (a.push(u), c.slice(0, h) + Xt + c.slice(h) + z + m) : c + z + (h === -2 ? p : m);
   }
   return [ee(e, s + (e[i] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), a];
 };
-class J {
+class X {
   constructor({ strings: t, _$litType$: i }, a) {
     let r;
     this.parts = [];
     let s = 0, o = 0;
-    const p = t.length - 1, l = this.parts, [u, g] = Ce(t, i);
-    if (this.el = J.createElement(u, a), F.currentNode = this.el.content, i === 2 || i === 3) {
+    const p = t.length - 1, c = this.parts, [u, g] = Ee(t, i);
+    if (this.el = X.createElement(u, a), U.currentNode = this.el.content, i === 2 || i === 3) {
       const h = this.el.content.firstChild;
       h.replaceWith(...h.childNodes);
     }
-    for (; (r = F.nextNode()) !== null && l.length < p; ) {
+    for (; (r = U.nextNode()) !== null && c.length < p; ) {
       if (r.nodeType === 1) {
-        if (r.hasAttributes()) for (const h of r.getAttributeNames()) if (h.endsWith(Qt)) {
-          const y = g[o++], m = r.getAttribute(h).split(M), w = /([.?@])?(.*)/.exec(y);
-          l.push({ type: 1, index: s, name: w[2], strings: m, ctor: w[1] === "." ? Ie : w[1] === "?" ? Te : w[1] === "@" ? Oe : ut }), r.removeAttribute(h);
-        } else h.startsWith(M) && (l.push({ type: 6, index: s }), r.removeAttribute(h));
+        if (r.hasAttributes()) for (const h of r.getAttributeNames()) if (h.endsWith(Xt)) {
+          const w = g[o++], m = r.getAttribute(h).split(z), x = /([.?@])?(.*)/.exec(w);
+          c.push({ type: 1, index: s, name: x[2], strings: m, ctor: x[1] === "." ? Ce : x[1] === "?" ? Me : x[1] === "@" ? Te : gt }), r.removeAttribute(h);
+        } else h.startsWith(z) && (c.push({ type: 6, index: s }), r.removeAttribute(h));
         if (te.test(r.tagName)) {
-          const h = r.textContent.split(M), y = h.length - 1;
-          if (y > 0) {
-            r.textContent = nt ? nt.emptyScript : "";
-            for (let m = 0; m < y; m++) r.append(h[m], Z()), F.nextNode(), l.push({ type: 2, index: ++s });
-            r.append(h[y], Z());
+          const h = r.textContent.split(z), w = h.length - 1;
+          if (w > 0) {
+            r.textContent = ct ? ct.emptyScript : "";
+            for (let m = 0; m < w; m++) r.append(h[m], K()), U.nextNode(), c.push({ type: 2, index: ++s });
+            r.append(h[w], K());
           }
         }
-      } else if (r.nodeType === 8) if (r.data === Xt) l.push({ type: 2, index: s });
+      } else if (r.nodeType === 8) if (r.data === Qt) c.push({ type: 2, index: s });
       else {
         let h = -1;
-        for (; (h = r.data.indexOf(M, h + 1)) !== -1; ) l.push({ type: 7, index: s }), h += M.length - 1;
+        for (; (h = r.data.indexOf(z, h + 1)) !== -1; ) c.push({ type: 7, index: s }), h += z.length - 1;
       }
       s++;
     }
   }
   static createElement(t, i) {
-    const a = B.createElement("template");
+    const a = j.createElement("template");
     return a.innerHTML = t, a;
   }
 }
-function L(e, t, i = e, a) {
-  if (t === U) return t;
+function V(e, t, i = e, a) {
+  if (t === W) return t;
   let r = a !== void 0 ? i._$Co?.[a] : i._$Cl;
-  const s = K(t) ? void 0 : t._$litDirective$;
-  return r?.constructor !== s && (r?._$AO?.(!1), s === void 0 ? r = void 0 : (r = new s(e), r._$AT(e, i, a)), a !== void 0 ? (i._$Co ??= [])[a] = r : i._$Cl = r), r !== void 0 && (t = L(e, r._$AS(e, t.values), r, a)), t;
+  const s = J(t) ? void 0 : t._$litDirective$;
+  return r?.constructor !== s && (r?._$AO?.(!1), s === void 0 ? r = void 0 : (r = new s(e), r._$AT(e, i, a)), a !== void 0 ? (i._$Co ??= [])[a] = r : i._$Cl = r), r !== void 0 && (t = V(e, r._$AS(e, t.values), r, a)), t;
 }
-class Ee {
+class Ie {
   constructor(t, i) {
     this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = i;
   }
@@ -320,29 +320,29 @@ class Ee {
     return this._$AM._$AU;
   }
   u(t) {
-    const { el: { content: i }, parts: a } = this._$AD, r = (t?.creationScope ?? B).importNode(i, !0);
-    F.currentNode = r;
-    let s = F.nextNode(), o = 0, p = 0, l = a[0];
-    for (; l !== void 0; ) {
-      if (o === l.index) {
+    const { el: { content: i }, parts: a } = this._$AD, r = (t?.creationScope ?? j).importNode(i, !0);
+    U.currentNode = r;
+    let s = U.nextNode(), o = 0, p = 0, c = a[0];
+    for (; c !== void 0; ) {
+      if (o === c.index) {
         let u;
-        l.type === 2 ? u = new tt(s, s.nextSibling, this, t) : l.type === 1 ? u = new l.ctor(s, l.name, l.strings, this, t) : l.type === 6 && (u = new Re(s, this, t)), this._$AV.push(u), l = a[++p];
+        c.type === 2 ? u = new it(s, s.nextSibling, this, t) : c.type === 1 ? u = new c.ctor(s, c.name, c.strings, this, t) : c.type === 6 && (u = new Oe(s, this, t)), this._$AV.push(u), c = a[++p];
       }
-      o !== l?.index && (s = F.nextNode(), o++);
+      o !== c?.index && (s = U.nextNode(), o++);
     }
-    return F.currentNode = B, r;
+    return U.currentNode = j, r;
   }
   p(t) {
     let i = 0;
     for (const a of this._$AV) a !== void 0 && (a.strings !== void 0 ? (a._$AI(t, a, i), i += a.strings.length - 2) : a._$AI(t[i])), i++;
   }
 }
-class tt {
+class it {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
   constructor(t, i, a, r) {
-    this.type = 2, this._$AH = c, this._$AN = void 0, this._$AA = t, this._$AB = i, this._$AM = a, this.options = r, this._$Cv = r?.isConnected ?? !0;
+    this.type = 2, this._$AH = l, this._$AN = void 0, this._$AA = t, this._$AB = i, this._$AM = a, this.options = r, this._$Cv = r?.isConnected ?? !0;
   }
   get parentNode() {
     let t = this._$AA.parentNode;
@@ -356,7 +356,7 @@ class tt {
     return this._$AB;
   }
   _$AI(t, i = this) {
-    t = L(this, t, i), K(t) ? t === c || t == null || t === "" ? (this._$AH !== c && this._$AR(), this._$AH = c) : t !== this._$AH && t !== U && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : ke(t) ? this.k(t) : this._(t);
+    t = V(this, t, i), J(t) ? t === l || t == null || t === "" ? (this._$AH !== l && this._$AR(), this._$AH = l) : t !== this._$AH && t !== W && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : ke(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -365,38 +365,38 @@ class tt {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== c && K(this._$AH) ? this._$AA.nextSibling.data = t : this.T(B.createTextNode(t)), this._$AH = t;
+    this._$AH !== l && J(this._$AH) ? this._$AA.nextSibling.data = t : this.T(j.createTextNode(t)), this._$AH = t;
   }
   $(t) {
-    const { values: i, _$litType$: a } = t, r = typeof a == "number" ? this._$AC(t) : (a.el === void 0 && (a.el = J.createElement(ee(a.h, a.h[0]), this.options)), a);
+    const { values: i, _$litType$: a } = t, r = typeof a == "number" ? this._$AC(t) : (a.el === void 0 && (a.el = X.createElement(ee(a.h, a.h[0]), this.options)), a);
     if (this._$AH?._$AD === r) this._$AH.p(i);
     else {
-      const s = new Ee(r, this), o = s.u(this.options);
+      const s = new Ie(r, this), o = s.u(this.options);
       s.p(i), this.T(o), this._$AH = s;
     }
   }
   _$AC(t) {
-    let i = Ut.get(t.strings);
-    return i === void 0 && Ut.set(t.strings, i = new J(t)), i;
+    let i = Ht.get(t.strings);
+    return i === void 0 && Ht.set(t.strings, i = new X(t)), i;
   }
   k(t) {
     St(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
     let a, r = 0;
-    for (const s of t) r === i.length ? i.push(a = new tt(this.O(Z()), this.O(Z()), this, this.options)) : a = i[r], a._$AI(s), r++;
+    for (const s of t) r === i.length ? i.push(a = new it(this.O(K()), this.O(K()), this, this.options)) : a = i[r], a._$AI(s), r++;
     r < i.length && (this._$AR(a && a._$AB.nextSibling, r), i.length = r);
   }
   _$AR(t = this._$AA.nextSibling, i) {
     for (this._$AP?.(!1, !0, i); t !== this._$AB; ) {
-      const a = Nt(t).nextSibling;
-      Nt(t).remove(), t = a;
+      const a = Ft(t).nextSibling;
+      Ft(t).remove(), t = a;
     }
   }
   setConnected(t) {
     this._$AM === void 0 && (this._$Cv = t, this._$AP?.(t));
   }
 }
-class ut {
+class gt {
   get tagName() {
     return this.element.tagName;
   }
@@ -404,53 +404,53 @@ class ut {
     return this._$AM._$AU;
   }
   constructor(t, i, a, r, s) {
-    this.type = 1, this._$AH = c, this._$AN = void 0, this.element = t, this.name = i, this._$AM = r, this.options = s, a.length > 2 || a[0] !== "" || a[1] !== "" ? (this._$AH = Array(a.length - 1).fill(new String()), this.strings = a) : this._$AH = c;
+    this.type = 1, this._$AH = l, this._$AN = void 0, this.element = t, this.name = i, this._$AM = r, this.options = s, a.length > 2 || a[0] !== "" || a[1] !== "" ? (this._$AH = Array(a.length - 1).fill(new String()), this.strings = a) : this._$AH = l;
   }
   _$AI(t, i = this, a, r) {
     const s = this.strings;
     let o = !1;
-    if (s === void 0) t = L(this, t, i, 0), o = !K(t) || t !== this._$AH && t !== U, o && (this._$AH = t);
+    if (s === void 0) t = V(this, t, i, 0), o = !J(t) || t !== this._$AH && t !== W, o && (this._$AH = t);
     else {
       const p = t;
-      let l, u;
-      for (t = s[0], l = 0; l < s.length - 1; l++) u = L(this, p[a + l], i, l), u === U && (u = this._$AH[l]), o ||= !K(u) || u !== this._$AH[l], u === c ? t = c : t !== c && (t += (u ?? "") + s[l + 1]), this._$AH[l] = u;
+      let c, u;
+      for (t = s[0], c = 0; c < s.length - 1; c++) u = V(this, p[a + c], i, c), u === W && (u = this._$AH[c]), o ||= !J(u) || u !== this._$AH[c], u === l ? t = l : t !== l && (t += (u ?? "") + s[c + 1]), this._$AH[c] = u;
     }
     o && !r && this.j(t);
   }
   j(t) {
-    t === c ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
+    t === l ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
   }
 }
-class Ie extends ut {
+class Ce extends gt {
   constructor() {
     super(...arguments), this.type = 3;
   }
   j(t) {
-    this.element[this.name] = t === c ? void 0 : t;
+    this.element[this.name] = t === l ? void 0 : t;
   }
 }
-class Te extends ut {
+class Me extends gt {
   constructor() {
     super(...arguments), this.type = 4;
   }
   j(t) {
-    this.element.toggleAttribute(this.name, !!t && t !== c);
+    this.element.toggleAttribute(this.name, !!t && t !== l);
   }
 }
-class Oe extends ut {
+class Te extends gt {
   constructor(t, i, a, r, s) {
     super(t, i, a, r, s), this.type = 5;
   }
   _$AI(t, i = this) {
-    if ((t = L(this, t, i, 0) ?? c) === U) return;
-    const a = this._$AH, r = t === c && a !== c || t.capture !== a.capture || t.once !== a.once || t.passive !== a.passive, s = t !== c && (a === c || r);
+    if ((t = V(this, t, i, 0) ?? l) === W) return;
+    const a = this._$AH, r = t === l && a !== l || t.capture !== a.capture || t.once !== a.once || t.passive !== a.passive, s = t !== l && (a === l || r);
     r && this.element.removeEventListener(this.name, this, a), s && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
   handleEvent(t) {
     typeof this._$AH == "function" ? this._$AH.call(this.options?.host ?? this.element, t) : this._$AH.handleEvent(t);
   }
 }
-class Re {
+class Oe {
   constructor(t, i, a) {
     this.element = t, this.type = 6, this._$AN = void 0, this._$AM = i, this.options = a;
   }
@@ -458,22 +458,22 @@ class Re {
     return this._$AM._$AU;
   }
   _$AI(t) {
-    L(this, t);
+    V(this, t);
   }
 }
-const Me = _t.litHtmlPolyfillSupport;
-Me?.(J, tt), (_t.litHtmlVersions ??= []).push("3.3.3");
+const Re = _t.litHtmlPolyfillSupport;
+Re?.(X, it), (_t.litHtmlVersions ??= []).push("3.3.3");
 const ze = (e, t, i) => {
   const a = i?.renderBefore ?? t;
   let r = a._$litPart$;
   if (r === void 0) {
     const s = i?.renderBefore ?? null;
-    a._$litPart$ = r = new tt(t.insertBefore(Z(), s), s, void 0, i ?? {});
+    a._$litPart$ = r = new it(t.insertBefore(K(), s), s, void 0, i ?? {});
   }
   return r._$AI(e), r;
 };
 const At = globalThis;
-class $ extends j {
+class $ extends H {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -492,26 +492,26 @@ class $ extends j {
     super.disconnectedCallback(), this._$Do?.setConnected(!1);
   }
   render() {
-    return U;
+    return W;
   }
 }
 $._$litElement$ = !0, $.finalized = !0, At.litElementHydrateSupport?.({ LitElement: $ });
 const Ne = At.litElementPolyfillSupport;
 Ne?.({ LitElement: $ });
 (At.litElementVersions ??= []).push("4.2.2");
-const E = (e) => (t, i) => {
+const I = (e) => (t, i) => {
   i !== void 0 ? i.addInitializer(() => {
     customElements.define(e, t);
   }) : customElements.define(e, t);
 };
-const Fe = { attribute: !0, type: String, converter: ot, reflect: !1, hasChanged: $t }, De = (e = Fe, t, i) => {
+const Fe = { attribute: !0, type: String, converter: lt, reflect: !1, hasChanged: $t }, De = (e = Fe, t, i) => {
   const { kind: a, metadata: r } = i;
   let s = globalThis.litPropertyMetadata.get(r);
   if (s === void 0 && globalThis.litPropertyMetadata.set(r, s = /* @__PURE__ */ new Map()), a === "setter" && ((e = Object.create(e)).wrapped = !0), s.set(i.name, e), a === "accessor") {
     const { name: o } = i;
     return { set(p) {
-      const l = t.get.call(this);
-      t.set.call(this, p), this.requestUpdate(o, l, e, !0, p);
+      const c = t.get.call(this);
+      t.set.call(this, p), this.requestUpdate(o, c, e, !0, p);
     }, init(p) {
       return p !== void 0 && this.C(o, void 0, e, p), p;
     } };
@@ -519,8 +519,8 @@ const Fe = { attribute: !0, type: String, converter: ot, reflect: !1, hasChanged
   if (a === "setter") {
     const { name: o } = i;
     return function(p) {
-      const l = this[o];
-      t.call(this, p), this.requestUpdate(o, l, e, !0, p);
+      const c = this[o];
+      t.call(this, p), this.requestUpdate(o, c, e, !0, p);
     };
   }
   throw Error("Unsupported decorator location: " + a);
@@ -531,14 +531,14 @@ function d(e) {
     return r.constructor.createProperty(s, a), o ? Object.getOwnPropertyDescriptor(r, s) : void 0;
   })(e, t, i);
 }
-function x(e) {
+function v(e) {
   return d({ ...e, state: !0, attribute: !1 });
 }
-const Be = (e, t, i) => (i.configurable = !0, i.enumerable = !0, Reflect.decorate && typeof t != "object" && Object.defineProperty(e, t, i), i);
-function He(e, t) {
+const Ue = (e, t, i) => (i.configurable = !0, i.enumerable = !0, Reflect.decorate && typeof t != "object" && Object.defineProperty(e, t, i), i);
+function Le(e, t) {
   return (i, a, r) => {
     const s = (o) => o.renderRoot?.querySelector(e) ?? null;
-    return Be(i, a, { get() {
+    return Ue(i, a, { get() {
       return s(this);
     } });
   };
@@ -548,30 +548,33 @@ async function je(e) {
     type: "octopus_media/get_entries"
   })).entries;
 }
-function Ue(e, t, i) {
+function ie(e, t, i) {
   return e.connection.subscribeMessage((a) => i(a.snapshot), {
     type: "octopus_media/subscribe_snapshot",
     entry_id: t
   });
 }
-var Le = Object.defineProperty, We = Object.getOwnPropertyDescriptor, ie = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? We(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+function ae(e) {
+  return !e || typeof e != "object" ? !1 : e.code === "not_found" ? !0 : (e instanceof Error || "message" in e && typeof e.message == "string" ? e.message : "").includes("Config entry is not loaded");
+}
+var Be = Object.defineProperty, He = Object.getOwnPropertyDescriptor, kt = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? He(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Le(t, i, r), r;
+  return a && r && Be(t, i, r), r;
 };
-let lt = class extends $ {
+let Q = class extends $ {
   constructor() {
-    super(...arguments), this.message = "No media to display";
+    super(...arguments), this.message = "No media to display", this.secondary = "";
   }
   render() {
     return n`<div role="status">
       <span class="mark" aria-hidden="true"><ha-icon icon="mdi:octopus"></ha-icon></span>
       <strong>${this.message}</strong>
-      <small>Octopus Media</small>
+      <small>${this.secondary || "Octopus Media"}</small>
     </div>`;
   }
 };
-lt.styles = C`
+Q.styles = E`
     div {
       align-items: center;
       color: var(--octopus-media-muted, #8fa4ad);
@@ -616,18 +619,21 @@ lt.styles = C`
       text-transform: uppercase;
     }
   `;
-ie([
+kt([
   d({ type: String })
-], lt.prototype, "message", 2);
-lt = ie([
-  E("octopus-empty-state")
-], lt);
-var Ve = Object.defineProperty, qe = Object.getOwnPropertyDescriptor, ae = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? qe(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+], Q.prototype, "message", 2);
+kt([
+  d({ type: String })
+], Q.prototype, "secondary", 2);
+Q = kt([
+  I("octopus-empty-state")
+], Q);
+var We = Object.defineProperty, Ve = Object.getOwnPropertyDescriptor, re = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? Ve(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Ve(t, i, r), r;
+  return a && r && We(t, i, r), r;
 };
-let ct = class extends $ {
+let pt = class extends $ {
   constructor() {
     super(...arguments), this.message = "Unable to load media";
   }
@@ -635,7 +641,7 @@ let ct = class extends $ {
     return n`<div role="alert"><span aria-hidden="true">!</span>${this.message}</div>`;
   }
 };
-ct.styles = C`
+pt.styles = E`
     div {
       align-items: center;
       color: #ffb8b8;
@@ -655,40 +661,40 @@ ct.styles = C`
       width: 28px;
     }
   `;
-ae([
+re([
   d({ type: String })
-], ct.prototype, "message", 2);
-ct = ae([
-  E("octopus-error-state")
-], ct);
+], pt.prototype, "message", 2);
+pt = re([
+  I("octopus-error-state")
+], pt);
 const Ge = [
   "poster-small",
   "poster-medium",
   "poster-large",
   "backdrop-small",
   "backdrop-medium"
-], N = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+], D = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 360"><rect width="240" height="360" fill="#101820"/><path d="M76 166h88v64H76z" fill="none" stroke="#3dd6c6" stroke-width="6"/><circle cx="120" cy="126" r="32" fill="none" stroke="#3dd6c6" stroke-width="6"/><path d="m92 222 28-28 28 28" fill="none" stroke="#3dd6c6" stroke-width="6"/></svg>'
-), Lt = 300, Ye = 3e4;
-function Ze(e) {
+), Wt = 300, qe = 3e4;
+function Ye(e) {
   return Ge.includes(e);
 }
-function Ke(e) {
+function Ze(e) {
   return /^image_[A-Za-z0-9_-]{32}$/.test(e);
 }
-function Wt(e, t, i) {
-  if (!/^[A-Za-z0-9_-]{1,128}$/.test(e) || !Ke(t))
+function Vt(e, t, i) {
+  if (!/^[A-Za-z0-9_-]{1,128}$/.test(e) || !Ze(t))
     throw new Error("invalid_image_request");
-  if (!Ze(i)) throw new Error("invalid_image_variant");
+  if (!Ye(i)) throw new Error("invalid_image_variant");
   return `/api/octopus_media/image/${encodeURIComponent(e)}/${t}/${i}`;
 }
-class Je {
+class Ke {
   constructor(t, i = Date.now) {
     this.connection = t, this.now = i, this.cache = /* @__PURE__ */ new Map(), this.inflight = /* @__PURE__ */ new Map();
   }
   resolve(t) {
-    const i = Wt(t.entryId, t.imageRef, t.variant), a = this.cache.get(i);
-    if (a && a.expiresAt - Ye > this.now())
+    const i = Vt(t.entryId, t.imageRef, t.variant), a = this.cache.get(i);
+    if (a && a.expiresAt - qe > this.now())
       return Promise.resolve(a.path);
     const r = this.inflight.get(i);
     if (r) return r;
@@ -696,7 +702,7 @@ class Je {
     return this.inflight.set(i, s), s;
   }
   invalidate(t) {
-    this.cache.delete(Wt(t.entryId, t.imageRef, t.variant));
+    this.cache.delete(Vt(t.entryId, t.imageRef, t.variant));
   }
   release() {
   }
@@ -704,31 +710,31 @@ class Je {
     const i = await this.connection.sendMessagePromise({
       type: "auth/sign_path",
       path: t,
-      expires: Lt
+      expires: Wt
     });
     if (typeof i.path != "string" || !i.path.startsWith(`${t}?`) || i.path.includes("://"))
       throw new Error("invalid_signed_path");
     return this.cache.set(t, {
-      expiresAt: this.now() + Lt * 1e3,
+      expiresAt: this.now() + Wt * 1e3,
       path: i.path
     }), i.path;
   }
 }
-const Vt = /* @__PURE__ */ new WeakMap();
+const Gt = /* @__PURE__ */ new WeakMap();
 function qt(e) {
   const t = e.connection;
-  let i = Vt.get(t);
-  return i || (i = new Je(e.connection), Vt.set(t, i)), i;
+  let i = Gt.get(t);
+  return i || (i = new Ke(e.connection), Gt.set(t, i)), i;
 }
-var Qe = Object.defineProperty, Xe = Object.getOwnPropertyDescriptor, R = (e, t, i, a) => {
+var Je = Object.defineProperty, Xe = Object.getOwnPropertyDescriptor, R = (e, t, i, a) => {
   for (var r = a > 1 ? void 0 : a ? Xe(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Qe(t, i, r), r;
+  return a && r && Je(t, i, r), r;
 };
-let I = class extends $ {
+let M = class extends $ {
   constructor() {
-    super(...arguments), this.entryId = "", this.variant = "poster-medium", this.alt = "", this.backdrop = !1, this.imageUrl = N, this.imageState = "idle", this.nearViewport = !1, this.generation = 0, this.renewalAttempts = 0, this.onLoad = () => {
-      this.imageUrl !== N && (this.imageState = "loaded", this.dispatchEvent(
+    super(...arguments), this.entryId = "", this.variant = "poster-medium", this.alt = "", this.backdrop = !1, this.imageUrl = D, this.imageState = "idle", this.nearViewport = !1, this.generation = 0, this.renewalAttempts = 0, this.onLoad = () => {
+      this.imageUrl !== D && (this.imageState = "loaded", this.dispatchEvent(
         new CustomEvent("octopus-image-ready", {
           bubbles: !0,
           composed: !0,
@@ -774,7 +780,7 @@ let I = class extends $ {
     }
   }
   resetImage() {
-    this.generation += 1, this.renewalAttempts = 0, this.imageUrl = N, this.imageState = "idle", this.retryTimer !== void 0 && window.clearTimeout(this.retryTimer), this.retryTimer = void 0, this.nearViewport && this.loadSignedPath();
+    this.generation += 1, this.renewalAttempts = 0, this.imageUrl = D, this.imageState = "idle", this.retryTimer !== void 0 && window.clearTimeout(this.retryTimer), this.retryTimer = void 0, this.nearViewport && this.loadSignedPath();
   }
   request() {
     if (!(!this.hass || !this.imageRef || !this.entryId))
@@ -793,20 +799,20 @@ let I = class extends $ {
       i === this.generation && (this.imageUrl = a);
     } catch {
       if (i !== this.generation) return;
-      this.imageState = "temporary", this.imageUrl = N, this.scheduleBackoffRetry();
+      this.imageState = "temporary", this.imageUrl = D, this.scheduleBackoffRetry();
     }
   }
   async handleImageError() {
     const e = this.request();
     if (!e || !this.hass) {
-      this.imageState = "missing", this.imageUrl = N;
+      this.imageState = "missing", this.imageUrl = D;
       return;
     }
     if (this.renewalAttempts === 0) {
-      this.renewalAttempts = 1, qt(this.hass).invalidate(e), this.imageUrl = N, await this.updateComplete, await this.loadSignedPath();
+      this.renewalAttempts = 1, qt(this.hass).invalidate(e), this.imageUrl = D, await this.updateComplete, await this.loadSignedPath();
       return;
     }
-    this.imageState = "missing", this.imageUrl = N;
+    this.imageState = "missing", this.imageUrl = D;
   }
   scheduleBackoffRetry() {
     this.renewalAttempts > 0 || this.retryTimer !== void 0 || (this.renewalAttempts = 1, this.retryTimer = window.setTimeout(() => {
@@ -814,7 +820,7 @@ let I = class extends $ {
     }, 5e3));
   }
 };
-I.styles = C`
+M.styles = E`
     :host {
       display: block;
       height: 100%;
@@ -847,37 +853,37 @@ I.styles = C`
   `;
 R([
   d({ attribute: !1 })
-], I.prototype, "hass", 2);
+], M.prototype, "hass", 2);
 R([
   d({ type: String })
-], I.prototype, "entryId", 2);
+], M.prototype, "entryId", 2);
 R([
   d({ type: String })
-], I.prototype, "imageRef", 2);
+], M.prototype, "imageRef", 2);
 R([
   d({ type: String })
-], I.prototype, "variant", 2);
+], M.prototype, "variant", 2);
 R([
   d({ type: String })
-], I.prototype, "alt", 2);
+], M.prototype, "alt", 2);
 R([
   d({ type: Boolean })
-], I.prototype, "backdrop", 2);
+], M.prototype, "backdrop", 2);
 R([
-  x()
-], I.prototype, "imageUrl", 2);
+  v()
+], M.prototype, "imageUrl", 2);
 R([
-  x()
-], I.prototype, "imageState", 2);
-I = R([
-  E("octopus-media-image")
-], I);
-var ti = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, re = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? ei(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+  v()
+], M.prototype, "imageState", 2);
+M = R([
+  I("octopus-media-image")
+], M);
+var Qe = Object.defineProperty, ti = Object.getOwnPropertyDescriptor, se = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? ti(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && ti(t, i, r), r;
+  return a && r && Qe(t, i, r), r;
 };
-let pt = class extends $ {
+let dt = class extends $ {
   constructor() {
     super(...arguments), this.message = "Loading media";
   }
@@ -885,7 +891,7 @@ let pt = class extends $ {
     return n`<div role="status" aria-live="polite"><span></span>${this.message}</div>`;
   }
 };
-pt.styles = C`
+dt.styles = E`
     div {
       align-items: center;
       color: var(--octopus-media-muted, #8fa4ad);
@@ -912,21 +918,21 @@ pt.styles = C`
       }
     }
   `;
-re([
+se([
   d({ type: String })
-], pt.prototype, "message", 2);
-pt = re([
-  E("octopus-loading-state")
-], pt);
-const vt = ["recent", "upcoming", "playing", "carousel"], se = ["auto", "strip", "grid", "hero", "compact", "portrait", "list"], ii = ["auto", "midnight", "ocean", "jellyfin", "neutral"], oe = [
+], dt.prototype, "message", 2);
+dt = se([
+  I("octopus-loading-state")
+], dt);
+const bt = ["recent", "upcoming", "playing"], ei = ["auto", "strip", "grid", "hero", "compact", "portrait", "list"], ii = [
   "cinematic-overlay",
   "gallery-clean",
   "octopus-glass",
   "cinematic-octopus-gallery",
   "playing-hero-cinematic"
-], yt = "select_entry", A = {
+], vt = "select_entry", k = {
   type: "custom:octopus-media-card",
-  entry_id: yt,
+  entry_id: vt,
   mode: "recent",
   layout: "auto",
   height: "auto",
@@ -954,13 +960,13 @@ const vt = ["recent", "upcoming", "playing", "carousel"], se = ["auto", "strip",
   appearance: "auto",
   auto_scroll: !1,
   auto_scroll_interval: 6
-}, H = (e, t) => typeof e == "string" && t.includes(e), rt = (e, t, i, a) => {
+}, B = (e, t) => typeof e == "string" && t.includes(e), ot = (e, t, i, a) => {
   if (e === void 0) return t;
   if (!Number.isInteger(e) || Number(e) < i || Number(e) > a)
     throw new Error(`Expected an integer between ${String(i)} and ${String(a)}`);
   return Number(e);
 };
-function ne(e) {
+function oe(e) {
   if (typeof e != "object" || e === null)
     throw new Error("Card configuration must be an object");
   const t = e;
@@ -968,61 +974,61 @@ function ne(e) {
     throw new Error("Invalid card type");
   if (typeof t.entry_id != "string" || t.entry_id.trim() === "")
     throw new Error("entry_id is required");
-  if (t.mode !== void 0 && !H(t.mode, vt))
+  if (t.mode !== void 0 && !B(t.mode, bt))
     throw new Error("Invalid mode");
-  if (t.layout !== void 0 && !H(t.layout, se))
+  if (t.layout !== void 0 && !B(t.layout, ei))
     throw new Error("Invalid layout");
-  if (t.visual_concept !== void 0 && !H(t.visual_concept, oe))
+  if (t.visual_concept !== void 0 && !B(t.visual_concept, ii))
     throw new Error("Invalid visual concept");
-  if (t.appearance !== void 0 && !H(t.appearance, ["auto", "dark", "light"]))
+  if (t.appearance !== void 0 && !B(t.appearance, ["auto", "dark", "light"]))
     throw new Error("Invalid appearance");
-  if (t.title_position !== void 0 && !H(t.title_position, ["overlay", "below"]))
+  if (t.title_position !== void 0 && !B(t.title_position, ["overlay", "below"]))
     throw new Error("Invalid title position");
-  const i = t.height ?? A.height;
+  const i = t.height ?? k.height;
   if (i !== "auto" && (!Number.isFinite(i) || Number(i) < 80))
     throw new Error("height must be auto or at least 80 pixels");
   const a = Array.isArray(t.sections) ? t.sections.filter(
-    (r) => H(r, ["recent", "upcoming", "playing"])
-  ) : A.sections;
+    (r) => B(r, ["recent", "upcoming", "playing"])
+  ) : k.sections;
   return {
-    ...A,
+    ...k,
     ...t,
     type: "custom:octopus-media-card",
     entry_id: t.entry_id.trim(),
-    mode: t.mode ?? A.mode,
-    layout: t.layout ?? A.layout,
+    mode: t.mode ?? k.mode,
+    layout: t.layout ?? k.layout,
     height: i,
-    sections: a.length > 0 ? [...a] : [...A.sections],
-    item_count: rt(t.item_count, A.item_count, 1, 50),
-    cycle_interval: rt(t.cycle_interval, A.cycle_interval, 5, 3600),
-    appearance: t.appearance ?? A.appearance,
+    sections: a.length > 0 ? [...a] : [...k.sections],
+    item_count: ot(t.item_count, k.item_count, 1, 50),
+    cycle_interval: ot(t.cycle_interval, k.cycle_interval, 5, 3600),
+    appearance: t.appearance ?? k.appearance,
     auto_scroll: t.auto_scroll === !0,
-    auto_scroll_interval: rt(
+    auto_scroll_interval: ot(
       t.auto_scroll_interval,
-      A.auto_scroll_interval,
+      k.auto_scroll_interval,
       2,
       3600
     ),
-    posters_visible: t.posters_visible === void 0 || t.posters_visible === "auto" ? "auto" : rt(t.posters_visible, 3, 1, 5)
+    posters_visible: t.posters_visible === void 0 || t.posters_visible === "auto" ? "auto" : ot(t.posters_visible, 3, 1, 5)
   };
 }
-const D = [280, 450, 700, 1e3], Gt = 12, Yt = ["xs", "sm", "md", "lg", "xl"];
+const L = [280, 450, 700, 1e3], Yt = 12, Zt = ["xs", "sm", "md", "lg", "xl"];
 function ai(e) {
-  return e < D[0] ? "xs" : e < D[1] ? "sm" : e < D[2] ? "md" : e < D[3] ? "lg" : "xl";
+  return e < L[0] ? "xs" : e < L[1] ? "sm" : e < L[2] ? "md" : e < L[3] ? "lg" : "xl";
 }
 function ri(e, t) {
   if (!t) return ai(e);
-  let i = Yt.indexOf(t);
-  for (; i < D.length && e >= (D[i] ?? Number.POSITIVE_INFINITY) + Gt; )
+  let i = Zt.indexOf(t);
+  for (; i < L.length && e >= (L[i] ?? Number.POSITIVE_INFINITY) + Yt; )
     i += 1;
-  for (; i > 0 && e < (D[i - 1] ?? Number.NEGATIVE_INFINITY) - Gt; )
+  for (; i > 0 && e < (L[i - 1] ?? Number.NEGATIVE_INFINITY) - Yt; )
     i -= 1;
-  return Yt[i] ?? "xl";
+  return Zt[i] ?? "xl";
 }
 function si(e, t, i) {
   return t === "xs" ? e === "playing" ? "list" : "compact" : t === "sm" ? e === "playing" ? i >= 200 ? "hero" : "compact" : "strip" : t === "md" ? e === "playing" ? i >= 200 ? "hero" : "list" : "strip" : e === "playing" ? "hero" : i >= 360 ? "grid" : "strip";
 }
-class oi {
+class ne {
   update(t, i, a) {
     return this.bucket = ri(i, this.bucket), si(t, this.bucket, a);
   }
@@ -1030,7 +1036,7 @@ class oi {
     return this.bucket;
   }
 }
-const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
+const oi = ({ entryId: e, hass: t, items: i, width: a }) => {
   const r = i.slice(0, 3);
   return n`
     <div class="layout compact" data-layout="compact">
@@ -1056,12 +1062,13 @@ const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
   )}
     </div>
   `;
-}, li = {
+}, ni = {
   recent: "Recently added",
+  recentEyebrow: "Recent",
   upcoming: "Upcoming",
+  upcomingEyebrow: "Upcoming",
   playing: "Playing now",
   playingEyebrow: "Now playing",
-  carousel: "Media",
   loading: "Loading media",
   empty: "No media to display",
   upcomingEmpty: "Nothing scheduled for now",
@@ -1072,6 +1079,9 @@ const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
   unavailableSecondary: "Waiting for the media service to reconnect.",
   upcomingNotConfigured: "Upcoming media will be available in a future setup phase",
   error: "Unable to load media",
+  configurationNotFound: "Octopus configuration not found",
+  configurationNotFoundSecondary: "Edit this card and select an Octopus Media integration.",
+  previousConfigurationUnavailable: "Previous configuration (unavailable)",
   notConfigured: "The integration is not configured yet",
   stale: "Showing the last available update",
   partial: "Some media could not be displayed",
@@ -1090,14 +1100,52 @@ const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
   series: "Series",
   episode: "Episode",
   pending: "Pending",
-  downloaded: "Downloaded"
-}, ci = {
+  downloaded: "Downloaded",
+  integration: "Integration",
+  selectIntegration: "Select an integration",
+  contentMode: "Content / mode",
+  mode: "Mode",
+  layout: "Layout",
+  title: "Title",
+  height: "Height",
+  appearance: "Appearance",
+  itemCount: "Item count",
+  postersVisible: "Posters visible",
+  content: "Content",
+  titles: "Titles",
+  dates: "Dates",
+  ratings: "Ratings",
+  badges: "Badges",
+  arrows: "Arrows",
+  device: "Device",
+  user: "User",
+  progress: "Progress",
+  time: "Time",
+  autoScroll: "Auto-scroll",
+  autoScrollInterval: "Auto-scroll interval (seconds)",
+  appearanceAuto: "Follow Home Assistant",
+  appearanceDark: "Dark",
+  appearanceLight: "Light",
+  preview: "Preview",
+  previewWidth: "Preview width",
+  previewCard: "Card preview",
+  previewUnavailable: "Live preview is unavailable",
+  fictionalPreview: "Deterministic preview: titles and images are fictional.",
+  previousPosters: "Previous posters",
+  nextPosters: "Next posters",
+  today: "Today",
+  tomorrow: "Tomorrow",
+  digital: "Digital",
+  physical: "Physical",
+  cinema: "Cinema"
+}, li = {
   recent: "Recém-adicionados",
+  recentEyebrow: "Recentes",
   upcoming: "Em breve",
+  upcomingEyebrow: "Em breve",
   upcomingEmpty: "Nada previsto por enquanto",
   playing: "Tocando agora",
   playingEyebrow: "EM REPRODUÇÃO",
-  carousel: "Mídia",
   loading: "Carregando mídia",
   empty: "Nenhuma mídia para exibir",
   noPlaying: "Nenhuma reprodução ativa",
@@ -1107,6 +1155,9 @@ const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
   unavailableSecondary: "Aguardando o serviço de mídia se reconectar.",
   upcomingNotConfigured: "As próximas mídias estarão disponíveis em uma futura fase de configuração",
   error: "Não foi possível carregar a mídia",
+  configurationNotFound: "Configuração do Octopus não encontrada",
+  configurationNotFoundSecondary: "Edite este cartão e selecione uma integração Octopus Media.",
+  previousConfigurationUnavailable: "Configuração anterior (indisponível)",
   notConfigured: "A integração ainda não está configurada",
   stale: "Exibindo a última atualização disponível",
   partial: "Algumas mídias não puderam ser exibidas",
@@ -1125,17 +1176,54 @@ const ni = ({ entryId: e, hass: t, items: i, width: a }) => {
   series: "Série",
   episode: "Episódio",
   pending: "Pendente",
-  downloaded: "Baixado"
+  downloaded: "Baixado",
+  integration: "Integração",
+  selectIntegration: "Selecione uma integração",
+  contentMode: "Conteúdo / modo",
+  mode: "Modo",
+  layout: "Layout",
+  title: "Título",
+  height: "Altura",
+  appearance: "Aparência",
+  itemCount: "Quantidade de itens",
+  postersVisible: "Pôsteres visíveis",
+  content: "Conteúdo",
+  titles: "Títulos",
+  dates: "Datas",
+  ratings: "Avaliações",
+  badges: "Badges",
+  arrows: "Setas",
+  device: "Dispositivo",
+  user: "Usuário",
+  progress: "Progresso",
+  time: "Tempo",
+  autoScroll: "Rolagem automática",
+  autoScrollInterval: "Intervalo da rolagem (segundos)",
+  appearanceAuto: "Seguir o Home Assistant",
+  appearanceDark: "Escuro",
+  appearanceLight: "Claro",
+  preview: "Prévia",
+  previewWidth: "Largura da prévia",
+  previewCard: "Prévia do card",
+  previewUnavailable: "A prévia ao vivo está indisponível",
+  fictionalPreview: "Prévia determinística: títulos e imagens são fictícios.",
+  previousPosters: "Pôsteres anteriores",
+  nextPosters: "Próximos pôsteres",
+  today: "Hoje",
+  tomorrow: "Amanhã",
+  digital: "Digital",
+  physical: "Físico",
+  cinema: "Cinema"
 };
 function f(e, t) {
-  return e?.toLowerCase().startsWith("pt") ? ci[t] : li[t];
+  return e?.toLowerCase().startsWith("pt") ? li[t] : ni[t];
 }
-var pi = Object.defineProperty, di = Object.getOwnPropertyDescriptor, T = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? di(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var ci = Object.defineProperty, pi = Object.getOwnPropertyDescriptor, T = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? pi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && pi(t, i, r), r;
+  return a && r && ci(t, i, r), r;
 };
-let k = class extends $ {
+let P = class extends $ {
   constructor() {
     super(...arguments), this.entryId = "", this.variant = "poster-medium", this.showTitle = !0, this.showBadge = !0, this.showSubtitle = !0, this.titlePosition = "overlay", this.focused = !1, this.itemIndex = 0, this.announceFocus = () => {
       this.item && this.dispatchEvent(
@@ -1168,22 +1256,22 @@ let k = class extends $ {
             .variant=${this.variant}
             .alt=${this.item.title}
           ></octopus-media-image>
-          ${this.showBadge ? n`<span class="badge">${this.badgeLabel()}</span>` : c}
+          ${this.showBadge ? n`<span class="badge">${this.badgeLabel()}</span>` : l}
           ${this.showTitle && this.titlePosition === "overlay" ? n`<div class="overlay-copy">
                   <h3 class="title">${this.item.title}</h3>
-                  ${this.showSubtitle && this.item.subtitle ? n`<p>${this.item.subtitle}</p>` : c}
-                </div>` : c}
+                  ${this.showSubtitle && this.item.subtitle ? n`<p>${this.item.subtitle}</p>` : l}
+                </div>` : l}
         </div>
-        ${this.showTitle && this.titlePosition === "below" ? n`<h3 class="title">${this.item.title}</h3>` : c}
-        ${this.titlePosition === "below" && this.showSubtitle && this.item.subtitle ? n`<p>${this.item.subtitle}</p>` : c}
+        ${this.showTitle && this.titlePosition === "below" ? n`<h3 class="title">${this.item.title}</h3>` : l}
+        ${this.titlePosition === "below" && this.showSubtitle && this.item.subtitle ? n`<p>${this.item.subtitle}</p>` : l}
       </article>
-    ` : c;
+    ` : l;
   }
   badgeLabel() {
     return this.item ? this.item.type === "episode" && "season" in this.item && "episode" in this.item && this.item.season !== null && this.item.episode !== null ? `T${String(this.item.season).padStart(2, "0")}E${String(this.item.episode).padStart(2, "0")}` : f(this.hass?.language, this.item.type) : "";
   }
 };
-k.styles = C`
+P.styles = E`
     :host {
       display: block;
       height: 100%;
@@ -1304,38 +1392,38 @@ k.styles = C`
   `;
 T([
   d({ attribute: !1 })
-], k.prototype, "item", 2);
+], P.prototype, "item", 2);
 T([
   d({ attribute: !1 })
-], k.prototype, "hass", 2);
+], P.prototype, "hass", 2);
 T([
   d({ type: String })
-], k.prototype, "entryId", 2);
+], P.prototype, "entryId", 2);
 T([
   d({ type: String })
-], k.prototype, "variant", 2);
+], P.prototype, "variant", 2);
 T([
   d({ type: Boolean })
-], k.prototype, "showTitle", 2);
+], P.prototype, "showTitle", 2);
 T([
   d({ type: Boolean })
-], k.prototype, "showBadge", 2);
+], P.prototype, "showBadge", 2);
 T([
   d({ type: Boolean })
-], k.prototype, "showSubtitle", 2);
+], P.prototype, "showSubtitle", 2);
 T([
   d({ type: String })
-], k.prototype, "titlePosition", 2);
+], P.prototype, "titlePosition", 2);
 T([
   d({ type: Boolean, reflect: !0 })
-], k.prototype, "focused", 2);
+], P.prototype, "focused", 2);
 T([
   d({ type: Number })
-], k.prototype, "itemIndex", 2);
-k = T([
-  E("octopus-media-poster")
-], k);
-const hi = ({ config: e, entryId: t, hass: i, items: a }) => n`
+], P.prototype, "itemIndex", 2);
+P = T([
+  I("octopus-media-poster")
+], P);
+const di = ({ config: e, entryId: t, hass: i, items: a }) => n`
   <div class="layout grid" data-layout="grid">
     ${a.map(
   (r) => n`
@@ -1352,23 +1440,23 @@ const hi = ({ config: e, entryId: t, hass: i, items: a }) => n`
 )}
   </div>
 `;
-var ui = Object.defineProperty, gi = Object.getOwnPropertyDescriptor, kt = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? gi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var hi = Object.defineProperty, ui = Object.getOwnPropertyDescriptor, Pt = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? ui(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && ui(t, i, r), r;
+  return a && r && hi(t, i, r), r;
 };
-let Q = class extends $ {
+let tt = class extends $ {
   constructor() {
     super(...arguments), this.showSubtitle = !0;
   }
   render() {
     return this.item ? n`
       <strong>${this.item.title}</strong>
-      ${this.showSubtitle && this.item.subtitle ? n`<span>${this.item.subtitle}</span>` : c}
-    ` : c;
+      ${this.showSubtitle && this.item.subtitle ? n`<span>${this.item.subtitle}</span>` : l}
+    ` : l;
   }
 };
-Q.styles = C`
+tt.styles = E`
     :host {
       display: grid;
       gap: 4px;
@@ -1392,34 +1480,34 @@ Q.styles = C`
       white-space: nowrap;
     }
   `;
-kt([
+Pt([
   d({ attribute: !1 })
-], Q.prototype, "item", 2);
-kt([
+], tt.prototype, "item", 2);
+Pt([
   d({ type: Boolean })
-], Q.prototype, "showSubtitle", 2);
-Q = kt([
-  E("octopus-media-metadata")
-], Q);
-var fi = Object.defineProperty, mi = Object.getOwnPropertyDescriptor, S = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? mi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+], tt.prototype, "showSubtitle", 2);
+tt = Pt([
+  I("octopus-media-metadata")
+], tt);
+var gi = Object.defineProperty, fi = Object.getOwnPropertyDescriptor, A = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? fi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && fi(t, i, r), r;
+  return a && r && gi(t, i, r), r;
 };
-function G(e) {
+function Y(e) {
   if (!Number.isFinite(e) || e <= 0) return "0:00";
   const t = Math.floor(e), i = Math.floor(t / 3600), a = Math.floor(t % 3600 / 60), r = t % 60;
   return i > 0 ? `${String(i)}:${String(a).padStart(2, "0")}:${String(r).padStart(2, "0")}` : `${String(a)}:${String(r).padStart(2, "0")}`;
 }
-function bi(e) {
+function mi(e) {
   if (!Number.isFinite(e) || e <= 0) return;
   const t = Math.max(1, Math.round(e / 60)), i = Math.floor(t / 60), a = t % 60;
   return i === 0 ? `${String(a)} min` : a > 0 ? `${String(i)}h${String(a).padStart(2, "0")}` : `${String(i)}h`;
 }
-function vi(e, t) {
+function bi(e, t) {
   const i = [], a = e.type === "movie" && /^\d{4}$/.test(e.subtitle ?? "") ? e.subtitle : null;
   a && i.push(a);
-  const r = bi(e.duration_seconds);
+  const r = mi(e.duration_seconds);
   if (r && i.push(r), i.push(...e.genres.filter((s) => s.trim()).slice(0, 2)), e.rating !== null && Number.isFinite(e.rating)) {
     const s = new Intl.NumberFormat(t ?? "en", {
       maximumFractionDigits: 1,
@@ -1429,14 +1517,14 @@ function vi(e, t) {
   }
   return i;
 }
-function yi(e) {
+function vi(e) {
   return [
     e.video_resolution?.trim(),
     e.video_hdr ? "HDR" : void 0,
     e.audio_channels?.trim()
   ].filter((t) => !!t).slice(0, 3);
 }
-function xi(e) {
+function yi(e) {
   return e.type === "episode" && e.still_ref ? { ref: e.still_ref, variant: "poster-large" } : e.backdrop_ref ? { ref: e.backdrop_ref, variant: "backdrop-medium" } : e.still_ref ? { ref: e.still_ref, variant: "poster-large" } : { variant: "backdrop-medium" };
 }
 let _ = class extends $ {
@@ -1477,7 +1565,7 @@ let _ = class extends $ {
         <div class="session-track" @scroll=${this.onScroll}>
           ${this.items.map((t, i) => this.renderSession(t, i))}
         </div>
-        ${e ? this.renderNavigation() : c}
+        ${e ? this.renderNavigation() : l}
       </section>
     `;
   }
@@ -1506,16 +1594,16 @@ let _ = class extends $ {
     `;
   }
   renderSession(e, t) {
-    const i = t === this.activeIndex, a = xi(e), r = e.duration_seconds > 0, s = r ? Math.min(100, Math.max(0, e.progress)) : 0, o = Math.round(s), p = r ? Math.max(0, e.duration_seconds - e.position_seconds) : 0, l = vi(e, this.language), u = yi(e), g = l.length > 0 || u.length > 0, h = f(
+    const i = t === this.activeIndex, a = yi(e), r = e.duration_seconds > 0, s = r ? Math.min(100, Math.max(0, e.progress)) : 0, o = Math.round(s), p = r ? Math.max(0, e.duration_seconds - e.position_seconds) : 0, c = bi(e, this.language), u = vi(e), g = c.length > 0 || u.length > 0, h = f(
       this.language,
       e.state === "paused" ? "pausedStatus" : "playingStatus"
-    ), y = e.device_alias ?? e.device_name, m = [
+    ), w = e.device_alias ?? e.device_name, m = [
       h,
       e.title,
       e.subtitle,
-      this.config?.show_device ? y : void 0,
+      this.config?.show_device ? w : void 0,
       this.config?.show_user ? e.user_name : void 0,
-      r ? `${G(e.position_seconds)} / ${G(e.duration_seconds)}` : void 0
+      r ? `${Y(e.position_seconds)} / ${Y(e.duration_seconds)}` : void 0
     ].filter(Boolean).join(", ");
     return n`
       <article
@@ -1531,8 +1619,8 @@ let _ = class extends $ {
         @click=${() => {
       this.activate(t, !1);
     }}
-        @keydown=${(w) => {
-      this.onSessionKeydown(w, t);
+        @keydown=${(x) => {
+      this.onSessionKeydown(x, t);
     }}
       >
         ${a.ref ? n`<octopus-media-image
@@ -1544,7 +1632,7 @@ let _ = class extends $ {
                 .variant=${a.variant}
                 .alt=${""}
                 .backdrop=${!0}
-              ></octopus-media-image>` : c}
+              ></octopus-media-image>` : l}
         <span class="color-wash" aria-hidden="true"></span>
         <span class="vignette" aria-hidden="true"></span>
         <div class="session-content">
@@ -1568,36 +1656,36 @@ let _ = class extends $ {
                         aria-hidden="true"
                       ></ha-icon>
                       ${h}
-                    </span>` : c}
+                    </span>` : l}
               <span class="media-kind">${f(this.language, e.type)}</span>
             </div>
             <div class="title-block">
               ${this.config?.show_titles ? n`<h3>${e.title}</h3>
-                      ${e.subtitle ? n`<p class=${`editorial-meta ${e.type}`}>${e.subtitle}</p>` : c}` : c}
+                      ${e.subtitle ? n`<p class=${`editorial-meta ${e.type}`}>${e.subtitle}</p>` : l}` : l}
             </div>
             ${g ? n`<div class="enriched-metadata">
-                    ${l.length > 0 ? n`<p class="editorial-line">
-                            ${l.map((w) => n`<span>${w}</span>`)}
-                          </p>` : c}
+                    ${c.length > 0 ? n`<p class="editorial-line">
+                            ${c.map((x) => n`<span>${x}</span>`)}
+                          </p>` : l}
                     ${u.length > 0 ? n`<div class="technical-chips">
-                            ${u.map((w) => n`<span>${w}</span>`)}
-                          </div>` : c}
-                  </div>` : c}
+                            ${u.map((x) => n`<span>${x}</span>`)}
+                          </div>` : l}
+                  </div>` : l}
             <div class="session-context">
               <div class="session-meta">
                 ${this.config?.show_device ? n`<span
                         ><ha-icon icon="mdi:television-play" aria-hidden="true"></ha-icon
-                        >${y}</span
-                      >` : c}
+                        >${w}</span
+                      >` : l}
                 ${this.config?.show_user ? n`<span
                         ><ha-icon icon="mdi:account" aria-hidden="true"></ha-icon
                         >${e.user_name}</span
-                      >` : c}
+                      >` : l}
               </div>
               ${this.stale || this.partial || this.serviceOffline ? n`<div class="data-flags" role="status">
-                      ${this.stale || this.serviceOffline ? n`<span>${f(this.language, "staleShort")}</span>` : c}
-                      ${this.partial ? n`<span>${f(this.language, "partialShort")}</span>` : c}
-                    </div>` : c}
+                      ${this.stale || this.serviceOffline ? n`<span>${f(this.language, "staleShort")}</span>` : l}
+                      ${this.partial ? n`<span>${f(this.language, "partialShort")}</span>` : l}
+                    </div>` : l}
             </div>
             ${this.config?.show_progress && r ? n`<div class="progress-block">
                     <div
@@ -1613,10 +1701,10 @@ let _ = class extends $ {
                     ${this.config.show_time ? n`
                             <div class="times">
                               <span class="position"
-                                >${G(e.position_seconds)}</span
+                                >${Y(e.position_seconds)}</span
                               >
                               <span class="duration"
-                                >${G(e.duration_seconds)}</span
+                                >${Y(e.duration_seconds)}</span
                               >
                             </div>
                             <div class="progress-summary">
@@ -1626,11 +1714,11 @@ let _ = class extends $ {
                               >
                               <span class="remaining"
                                 >${f(this.language, "remainingPrefix")}
-                                ${G(p)}</span
+                                ${Y(p)}</span
                               >
                             </div>
-                          ` : c}
-                  </div>` : c}
+                          ` : l}
+                  </div>` : l}
           </div>
         </div>
       </article>
@@ -1660,7 +1748,7 @@ let _ = class extends $ {
               >
                 ›
               </button>
-            </div>` : c}
+            </div>` : l}
       ${e?.show_indicators ? n`<div
               class="session-indicators"
               role="group"
@@ -1676,7 +1764,7 @@ let _ = class extends $ {
       }}
                   ></button>`
     )}
-            </div>` : c}
+            </div>` : l}
     `;
   }
   onSessionKeydown(e, t) {
@@ -1715,7 +1803,7 @@ let _ = class extends $ {
     this.cycleTimer !== void 0 && window.clearInterval(this.cycleTimer), this.cycleTimer = void 0;
   }
 };
-_.styles = C`
+_.styles = E`
     :host {
       container-type: inline-size;
       display: block;
@@ -1824,11 +1912,11 @@ _.styles = C`
       align-items: center;
       box-sizing: border-box;
       display: grid;
-      gap: 13px;
+      gap: 10px;
       grid-template-columns: minmax(100px, 31.5%) minmax(0, 1fr);
       height: 100%;
       min-width: 0;
-      padding: 10px 12px;
+      padding: 5px 12px;
     }
     .poster-shell {
       aspect-ratio: 2 / 3;
@@ -1850,7 +1938,7 @@ _.styles = C`
       display: grid;
       gap: 0;
       grid-template-rows: auto auto auto minmax(6px, 1fr) auto auto;
-      height: min(100%, 160px);
+      height: min(100%, 180px);
       min-width: 0;
       overflow: hidden;
     }
@@ -1862,7 +1950,7 @@ _.styles = C`
       grid-row: 1;
       letter-spacing: 0.14em;
       line-height: 1;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
       text-transform: uppercase;
     }
     .copy-topline,
@@ -1936,7 +2024,7 @@ _.styles = C`
       display: grid;
       gap: 3px;
       grid-row: 3;
-      margin-top: 6px;
+      margin-top: 4px;
       min-width: 0;
     }
     .editorial-meta {
@@ -2048,7 +2136,7 @@ _.styles = C`
       display: grid;
       gap: 4px;
       grid-row: 6;
-      margin-top: 8px;
+      margin-top: 5px;
       min-width: 0;
     }
     .progress-track {
@@ -2421,54 +2509,54 @@ _.styles = C`
       }
     }
   `;
-S([
+A([
   d({ attribute: !1 })
 ], _.prototype, "config", 2);
-S([
+A([
   d({ attribute: !1 })
 ], _.prototype, "hass", 2);
-S([
+A([
   d({ attribute: !1 })
 ], _.prototype, "items", 2);
-S([
+A([
   d({ type: String })
 ], _.prototype, "entryId", 2);
-S([
+A([
   d({ type: String })
 ], _.prototype, "focusedRef", 2);
-S([
+A([
   d({ type: String })
 ], _.prototype, "language", 2);
-S([
+A([
   d({ type: String, attribute: "data-appearance" })
 ], _.prototype, "appearance", 2);
-S([
+A([
   d({ type: String })
 ], _.prototype, "heroState", 2);
-S([
+A([
   d({ type: Boolean })
 ], _.prototype, "stale", 2);
-S([
+A([
   d({ type: Boolean })
 ], _.prototype, "partial", 2);
-S([
+A([
   d({ type: Boolean })
 ], _.prototype, "serviceOffline", 2);
-S([
-  x()
+A([
+  v()
 ], _.prototype, "activeIndex", 2);
-S([
-  He(".session-track")
+A([
+  Le(".session-track")
 ], _.prototype, "track", 2);
-_ = S([
-  E("octopus-playing-hero")
+_ = A([
+  I("octopus-playing-hero")
 ], _);
-var wi = Object.defineProperty, $i = Object.getOwnPropertyDescriptor, le = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? $i(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var wi = Object.defineProperty, xi = Object.getOwnPropertyDescriptor, le = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? xi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
   return a && r && wi(t, i, r), r;
 };
-let dt = class extends $ {
+let ht = class extends $ {
   constructor() {
     super(...arguments), this.value = 0;
   }
@@ -2481,7 +2569,7 @@ let dt = class extends $ {
     `;
   }
 };
-dt.styles = C`
+ht.styles = E`
     div {
       background: #25343b;
       border-radius: 999px;
@@ -2496,11 +2584,11 @@ dt.styles = C`
   `;
 le([
   d({ type: Number })
-], dt.prototype, "value", 2);
-dt = le([
-  E("octopus-progress-bar")
-], dt);
-const Zt = (e) => "progress" in e, _i = (e) => {
+], ht.prototype, "value", 2);
+ht = le([
+  I("octopus-progress-bar")
+], ht);
+const Kt = (e) => "progress" in e, $i = (e) => {
   const {
     config: t,
     entryId: i,
@@ -2509,14 +2597,14 @@ const Zt = (e) => "progress" in e, _i = (e) => {
     height: s,
     heroState: o,
     items: p,
-    language: l,
+    language: c,
     mode: u,
     partial: g,
     serviceOffline: h,
-    stale: y
+    stale: w
   } = e;
   if (u === "playing") {
-    const w = p.filter(Zt);
+    const x = p.filter(Kt);
     return n`
       <octopus-playing-hero
         .config=${t}
@@ -2524,12 +2612,12 @@ const Zt = (e) => "progress" in e, _i = (e) => {
         .entryId=${i}
         .focusedRef=${a}
         .hass=${r}
-        .heroState=${o ?? (w.length > 0 ? "ready" : "empty")}
-        .items=${w}
-        .language=${l}
+        .heroState=${o ?? (x.length > 0 ? "ready" : "empty")}
+        .items=${x}
+        .language=${c}
         .partial=${g ?? !1}
         .serviceOffline=${h ?? !1}
-        .stale=${y ?? !1}
+        .stale=${w ?? !1}
       ></octopus-playing-hero>
     `;
   }
@@ -2561,23 +2649,23 @@ const Zt = (e) => "progress" in e, _i = (e) => {
                   .item=${m}
                   .showSubtitle=${s >= 155}
                 ></octopus-media-metadata>
-                ${Zt(m) ? n`<octopus-progress-bar .value=${m.progress}></octopus-progress-bar>` : c}
+                ${Kt(m) ? n`<octopus-progress-bar .value=${m.progress}></octopus-progress-bar>` : l}
               </div>
-            ` : c}
+            ` : l}
     </div>
   `;
 };
-var Si = Object.defineProperty, Ai = Object.getOwnPropertyDescriptor, Pt = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? Ai(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var _i = Object.defineProperty, Si = Object.getOwnPropertyDescriptor, Et = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? Si(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Si(t, i, r), r;
+  return a && r && _i(t, i, r), r;
 };
-let X = class extends $ {
+let et = class extends $ {
   render() {
-    return this.item ? n`<span>${f(this.hass?.language, this.item.type)}</span>` : c;
+    return this.item ? n`<span>${f(this.hass?.language, this.item.type)}</span>` : l;
   }
 };
-X.styles = C`
+et.styles = E`
     span {
       backdrop-filter: blur(8px);
       background: color-mix(in srgb, var(--octopus-surface-elevated, #111c2a) 68%, transparent);
@@ -2589,21 +2677,21 @@ X.styles = C`
       padding: 3px 5px;
     }
   `;
-Pt([
+Et([
   d({ attribute: !1 })
-], X.prototype, "item", 2);
-Pt([
+], et.prototype, "item", 2);
+Et([
   d({ attribute: !1 })
-], X.prototype, "hass", 2);
-X = Pt([
-  E("octopus-media-badges")
-], X);
-var ki = Object.defineProperty, Pi = Object.getOwnPropertyDescriptor, gt = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? Pi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+], et.prototype, "hass", 2);
+et = Et([
+  I("octopus-media-badges")
+], et);
+var Ai = Object.defineProperty, ki = Object.getOwnPropertyDescriptor, ft = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? ki(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && ki(t, i, r), r;
+  return a && r && Ai(t, i, r), r;
 };
-let W = class extends $ {
+let G = class extends $ {
   constructor() {
     super(...arguments), this.entryId = "";
   }
@@ -2614,10 +2702,10 @@ let W = class extends $ {
       .imageRef=${this.item.poster_ref}
       .variant=${"poster-small"}
       .alt=${this.item.title}
-    ></octopus-media-image>` : c;
+    ></octopus-media-image>` : l;
   }
 };
-W.styles = C`
+G.styles = E`
     :host {
       align-items: center;
       display: flex;
@@ -2637,19 +2725,19 @@ W.styles = C`
       overflow: hidden;
     }
   `;
-gt([
+ft([
   d({ attribute: !1 })
-], W.prototype, "item", 2);
-gt([
+], G.prototype, "item", 2);
+ft([
   d({ attribute: !1 })
-], W.prototype, "hass", 2);
-gt([
+], G.prototype, "hass", 2);
+ft([
   d({ type: String })
-], W.prototype, "entryId", 2);
-W = gt([
-  E("octopus-media-thumbnail")
-], W);
-const Ci = ({ config: e, entryId: t, hass: i, items: a }) => n`
+], G.prototype, "entryId", 2);
+G = ft([
+  I("octopus-media-thumbnail")
+], G);
+const Pi = ({ config: e, entryId: t, hass: i, items: a }) => n`
   <div class="layout list" data-layout="list">
     ${a.map(
   (r) => n`
@@ -2682,14 +2770,14 @@ const Ci = ({ config: e, entryId: t, hass: i, items: a }) => n`
 )}
   </div>
 `;
-var Ii = Object.defineProperty, Ti = Object.getOwnPropertyDescriptor, v = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? Ti(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var Ii = Object.defineProperty, Ci = Object.getOwnPropertyDescriptor, y = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? Ci(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
   return a && r && Ii(t, i, r), r;
 };
 let b = class extends $ {
   constructor() {
-    super(...arguments), this.items = [], this.entryId = "", this.posterHeight = 160, this.posterWidth = 106.67, this.gap = 10, this.wide = !1, this.showTitles = !0, this.showDates = !0, this.showRatings = !0, this.showBadges = !0, this.showArrows = !0, this.autoScroll = !1, this.autoScrollInterval = 6, this.appearance = "dark", this.variant = "recent", this.partial = !1, this.stale = !1, this.canGoBack = !1, this.canGoForward = !1, this.itemSignature = "", this.autoScrollPaused = !1, this.onPointerEnter = (e, t) => {
+    super(...arguments), this.items = [], this.entryId = "", this.posterHeight = 160, this.posterWidth = 106.67, this.gap = 10, this.wide = !1, this.showTitles = !0, this.showDates = !0, this.showRatings = !0, this.showArrows = !0, this.autoScroll = !1, this.autoScrollInterval = 6, this.appearance = "dark", this.variant = "recent", this.partial = !1, this.stale = !1, this.canGoBack = !1, this.canGoForward = !1, this.itemSignature = "", this.autoScrollPaused = !1, this.onPointerEnter = (e, t) => {
       e.pointerType === "mouse" && this.announceFocus(t);
     }, this.onScroll = () => {
       this.updateNavigation(), this.scrollFrame !== void 0 && cancelAnimationFrame(this.scrollFrame), this.scrollFrame = requestAnimationFrame(() => {
@@ -2698,7 +2786,7 @@ let b = class extends $ {
         if (!e) return;
         const t = e.getBoundingClientRect().left + e.clientWidth / 2, a = [...this.renderRoot.querySelectorAll(".poster")].reduce(
           (s, o, p) => {
-            const l = o.getBoundingClientRect(), u = Math.abs(l.left + l.width / 2 - t);
+            const c = o.getBoundingClientRect(), u = Math.abs(c.left + c.width / 2 - t);
             return !s || u < s.distance ? { distance: u, index: p } : s;
           },
           void 0
@@ -2772,16 +2860,15 @@ let b = class extends $ {
                   .variant=${this.posterWidth < 125 ? "poster-small" : "poster-medium"}
                   .alt=${t.title}
                 ></octopus-media-image>
-                ${this.variant === "recent" && this.showBadges ? n`<span class="badge">${this.badge(t)}</span>` : c}
                 ${this.showTitles ? n`
                         <span class="copy-gradient">
                           <span class="title">${t.title}</span>
-                          ${this.metadata(t) ? n`<span class="metadata">${this.metadata(t)}</span>` : c}
+                          ${this.metadata(t) ? n`<span class="metadata">${this.metadata(t)}</span>` : l}
                           ${this.upcomingEpisodeSubtitle(t) ? n`<span class="episode-subtitle"
                                   >${this.upcomingEpisodeSubtitle(t)}</span
-                                >` : c}
+                                >` : l}
                         </span>
-                      ` : c}
+                      ` : l}
               </span>
             </button>
           `
@@ -2791,7 +2878,7 @@ let b = class extends $ {
               <button
                 class="arrow previous"
                 type="button"
-                aria-label="Voltar pôsteres"
+                aria-label=${f(this.hass?.language, "previousPosters")}
                 ?hidden=${!this.canGoBack}
                 @click=${() => this.scrollByPage(-1)}
               >
@@ -2800,15 +2887,15 @@ let b = class extends $ {
               <button
                 class="arrow next"
                 type="button"
-                aria-label="Avançar pôsteres"
+                aria-label=${f(this.hass?.language, "nextPosters")}
                 ?hidden=${!this.canGoForward}
                 @click=${() => this.scrollByPage(1)}
               >
                 ›
               </button>
-            ` : c}
-      ${this.stale ? n`<span class="state stale" role="status">${f(this.hass?.language, "stale")}</span>` : c}
-      ${this.partial ? n`<span class="state partial" role="status">${f(this.hass?.language, "partialShort")}</span>` : c}
+            ` : l}
+      ${this.stale ? n`<span class="state stale" role="status">${f(this.hass?.language, "stale")}</span>` : l}
+      ${this.partial ? n`<span class="state partial" role="status">${f(this.hass?.language, "partialShort")}</span>` : l}
     `;
   }
   track() {
@@ -2874,18 +2961,10 @@ let b = class extends $ {
     const t = this.metadata(e);
     return t ? `${e.title}, ${t}` : e.title;
   }
-  badge(e) {
-    if (this.variant === "upcoming") return e.type === "episode" ? "EPISÓDIO" : "FILME";
-    if (e.type === "episode" && "season" in e && e.season !== null) {
-      const t = `T${String(e.season).padStart(2, "0")}`;
-      return e.episode === null ? t : `${t}E${String(e.episode).padStart(2, "0")}`;
-    }
-    return f(this.hass?.language, e.type);
-  }
   metadata(e) {
     if (this.variant === "upcoming" && "release_at" in e) {
       const i = this.upcomingDate(e);
-      return e.type === "episode" ? [e.season_number !== null && e.season_number !== void 0 ? `T${String(e.season_number).padStart(2, "0")}${e.episode_number === null || e.episode_number === void 0 ? "" : `E${String(e.episode_number).padStart(2, "0")}`}` : "", i].filter(Boolean).join(" · ") : [i, this.releaseType(e.release_type)].filter(Boolean).join(" · ");
+      return e.type === "episode" ? [e.season_number !== null && e.season_number !== void 0 ? `T${String(e.season_number).padStart(2, "0")}${e.episode_number === null || e.episode_number === void 0 ? "" : `E${String(e.episode_number).padStart(2, "0")}`}` : "", i].filter(Boolean).join(" · ") : [i, this.wide ? this.releaseType(e.release_type) : void 0].filter(Boolean).join(" · ");
     }
     const t = [];
     if (this.showDates)
@@ -2902,8 +2981,8 @@ let b = class extends $ {
       return e.subtitle ?? void 0;
   }
   upcomingDate(e) {
-    if (e.relative_day === "today") return "HOJE";
-    if (e.relative_day === "tomorrow") return "AMANHÃ";
+    if (e.relative_day === "today") return f(this.hass?.language, "today");
+    if (e.relative_day === "tomorrow") return f(this.hass?.language, "tomorrow");
     const t = e.all_day && /^\d{4}-\d{2}-\d{2}$/.test(e.release_at) ? /* @__PURE__ */ new Date(`${e.release_at}T12:00:00Z`) : new Date(e.release_at);
     if (Number.isNaN(t.getTime())) return "";
     const i = new Intl.DateTimeFormat(this.hass?.language ?? "pt-BR", {
@@ -2921,8 +3000,9 @@ let b = class extends $ {
     return `${i} · ${a}`;
   }
   releaseType(e) {
-    if (e)
-      return { digital: "Digital", physical: "Físico", cinema: "Cinema", theatrical: "Cinema" }[e.toLowerCase()];
+    if (!e) return;
+    const t = e.toLowerCase(), i = t === "digital" ? "digital" : t === "physical" ? "physical" : t === "cinema" || t === "theatrical" ? "cinema" : void 0;
+    return i ? f(this.hass?.language, i) : void 0;
   }
   formatDate(e) {
     const t = new Date(e);
@@ -2933,7 +3013,7 @@ let b = class extends $ {
     }).format(t);
   }
 };
-b.styles = C`
+b.styles = E`
     :host {
       display: block;
       height: 100%;
@@ -3251,99 +3331,96 @@ b.styles = C`
       }
     }
   `;
-v([
+y([
   d({ attribute: !1 })
 ], b.prototype, "hass", 2);
-v([
+y([
   d({ attribute: !1 })
 ], b.prototype, "items", 2);
-v([
+y([
   d({ type: String })
 ], b.prototype, "entryId", 2);
-v([
+y([
   d({ type: String })
 ], b.prototype, "focusedRef", 2);
-v([
+y([
   d({ type: Number })
 ], b.prototype, "posterHeight", 2);
-v([
+y([
   d({ type: Number })
 ], b.prototype, "posterWidth", 2);
-v([
+y([
   d({ type: Number })
 ], b.prototype, "gap", 2);
-v([
+y([
   d({ type: Boolean, reflect: !0 })
 ], b.prototype, "wide", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "showTitles", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "showDates", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "showRatings", 2);
-v([
-  d({ type: Boolean })
-], b.prototype, "showBadges", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "showArrows", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "autoScroll", 2);
-v([
+y([
   d({ type: Number })
 ], b.prototype, "autoScrollInterval", 2);
-v([
+y([
   d({ type: String, attribute: "data-appearance" })
 ], b.prototype, "appearance", 2);
-v([
+y([
   d({ type: String })
 ], b.prototype, "variant", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "partial", 2);
-v([
+y([
   d({ type: Boolean })
 ], b.prototype, "stale", 2);
-v([
-  x()
+y([
+  v()
 ], b.prototype, "canGoBack", 2);
-v([
-  x()
+y([
+  v()
 ], b.prototype, "canGoForward", 2);
-b = v([
-  E("octopus-media-strip")
+b = y([
+  I("octopus-media-strip")
 ], b);
-const Oi = 18, Ri = 70, Mi = 30, zi = 0.22;
-function ce(e, t, i = "auto", a = Number.POSITIVE_INFINITY, r = a) {
-  const s = e < 560, p = Math.max(1, e - (s ? Oi : Ri)), l = s ? 3 : 5;
-  let g = Math.max(1, Math.min(i === "auto" ? l : i, Math.max(1, r)));
-  const h = s ? 10 : 12, y = Math.max(1, t - Mi), m = (at) => {
-    const Tt = r > at, ue = Tt ? zi : 0, ge = Tt ? at : Math.max(0, at - 1);
-    return Math.max(1, (p - ge * h) / (at + ue) * 1.5);
+const Mi = 18, Ti = 70, Oi = 30, Ri = 0.22;
+function zi(e, t, i = "auto", a = Number.POSITIVE_INFINITY, r = a) {
+  const s = e < 560, p = Math.max(1, e - (s ? Mi : Ti)), c = s ? 3 : 5;
+  let g = Math.max(1, Math.min(i === "auto" ? c : i, Math.max(1, r)));
+  const h = s ? 10 : 12, w = Math.max(1, t - Oi), m = (st) => {
+    const Tt = r > st, ue = Tt ? Ri : 0, ge = Tt ? st : Math.max(0, st - 1);
+    return Math.max(1, (p - ge * h) / (st + ue) * 1.5);
   };
-  let w = m(g);
-  const Ct = Math.min(l, Math.max(1, r));
-  g < Ct && w > y && r > g && (g = Ct, w = m(g));
-  const Et = Math.min(y, w), et = Et * (2 / 3), it = Math.max(
+  let x = m(g);
+  const It = Math.min(c, Math.max(1, r));
+  g < It && x > w && r > g && (g = It, x = m(g));
+  const Ct = Math.min(w, x), at = Ct * (2 / 3), rt = Math.max(
     1,
-    Math.min(a, Math.floor((p + h) / (et + h)))
-  ), de = a > it, he = it * et + Math.max(0, it - 1) * h, It = de ? Math.max(0, p - he - h) : 0;
+    Math.min(a, Math.floor((p + h) / (at + h)))
+  ), de = a > rt, he = rt * at + Math.max(0, rt - 1) * h, Mt = de ? Math.max(0, p - he - h) : 0;
   return {
     gap: h,
-    peekFraction: It / et,
-    peekWidth: It,
-    posterHeight: Et,
-    posterWidth: et,
+    peekFraction: Mt / at,
+    peekWidth: Mt,
+    posterHeight: Ct,
+    posterWidth: at,
     usefulWidth: p,
-    visibleFullItems: it
+    visibleFullItems: rt
   };
 }
 function Ni(e, t, i = "auto", a = Number.POSITIVE_INFINITY) {
-  return ce(
+  return zi(
     e,
     t,
     i,
@@ -3351,7 +3428,7 @@ function Ni(e, t, i = "auto", a = Number.POSITIVE_INFINITY) {
     Number.POSITIVE_INFINITY
   );
 }
-const pe = ({
+const ce = ({
   config: e,
   entryId: t,
   focusedItemRef: i,
@@ -3360,7 +3437,7 @@ const pe = ({
   items: s,
   mode: o,
   partial: p,
-  stale: l,
+  stale: c,
   width: u
 }) => {
   const g = o === "upcoming", h = Ni(
@@ -3376,7 +3453,7 @@ const pe = ({
       data-appearance=${e.appearance}
       variant=${g ? "upcoming" : "recent"}
       .partial=${p ?? !1}
-      .stale=${l ?? !1}
+      .stale=${c ?? !1}
       .hass=${a}
       .items=${s}
       .entryId=${t}
@@ -3388,119 +3465,61 @@ const pe = ({
       .showTitles=${e.show_titles}
       .showDates=${g || e.show_dates}
       .showRatings=${g ? !1 : e.show_ratings}
-      .showBadges=${e.show_badges}
       .showArrows=${e.show_arrows}
       .autoScroll=${e.auto_scroll}
       .autoScrollInterval=${e.auto_scroll_interval}
     ></octopus-media-strip>
   `;
 };
-function Kt(e, t) {
+function yt(e, t) {
   switch (e) {
     case "grid":
-      return hi(t);
+      return di(t);
     case "hero":
-      return _i(t);
+      return $i(t);
     case "compact":
-      return ni(t);
+      return oi(t);
     case "portrait":
       return Ei(t);
     case "list":
-      return Ci(t);
+      return Pi(t);
     case "strip":
-      return pe(t);
+      return ce(t);
   }
 }
-function Fi(e) {
-  return pe(e);
+function pe(e) {
+  return ce(e);
 }
-var Di = Object.defineProperty, Bi = Object.getOwnPropertyDescriptor, ft = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? Bi(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var Fi = Object.defineProperty, Di = Object.getOwnPropertyDescriptor, N = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? Di(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Di(t, i, r), r;
+  return a && r && Fi(t, i, r), r;
 };
-const Hi = Array.from({ length: 12 }, (e, t) => ({
-  ref: `editor_fixture_${String(t + 1).padStart(2, "0")}`,
-  type: t === 2 ? "episode" : "movie",
-  title: t === 1 ? "The Very Long Fictional Voyage Beyond Quiet Constellations" : [
-    "Violet Tides",
-    "Silent Meridian",
-    "Octopus Station",
-    "Neon Harbor",
-    "Glass Moons",
-    "Midnight Signal"
-  ][t % 6] ?? "Fixture Media",
-  subtitle: "Fictional preview",
-  year: 2030 - t % 4,
-  season: t === 2 ? 2 : null,
-  episode: t === 2 ? 4 : null,
-  episode_count: t === 2 ? 1 : 0,
-  added_at: "2030-04-05T10:00:00Z",
-  rating: 7.2 + t % 7 / 10,
-  poster_ref: null,
-  still_ref: null,
-  backdrop_ref: null
-})), bt = [
-  {
-    ref: "editor_playing_fixture_01",
-    device_name: "Fictional display",
-    device_alias: "Octopus lounge",
-    user_name: "Demo viewer",
-    state: "playing",
-    type: "episode",
-    title: "Harbor of Small Comets",
-    genres: ["Drama", "Adventure"],
-    rating: 8.7,
-    video_resolution: "1080p",
-    video_hdr: !1,
-    audio_channels: "5.1",
-    subtitle: "T02E04 · A Map of Quiet Water",
-    position_seconds: 1240,
-    duration_seconds: 3120,
-    progress: 39.74,
-    poster_ref: null,
-    still_ref: null,
-    backdrop_ref: null,
-    updated_at: "2030-04-05T12:00:00Z"
-  },
-  {
-    ref: "editor_playing_fixture_02",
-    device_name: "Fictional tablet",
-    device_alias: null,
-    user_name: "Sample viewer",
-    state: "paused",
-    type: "movie",
-    title: "Lanterns Beyond Europa",
-    genres: ["Science fiction"],
-    rating: null,
-    video_resolution: null,
-    video_hdr: !1,
-    audio_channels: null,
-    subtitle: "2029",
-    position_seconds: 1800,
-    duration_seconds: 5400,
-    progress: 33.33,
-    poster_ref: null,
-    still_ref: null,
-    backdrop_ref: null,
-    updated_at: "2030-04-05T12:00:00Z"
-  }
-];
-let V = class extends $ {
+let O = class extends $ {
   constructor() {
-    super(...arguments), this.entries = [], this.previewWidth = 390, this.onBooleanChange = (e) => {
-      const t = e.target, i = t.dataset.field;
-      i && this.updateConfig({ [i]: t.checked });
-    };
+    super(...arguments), this.entries = [], this.previewWidth = 600, this.previewLoading = !1, this.configurationMissing = !1, this.previewGeneration = 0, this.autoLayout = new ne();
   }
   set hass(e) {
-    this.hassValue = e, this.loadEntries();
+    this.hassValue = e, this.loadEntries(), this.ensurePreviewSubscription();
   }
   get hass() {
     return this.hassValue;
   }
   setConfig(e) {
-    this.config = ne(e);
+    const t = this.config?.entry_id;
+    this.config = oe(e), t !== this.config.entry_id && this.resetPreviewSubscription(), this.ensurePreviewSubscription();
+  }
+  connectedCallback() {
+    super.connectedCallback(), this.ensurePreviewSubscription();
+  }
+  disconnectedCallback() {
+    this.resetPreviewSubscription(), this.resizeObserver?.disconnect(), this.resizeObserver = void 0, super.disconnectedCallback();
+  }
+  firstUpdated() {
+    typeof ResizeObserver > "u" || (this.resizeObserver = new ResizeObserver(([e]) => {
+      const t = e?.contentRect.width ?? 0;
+      t > 0 && Math.abs(t - this.previewWidth) >= 1 && (this.previewWidth = Math.max(320, Math.round(t)));
+    }), this.resizeObserver.observe(this));
   }
   render() {
     if (!this.config) return n``;
@@ -3508,213 +3527,153 @@ let V = class extends $ {
     return n`
       <div class="form">
         <label>
-          Integration
-          <select .value=${this.config.entry_id} @change=${this.onEntryChange}>
+          ${this.t("integration")}
+          <select @change=${this.onEntryChange}>
+            ${this.config.entry_id === "select_entry" ? n`<option value="select_entry" selected>
+                    ${this.t("selectIntegration")}
+                  </option>` : l}
+            ${this.selectedEntryMissing ? n`<option value=${this.config.entry_id} selected>
+                    ${this.t("previousConfigurationUnavailable")}
+                  </option>` : l}
             ${this.entries.map(
-      (t) => n`<option value=${t.entry_id}>${t.title}</option>`
+      (t) => n`<option
+                  value=${t.entry_id}
+                  ?selected=${t.entry_id === this.config?.entry_id}
+                >
+                  ${t.title}
+                </option>`
     )}
           </select>
         </label>
+        ${this.configurationMissing || this.selectedEntryMissing ? n`<p class="configuration-warning" role="alert">
+                <strong>${this.t("configurationNotFound")}</strong>
+                <span>${this.t("configurationNotFoundSecondary")}</span>
+              </p>` : l}
         <label>
-          Mode
+          ${this.t("contentMode")}
           <select .value=${this.config.mode} @change=${this.onModeChange}>
-            ${e.map((t) => n`<option value=${t}>${t}</option>`)}
+            ${e.map((t) => n`<option value=${t}>${this.t(t)}</option>`)}
           </select>
         </label>
         <label>
-          Layout
-          <select .value=${this.config.layout} @change=${this.onLayoutChange}>
-            ${se.map((t) => n`<option value=${t}>${t}</option>`)}
+          ${this.t("appearance")}
+          <select .value=${this.config.appearance} @change=${this.onAppearanceChange}>
+            <option value="auto">${this.t("appearanceAuto")}</option>
+            <option value="dark">${this.t("appearanceDark")}</option>
+            <option value="light">${this.t("appearanceLight")}</option>
           </select>
         </label>
-        <label>
-          Title
-          <input .value=${this.config.title ?? ""} @input=${this.onTitleInput} />
-        </label>
-        <label>
-          Visual concept
-          <select .value=${this.config.visual_concept} @change=${this.onConceptChange}>
-            ${oe.map((t) => n`<option value=${t}>${t}</option>`)}
-          </select>
-        </label>
-        <label>
-          Title position
-          <select .value=${this.config.title_position} @change=${this.onTitlePositionChange}>
-            <option value="overlay">overlay</option>
-            <option value="below">below</option>
-          </select>
-        </label>
-        <label>
-          Height
-          <input
-            .value=${String(this.config.height)}
-            inputmode="numeric"
-            @change=${this.onHeightChange}
-          />
-        </label>
-        <label>
-          Theme
-          <select .value=${this.config.theme} @change=${this.onThemeChange}>
-            ${ii.map((t) => n`<option value=${t}>${t}</option>`)}
-          </select>
-        </label>
-        <label>
-          Accent color
-          <input
-            type="color"
-            .value=${this.config.accent_color ?? "#8b5cf6"}
-            @input=${this.onAccentInput}
-          />
-        </label>
-        <label>
-          Item count
-          <input
-            type="number"
-            min="1"
-            max="50"
-            .value=${String(this.config.item_count)}
-            @change=${this.onItemCountChange}
-          />
-        </label>
-        <fieldset>
-          <legend>${this.isPlayingHeroPreview() ? "Playing hero" : "Strip content"}</legend>
-          ${this.booleanControl("Titles", "show_titles", this.config.show_titles)}
-          ${this.booleanControl("Badges", "show_badges", this.config.show_badges)}
-          ${this.isPlayingHeroPreview() ? n`
-                  ${this.booleanControl("Device", "show_device", this.config.show_device)}
-                  ${this.booleanControl("User", "show_user", this.config.show_user)}
-                  ${this.booleanControl("Progress", "show_progress", this.config.show_progress)}
-                  ${this.booleanControl("Time", "show_time", this.config.show_time)}
-                  ${this.booleanControl("Autoplay", "autoplay", this.config.autoplay)}
-                  ${this.booleanControl(
-      "Indicators",
-      "show_indicators",
-      this.config.show_indicators
-    )}
-                ` : ""}
-          ${this.booleanControl("Arrows", "show_arrows", this.config.show_arrows)}
-        </fieldset>
-        ${this.isPlayingHeroPreview() ? n`<label>
-                Cycle interval (seconds)
-                <input
-                  type="number"
-                  min="5"
-                  max="3600"
-                  .value=${String(this.config.cycle_interval)}
-                  @change=${this.onCycleIntervalChange}
-                />
-              </label>` : ""}
-        <section
-          class="preview-panel"
-          aria-label=${this.isPlayingHeroPreview() ? "Playing hero preview" : "Official strip preview"}
-        >
-          <div class="preview-toolbar">
-            <strong
-              >${this.isPlayingHeroPreview() ? "Playing hero preview" : "Official strip preview"}</strong
-            >
-            <div class="preview-widths" role="group" aria-label="Preview width">
-              ${[390, 800].map(
-      (t) => n`
-                  <button
-                    type="button"
-                    data-selected=${String(t === this.previewWidth)}
-                    @click=${() => {
-        this.previewWidth = t;
-      }}
-                  >
-                    ${t}px
-                  </button>
-                `
-    )}
-            </div>
-          </div>
+        ${this.isStripMode() ? n`
+                <label>
+                  ${this.t("itemCount")}
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    .value=${String(this.config.item_count)}
+                    @change=${this.onItemCountChange}
+                  />
+                </label>
+                <label class="check standalone">
+                  <input
+                    type="checkbox"
+                    .checked=${this.config.auto_scroll}
+                    @change=${this.onAutoScrollChange}
+                  />
+                  ${this.t("autoScroll")}
+                </label>
+                ${this.config.auto_scroll ? n`<label>
+                        ${this.t("autoScrollInterval")}
+                        <input
+                          type="number"
+                          min="2"
+                          max="3600"
+                          .value=${String(this.config.auto_scroll_interval)}
+                          @change=${this.onAutoScrollIntervalChange}
+                        />
+                      </label>` : l}
+              ` : l}
+        <section class="preview-panel" aria-label=${this.t("previewCard")}>
+          <strong>${this.t("preview")}</strong>
           ${this.renderPreview()}
-          <p>Prévia determinística: títulos e imagens são inteiramente fictícios.</p>
         </section>
       </div>
     `;
   }
   renderPreview() {
-    if (!this.config) return n``;
-    const e = typeof this.config.height == "number" ? Math.min(280, Math.max(180, this.config.height)) : this.previewWidth === 390 ? 210 : 240;
-    if (this.isPlayingHeroPreview())
-      return this.renderPlayingHeroPreview(e);
-    const t = Hi.slice(0, this.config.item_count), i = ce(
-      this.previewWidth,
-      e,
-      this.config.posters_visible,
-      t.length
-    ), a = [
-      `--preview-width:${String(this.previewWidth)}px`,
-      `--preview-height:${String(e)}px`,
-      `--octopus-media-accent:${this.config.accent_color ?? "#8b5cf6"}`
-    ].join(";");
+    if (!this.config || this.config.entry_id === "select_entry")
+      return n`<octopus-empty-state
+        .message=${this.t("selectIntegration")}
+      ></octopus-empty-state>`;
+    if (this.configurationMissing || this.selectedEntryMissing)
+      return n`<octopus-empty-state
+        .message=${this.t("configurationNotFound")}
+        .secondary=${this.t("configurationNotFoundSecondary")}
+      ></octopus-empty-state>`;
+    if (this.previewLoading)
+      return n`<octopus-loading-state .message=${this.t("loading")}></octopus-loading-state>`;
+    if (this.previewError)
+      return n`<octopus-error-state .message=${this.previewError}></octopus-error-state>`;
+    if (!this.previewSnapshot)
+      return n`<octopus-empty-state
+        .message=${this.t("previewUnavailable")}
+      ></octopus-empty-state>`;
+    const e = this.effectiveMode(), t = this.previewSnapshot[e], i = t.items.slice(0, this.config.item_count), a = e === "playing" ? 240 : 210, r = this.config.layout === "auto" ? this.autoLayout.update(e, this.previewWidth, a) : this.config.layout, s = this.previewSnapshot.availability.jellyfin.state === "offline", o = e !== "playing", p = i.length > 0 ? l : e === "playing" && (s || t.stale) ? n`<octopus-error-state .message=${this.t("unavailable")}></octopus-error-state>` : e === "upcoming" && this.previewSnapshot.availability.radarr.state === "not_configured" && this.previewSnapshot.availability.sonarr.state === "not_configured" ? n`<octopus-empty-state
+                .message=${this.t("upcomingNotConfigured")}
+              ></octopus-empty-state>` : n`<octopus-empty-state
+                .message=${this.t(e === "playing" ? "noPlaying" : "empty")}
+              ></octopus-empty-state>`;
     return n`
-      <article class="preview-card" data-wide=${String(this.previewWidth >= 560)} style=${a}>
-        <header>
-          <span
-            ><ha-icon icon="mdi:octopus"></ha-icon>${this.config.title ?? "Recém-adicionados"}</span
-          >
-          <small>${t.length}</small>
-        </header>
-        <octopus-media-strip
-          .hass=${void 0}
-          .items=${t}
-          .entryId=${"editor-fixture"}
-          .focusedRef=${t[0]?.ref}
-          .posterHeight=${i.posterHeight}
-          .posterWidth=${i.posterWidth}
-          .gap=${i.gap}
-          .wide=${this.previewWidth >= 560}
-          .showTitles=${this.config.show_titles}
-          .showDates=${this.config.show_dates}
-          .showRatings=${this.config.show_ratings}
-          .showBadges=${this.config.show_badges}
-          .showArrows=${this.config.show_arrows}
-        ></octopus-media-strip>
+      <article
+        class="preview-card real-preview"
+        data-appearance=${this.previewAppearance()}
+        data-mode=${e}
+        data-wide=${String(this.previewWidth >= 560)}
+      >
+        ${o ? n`
+                <header>
+                  <span>${this.t(e === "recent" ? "recentEyebrow" : "upcomingEyebrow")}</span>
+                  <small>${i.length}</small>
+                </header>
+              ` : l}
+        ${p !== l ? p : e === "upcoming" ? pe({
+      config: this.config,
+      entryId: this.config.entry_id,
+      focusedItemRef: i[0]?.ref,
+      hass: this.hassValue,
+      height: a,
+      items: i,
+      language: this.hassValue?.language,
+      mode: e,
+      partial: t.partial,
+      stale: t.stale,
+      width: this.previewWidth
+    }) : yt(r, {
+      config: this.config,
+      entryId: this.config.entry_id,
+      focusedItemRef: i[0]?.ref,
+      hass: this.hassValue,
+      height: a,
+      heroState: e === "playing" ? "ready" : void 0,
+      items: i,
+      language: this.hassValue?.language,
+      mode: e,
+      partial: t.partial,
+      serviceOffline: s,
+      stale: t.stale,
+      width: this.previewWidth
+    })}
       </article>
     `;
   }
-  renderPlayingHeroPreview(e) {
-    if (!this.config) return n``;
-    const t = [
-      `--preview-width:${String(this.previewWidth)}px`,
-      `--preview-height:${String(e)}px`,
-      `--octopus-media-accent:${this.config.accent_color ?? "#8b5cf6"}`
-    ].join(";");
-    return n`
-      <article class="preview-card playing-preview" style=${t}>
-        <header>
-          <span><ha-icon icon="mdi:octopus"></ha-icon>${this.config.title ?? "Tocando agora"}</span>
-          <small>${bt.length}</small>
-        </header>
-        <octopus-playing-hero
-          .config=${this.config}
-          .hass=${void 0}
-          .entryId=${"editor-fixture"}
-          .items=${bt}
-          .focusedRef=${bt[0]?.ref}
-          .language=${this.hassValue?.language}
-          .heroState=${"ready"}
-        ></octopus-playing-hero>
-      </article>
-    `;
+  effectiveMode() {
+    return this.config?.mode ?? "recent";
   }
-  isPlayingHeroPreview() {
-    return this.config?.mode === "playing" && (this.config.layout === "hero" || this.config.layout === "auto");
+  isStripMode() {
+    return this.effectiveMode() !== "playing";
   }
-  booleanControl(e, t, i) {
-    return n`
-      <label class="check">
-        <input
-          type="checkbox"
-          data-field=${t}
-          .checked=${i}
-          @change=${this.onBooleanChange}
-        />
-        ${e}
-      </label>
-    `;
+  previewAppearance() {
+    return this.config?.appearance === "light" ? "light" : this.config?.appearance === "dark" ? "dark" : this.hassValue?.themes?.darkMode === !1 ? "light" : "dark";
   }
   async loadEntries() {
     if (this.hassValue)
@@ -3725,10 +3684,11 @@ let V = class extends $ {
       }
   }
   compatibleModes() {
-    const e = this.entries.find((a) => a.entry_id === this.config?.entry_id);
-    if (!e) return [...vt];
-    const t = vt.filter((a) => a === "carousel" || e.capabilities[a]), i = t.some((a) => a !== "carousel");
-    return t.filter((a) => a !== "carousel" || i);
+    const e = this.entries.find((t) => t.entry_id === this.config?.entry_id);
+    return e ? bt.filter((t) => e.capabilities[t]) : [...bt];
+  }
+  get selectedEntryMissing() {
+    return !!(this.config && this.config.entry_id !== "select_entry" && !this.entries.some((e) => e.entry_id === this.config?.entry_id));
   }
   updateConfig(e) {
     this.config && (this.config = { ...this.config, ...e }, this.dispatchEvent(
@@ -3737,50 +3697,55 @@ let V = class extends $ {
         composed: !0,
         detail: { config: this.config }
       })
-    ));
+    ), this.ensurePreviewSubscription());
   }
   onEntryChange(e) {
-    this.updateConfig({ entry_id: e.target.value });
+    const t = e.target.value;
+    t !== this.config?.entry_id && this.resetPreviewSubscription(), this.updateConfig({ entry_id: t });
   }
   onModeChange(e) {
     this.updateConfig({ mode: e.target.value });
   }
-  onLayoutChange(e) {
-    this.updateConfig({ layout: e.target.value });
-  }
-  onTitleInput(e) {
-    this.updateConfig({ title: e.target.value });
-  }
-  onConceptChange(e) {
+  onAppearanceChange(e) {
     this.updateConfig({
-      visual_concept: e.target.value
+      appearance: e.target.value
     });
-  }
-  onTitlePositionChange(e) {
-    this.updateConfig({
-      title_position: e.target.value
-    });
-  }
-  onHeightChange(e) {
-    const t = e.target.value.trim();
-    this.updateConfig({ height: t === "auto" ? "auto" : Number(t) });
-  }
-  onThemeChange(e) {
-    this.updateConfig({ theme: e.target.value });
-  }
-  onAccentInput(e) {
-    this.updateConfig({ accent_color: e.target.value });
   }
   onItemCountChange(e) {
     const t = Number(e.target.value);
     this.updateConfig({ item_count: Math.min(50, Math.max(1, Math.round(t))) });
   }
-  onCycleIntervalChange(e) {
+  onAutoScrollIntervalChange(e) {
     const t = Number(e.target.value);
-    this.updateConfig({ cycle_interval: Math.min(3600, Math.max(5, Math.round(t))) });
+    this.updateConfig({ auto_scroll_interval: Math.min(3600, Math.max(2, Math.round(t))) });
+  }
+  onAutoScrollChange(e) {
+    this.updateConfig({ auto_scroll: e.target.checked });
+  }
+  t(e) {
+    return f(this.hassValue?.language, e);
+  }
+  async ensurePreviewSubscription() {
+    const e = this.config?.entry_id;
+    if (!this.isConnected || !this.hassValue || !e || e === "select_entry" || this.previewUnsubscribe && this.previewEntryId === e) return;
+    this.resetPreviewSubscription();
+    const t = ++this.previewGeneration;
+    this.previewEntryId = e, this.previewLoading = !0, this.previewError = void 0, this.configurationMissing = !1;
+    try {
+      const i = await ie(this.hassValue, e, (a) => {
+        t === this.previewGeneration && (this.previewSnapshot = a, this.previewLoading = !1, this.previewError = void 0);
+      });
+      t !== this.previewGeneration ? i() : this.previewUnsubscribe = i;
+    } catch (i) {
+      if (t !== this.previewGeneration) return;
+      this.previewLoading = !1, this.configurationMissing = ae(i), this.previewError = i instanceof Error ? i.message : this.t("previewUnavailable");
+    }
+  }
+  resetPreviewSubscription() {
+    this.previewGeneration += 1, this.previewUnsubscribe?.(), this.previewUnsubscribe = void 0, this.previewEntryId = void 0, this.previewSnapshot = void 0, this.previewLoading = !1, this.previewError = void 0, this.configurationMissing = !1;
   }
 };
-V.styles = C`
+O.styles = E`
     .form {
       display: grid;
       gap: 12px;
@@ -3822,32 +3787,19 @@ V.styles = C`
       font-size: 12px;
       margin: 0;
     }
+    .configuration-warning {
+      background: color-mix(in srgb, var(--warning-color, #d98b22) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--warning-color, #d98b22) 45%, transparent);
+      border-radius: 8px;
+      display: grid;
+      gap: 3px;
+      padding: 10px;
+    }
     .preview-panel {
       display: grid;
       gap: 8px;
       min-width: 0;
       overflow: hidden;
-    }
-    .preview-toolbar {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-    }
-    .preview-widths {
-      display: flex;
-      gap: 6px;
-    }
-    button {
-      background: var(--secondary-background-color, #eef0f3);
-      border: 1px solid var(--divider-color, #bbb);
-      border-radius: 7px;
-      color: var(--primary-text-color, #111);
-      cursor: pointer;
-      padding: 6px 9px;
-    }
-    button[data-selected="true"] {
-      border-color: var(--octopus-media-accent, #8b5cf6);
-      box-shadow: 0 0 0 1px var(--octopus-media-accent, #8b5cf6);
     }
     .preview-card {
       --octopus-text: #f3f6fb;
@@ -3860,14 +3812,35 @@ V.styles = C`
       color: #f3f6fb;
       display: grid;
       grid-template-rows: 22px minmax(0, 1fr);
-      height: var(--preview-height);
+      height: 240px;
       max-width: 100%;
       overflow: hidden;
       padding: 0 9px;
-      width: var(--preview-width);
+      width: 100%;
     }
-    .preview-card[data-wide="true"] {
-      padding-inline: 35px;
+    .preview-card[data-appearance="light"] {
+      --octopus-text: #172832;
+      background:
+        radial-gradient(circle at 13% 35%, rgb(41 190 195 / 18%), transparent 34%),
+        radial-gradient(circle at 72% 24%, rgb(157 112 220 / 14%), transparent 37%),
+        linear-gradient(105deg, #e8f3f3, #f4f1f7 48%, #eee7f4);
+      color: #172832;
+    }
+    .real-preview[data-mode="recent"],
+    .real-preview[data-mode="upcoming"] {
+      height: 210px;
+    }
+    .real-preview[data-mode="playing"] {
+      grid-template-rows: minmax(0, 1fr);
+    }
+    .real-preview > octopus-media-strip,
+    .real-preview > octopus-playing-hero,
+    .real-preview > octopus-empty-state,
+    .real-preview > octopus-error-state,
+    .real-preview > octopus-loading-state {
+      display: block;
+      height: 100%;
+      min-height: 0;
     }
     .preview-card header {
       align-items: center;
@@ -3889,19 +3862,31 @@ V.styles = C`
       opacity: 0.7;
     }
   `;
-ft([
-  x()
-], V.prototype, "config", 2);
-ft([
-  x()
-], V.prototype, "entries", 2);
-ft([
-  x()
-], V.prototype, "previewWidth", 2);
-V = ft([
-  E("octopus-media-editor")
-], V);
-const ji = C`
+N([
+  v()
+], O.prototype, "config", 2);
+N([
+  v()
+], O.prototype, "entries", 2);
+N([
+  v()
+], O.prototype, "previewWidth", 2);
+N([
+  v()
+], O.prototype, "previewSnapshot", 2);
+N([
+  v()
+], O.prototype, "previewLoading", 2);
+N([
+  v()
+], O.prototype, "previewError", 2);
+N([
+  v()
+], O.prototype, "configurationMissing", 2);
+O = N([
+  I("octopus-media-editor")
+], O);
+const Ui = E`
   :host {
     --octopus-bg: #060a12;
     --octopus-surface: rgb(13 22 35 / 92%);
@@ -4073,6 +4058,9 @@ const ji = C`
     overflow: visible;
     padding: 0;
   }
+  .card[data-playing-hero="true"]:not(.fixed) {
+    min-height: 210px;
+  }
   .card[data-playing-hero="true"]::after {
     display: none;
   }
@@ -4131,6 +4119,9 @@ const ji = C`
     grid-template-rows: 22px minmax(0, 1fr);
     isolation: isolate;
     padding: 0 9px;
+  }
+  .card[data-layout="strip"]:not(.fixed) {
+    min-height: 210px;
   }
   .card[data-layout="strip"][data-appearance="light"] .ambient-background {
     display: none;
@@ -4442,20 +4433,20 @@ const ji = C`
     }
   }
 `;
-var Ui = Object.defineProperty, Li = Object.getOwnPropertyDescriptor, O = (e, t, i, a) => {
-  for (var r = a > 1 ? void 0 : a ? Li(t, i) : t, s = e.length - 1, o; s >= 0; s--)
+var Li = Object.defineProperty, ji = Object.getOwnPropertyDescriptor, C = (e, t, i, a) => {
+  for (var r = a > 1 ? void 0 : a ? ji(t, i) : t, s = e.length - 1, o; s >= 0; s--)
     (o = e[s]) && (r = (a ? o(t, i, r) : o(r)) || r);
-  return a && r && Ui(t, i, r), r;
+  return a && r && Li(t, i, r), r;
 };
-let P = class extends $ {
+let S = class extends $ {
   constructor() {
-    super(...arguments), this.loading = !0, this.containerWidth = 390, this.containerHeight = 210, this.localPlaying = [], this.subscriptionPending = !1, this.subscriptionGeneration = 0, this.reconnectDelay = 1e3, this.progressTickAt = 0, this.autoLayout = new oi(), this.onMediaFocus = (e) => {
+    super(...arguments), this.loading = !0, this.configurationMissing = !1, this.containerWidth = 390, this.containerHeight = 210, this.localPlaying = [], this.subscriptionPending = !1, this.subscriptionGeneration = 0, this.reconnectDelay = 1e3, this.progressTickAt = 0, this.autoLayout = new ne(), this.onMediaFocus = (e) => {
       if (!this.config) return;
       const t = this.effectiveMode(this.config), i = typeof this.config.height == "number" ? this.config.height : this.containerHeight, a = this.resolveLayout(this.config, t, i), r = t === "playing" && a === "hero";
       if (a !== "strip" && !r) return;
       const s = e.detail;
       if (typeof s.ref != "string" || s.ref === this.focusedItemRef) return;
-      const o = this.itemsForMode(t).find((l) => l.ref === s.ref);
+      const o = this.itemsForMode(t).find((c) => c.ref === s.ref);
       if (!o || (this.focusedItemRef = o.ref, r)) return;
       const p = this.artworkFor(o);
       if (!p) {
@@ -4480,10 +4471,10 @@ let P = class extends $ {
   }
   setConfig(e) {
     const t = this.config?.entry_id;
-    this.config = ne(e), t !== this.config.entry_id && this.resetSubscription(), this.synchronizeFocusAndAmbient(!0), this.ensureSubscription();
+    this.config = oe(e), t !== this.config.entry_id && this.resetSubscription(), this.synchronizeFocusAndAmbient(!0), this.ensureSubscription();
   }
   static getStubConfig() {
-    return { ...A, sections: [...A.sections] };
+    return { ...k, sections: [...k.sections] };
   }
   static getConfigElement() {
     return document.createElement("octopus-media-editor");
@@ -4495,10 +4486,10 @@ let P = class extends $ {
     super.connectedCallback(), this.startResizeObserver(), this.ensureSubscription();
   }
   disconnectedCallback() {
-    this.subscriptionGeneration += 1, this.unsubscribe?.(), this.unsubscribe = void 0, this.clearReconnectTimer(), this.stopProgressTimer(), this.resizeObserver?.disconnect(), this.resizeObserver = void 0, this.resizeFrame !== void 0 && cancelAnimationFrame(this.resizeFrame), super.disconnectedCallback();
+    this.subscriptionGeneration += 1, this.subscriptionPending = !1, this.unsubscribe?.(), this.unsubscribe = void 0, this.clearReconnectTimer(), this.stopProgressTimer(), this.resizeObserver?.disconnect(), this.resizeObserver = void 0, this.resizeFrame !== void 0 && cancelAnimationFrame(this.resizeFrame), super.disconnectedCallback();
   }
   render() {
-    const e = this.config ?? A, t = this.hassValue?.language, i = this.effectiveMode(e), a = { ...e, appearance: this.resolveAppearance(e.appearance) }, r = e.title ?? (i === "upcoming" ? this.t("upcoming", t).toUpperCase() : this.t(i, t)), s = e.height, o = typeof s == "number", p = o ? s : this.containerHeight, l = this.resolveLayout(e, i, p), u = l === "strip", g = u ? i === "recent" ? "RECENT" : "UPCOMING" : r, h = i === "playing" && l === "hero", y = [
+    const e = this.config ?? k, t = this.hassValue?.language, i = this.effectiveMode(e), a = { ...e, appearance: this.resolveAppearance(e.appearance) }, r = e.title ?? (i === "upcoming" ? this.t("upcoming", t).toUpperCase() : this.t(i, t)), s = e.height, o = typeof s == "number", p = o ? s : this.containerHeight, c = this.resolveLayout(e, i, p), u = c === "strip", g = u ? this.t(i === "recent" ? "recentEyebrow" : "upcomingEyebrow", t) : r, h = i === "playing" && c === "hero", w = [
       o ? `--octopus-card-height:${String(s)}px` : "",
       e.accent_color ? `--octopus-media-accent:${e.accent_color}` : ""
     ].filter(Boolean).join(";");
@@ -4510,28 +4501,28 @@ let P = class extends $ {
         data-concept=${e.visual_concept}
         data-title-position=${e.title_position}
         data-header-alignment=${e.header_alignment}
-        data-layout=${l}
+        data-layout=${c}
         data-mode=${i}
         data-wide=${String(this.containerWidth >= 560)}
         data-has-ambient=${String(u && !!this.ambientArtwork)}
         data-playing-hero=${String(h)}
-        style=${y}
+        style=${w}
         @octopus-media-focus=${this.onMediaFocus}
       >
-        ${u ? this.renderAmbientBackground(e) : c}
-        ${h ? c : n`<header>
+        ${u ? this.renderAmbientBackground(e) : l}
+        ${h ? l : n`<header>
                 <span class="heading">
-                  ${u ? c : n`<ha-icon icon="mdi:octopus" aria-hidden="true"></ha-icon>`}
+                  ${u ? l : n`<ha-icon icon="mdi:octopus" aria-hidden="true"></ha-icon>`}
                   <h2>${g}</h2>
                 </span>
                 ${this.snapshot && u ? n`<span
                         class="context"
                         aria-label=${`${String(this.itemsForMode(i).length)} itens`}
                         >${this.itemsForMode(i).length}</span
-                      >` : c}
+                      >` : l}
               </header>`}
         <section class="content">
-          ${this.renderContent(a, i, t, l, p)}
+          ${this.renderContent(a, i, t, c, p)}
         </section>
       </article>
     `;
@@ -4547,7 +4538,7 @@ let P = class extends $ {
               .variant=${this.ambientArtwork.variant}
               .alt=${""}
               .backdrop=${!0}
-            ></octopus-media-image>` : c}
+            ></octopus-media-image>` : l}
       ${this.pendingAmbientArtwork ? n`<octopus-media-image
               class="ambient-preload"
               aria-hidden="true"
@@ -4558,29 +4549,34 @@ let P = class extends $ {
               .alt=${""}
               .backdrop=${!0}
               @octopus-image-ready=${this.onAmbientPreloadReady}
-            ></octopus-media-image>` : c}
+            ></octopus-media-image>` : l}
       <span class="ambient-color" aria-hidden="true"></span>
       <span class="ambient-vignette" aria-hidden="true"></span>
     `;
   }
   renderContent(e, t, i, a, r) {
-    if (e.entry_id === yt)
+    if (e.entry_id === vt)
       return n`<octopus-empty-state
         .message=${this.t("notConfigured", i)}
+      ></octopus-empty-state>`;
+    if (this.configurationMissing)
+      return n`<octopus-empty-state
+        .message=${this.t("configurationNotFound", i)}
+        .secondary=${this.t("configurationNotFoundSecondary", i)}
       ></octopus-empty-state>`;
     if (this.loading)
       return n`<octopus-loading-state
         .message=${this.t("loading", i)}
       ></octopus-loading-state>`;
     if (t === "playing" && a === "hero") {
-      const l = this.localPlaying.slice(0, e.item_count), u = this.snapshot?.availability.jellyfin.state === "offline", g = this.snapshot?.playing;
-      return Kt("hero", {
+      const c = this.localPlaying.slice(0, e.item_count), u = this.snapshot?.availability.jellyfin.state === "offline", g = this.snapshot?.playing;
+      return yt("hero", {
         config: e,
         entryId: e.entry_id,
-        focusedItemRef: this.focusedItemRef ?? l[0]?.ref,
+        focusedItemRef: this.focusedItemRef ?? c[0]?.ref,
         hass: this.hassValue,
-        heroState: l.length > 0 ? "ready" : u || this.error ? "unavailable" : "empty",
-        items: l,
+        heroState: c.length > 0 ? "ready" : u || this.error ? "unavailable" : "empty",
+        items: c,
         language: i,
         mode: t,
         partial: g?.partial ?? !1,
@@ -4613,13 +4609,13 @@ let P = class extends $ {
           <ha-icon icon="mdi:calendar-blank-outline" aria-hidden="true"></ha-icon>
           <span>${this.t("upcomingEmpty", i)}</span>
         </div>`;
-      const l = t === "playing" ? "noPlaying" : "empty";
+      const c = t === "playing" ? "noPlaying" : "empty";
       return n`<octopus-empty-state
-        .message=${this.t(l, i)}
+        .message=${this.t(c, i)}
       ></octopus-empty-state>`;
     }
     const p = this.snapshot[t];
-    return t === "upcoming" ? Fi({
+    return t === "upcoming" ? pe({
       config: e,
       entryId: e.entry_id,
       focusedItemRef: this.focusedItemRef ?? o[0]?.ref,
@@ -4631,7 +4627,7 @@ let P = class extends $ {
       stale: p.stale,
       width: this.containerWidth
     }) : n`
-      ${Kt(a, {
+      ${yt(a, {
       config: e,
       entryId: e.entry_id,
       focusedItemRef: this.focusedItemRef ?? o[0]?.ref,
@@ -4642,12 +4638,12 @@ let P = class extends $ {
       mode: t,
       width: this.containerWidth
     })}
-      ${p.stale ? n`<p class="stale" role="status">${this.t("stale", i)}</p>` : c}
-      ${p.partial ? n`<p class="partial" role="status">${this.t("partial", i)}</p>` : c}
+      ${p.stale ? n`<p class="stale" role="status">${this.t("stale", i)}</p>` : l}
+      ${p.partial ? n`<p class="partial" role="status">${this.t("partial", i)}</p>` : l}
     `;
   }
   effectiveMode(e) {
-    return e.mode === "carousel" ? e.sections[0] ?? "recent" : e.mode;
+    return e.mode;
   }
   resolveAppearance(e) {
     return e !== "auto" ? e : this.hassValue?.themes?.darkMode === !1 ? "light" : "dark";
@@ -4662,12 +4658,12 @@ let P = class extends $ {
     return f(t, e);
   }
   async ensureSubscription() {
-    if (!this.isConnected || !this.config || !this.hassValue || this.config.entry_id === yt || this.unsubscribe || this.subscriptionPending)
+    if (!this.isConnected || !this.config || !this.hassValue || this.config.entry_id === vt || this.unsubscribe || this.subscriptionPending)
       return;
     const e = ++this.subscriptionGeneration;
-    this.subscriptionPending = !0, this.loading = !0, this.error = void 0;
+    this.subscriptionPending = !0, this.loading = !0, this.error = void 0, this.configurationMissing = !1;
     try {
-      const t = await Ue(
+      const t = await ie(
         this.hassValue,
         this.config.entry_id,
         (i) => {
@@ -4676,13 +4672,13 @@ let P = class extends $ {
       );
       e !== this.subscriptionGeneration ? t() : (this.unsubscribe = t, this.reconnectDelay = 1e3);
     } catch (t) {
-      e === this.subscriptionGeneration && (this.error = t instanceof Error ? t.message : "subscription_failed", this.loading = !1, this.scheduleReconnect());
+      e === this.subscriptionGeneration && (this.configurationMissing = ae(t), this.error = t instanceof Error ? t.message : "subscription_failed", this.loading = !1, this.scheduleReconnect());
     } finally {
       e === this.subscriptionGeneration && (this.subscriptionPending = !1);
     }
   }
   resetSubscription() {
-    this.subscriptionGeneration += 1, this.unsubscribe?.(), this.unsubscribe = void 0, this.clearReconnectTimer(), this.stopProgressTimer(), this.snapshot = void 0, this.localPlaying = [], this.focusedItemRef = void 0, this.ambientArtwork = void 0, this.pendingAmbientArtwork = void 0, this.loading = !0, this.error = void 0;
+    this.subscriptionGeneration += 1, this.subscriptionPending = !1, this.unsubscribe?.(), this.unsubscribe = void 0, this.clearReconnectTimer(), this.stopProgressTimer(), this.snapshot = void 0, this.localPlaying = [], this.focusedItemRef = void 0, this.ambientArtwork = void 0, this.pendingAmbientArtwork = void 0, this.loading = !0, this.error = void 0, this.configurationMissing = !1;
   }
   scheduleReconnect() {
     if (this.reconnectTimer !== void 0 || !this.isConnected) return;
@@ -4746,40 +4742,43 @@ let P = class extends $ {
     }), this.resizeObserver.observe(this));
   }
 };
-P.styles = ji;
-O([
-  x()
-], P.prototype, "config", 2);
-O([
-  x()
-], P.prototype, "snapshot", 2);
-O([
-  x()
-], P.prototype, "loading", 2);
-O([
-  x()
-], P.prototype, "error", 2);
-O([
-  x()
-], P.prototype, "containerWidth", 2);
-O([
-  x()
-], P.prototype, "containerHeight", 2);
-O([
-  x()
-], P.prototype, "localPlaying", 2);
-O([
-  x()
-], P.prototype, "focusedItemRef", 2);
-O([
-  x()
-], P.prototype, "ambientArtwork", 2);
-O([
-  x()
-], P.prototype, "pendingAmbientArtwork", 2);
-P = O([
-  E("octopus-media-card")
-], P);
+S.styles = Ui;
+C([
+  v()
+], S.prototype, "config", 2);
+C([
+  v()
+], S.prototype, "snapshot", 2);
+C([
+  v()
+], S.prototype, "loading", 2);
+C([
+  v()
+], S.prototype, "error", 2);
+C([
+  v()
+], S.prototype, "configurationMissing", 2);
+C([
+  v()
+], S.prototype, "containerWidth", 2);
+C([
+  v()
+], S.prototype, "containerHeight", 2);
+C([
+  v()
+], S.prototype, "localPlaying", 2);
+C([
+  v()
+], S.prototype, "focusedItemRef", 2);
+C([
+  v()
+], S.prototype, "ambientArtwork", 2);
+C([
+  v()
+], S.prototype, "pendingAmbientArtwork", 2);
+S = C([
+  I("octopus-media-card")
+], S);
 window.customCards = window.customCards ?? [];
 window.customCards.some((e) => e.type === "octopus-media-card") || window.customCards.push({
   type: "octopus-media-card",
@@ -4788,5 +4787,5 @@ window.customCards.some((e) => e.type === "octopus-media-card") || window.custom
   preview: !0
 });
 export {
-  P as OctopusMediaCard
+  S as OctopusMediaCard
 };

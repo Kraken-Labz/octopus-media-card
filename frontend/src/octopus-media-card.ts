@@ -1,7 +1,7 @@
 import { html, LitElement, nothing } from "lit";
 import { customElement, state } from "lit/decorators.js";
 
-import { subscribeSnapshot } from "./api";
+import { isConfigEntryNotFound, subscribeSnapshot } from "./api";
 import "./components/empty-state";
 import "./components/error-state";
 import "./components/media-image";
@@ -34,6 +34,7 @@ export class OctopusMediaCard extends LitElement {
   @state() private snapshot?: DashboardSnapshot;
   @state() private loading = true;
   @state() private error?: string;
+  @state() private configurationMissing = false;
   @state() private containerWidth = 390;
   @state() private containerHeight = 210;
   @state() private localPlaying: PlayingItem[] = [];
@@ -96,6 +97,7 @@ export class OctopusMediaCard extends LitElement {
 
   override disconnectedCallback(): void {
     this.subscriptionGeneration += 1;
+    this.subscriptionPending = false;
     this.unsubscribe?.();
     this.unsubscribe = undefined;
     this.clearReconnectTimer();
@@ -119,7 +121,9 @@ export class OctopusMediaCard extends LitElement {
     const effectiveHeight = fixedHeight ? configuredHeight : this.containerHeight;
     const resolvedLayout = this.resolveLayout(config, mode, effectiveHeight);
     const officialStrip = resolvedLayout === "strip";
-    const headerTitle = officialStrip ? (mode === "recent" ? "RECENT" : "UPCOMING") : title;
+    const headerTitle = officialStrip
+      ? this.t(mode === "recent" ? "recentEyebrow" : "upcomingEyebrow", language)
+      : title;
     const officialPlayingHero = mode === "playing" && resolvedLayout === "hero";
     const style = [
       fixedHeight ? `--octopus-card-height:${String(configuredHeight)}px` : "",
@@ -209,7 +213,7 @@ export class OctopusMediaCard extends LitElement {
 
   private renderContent(
     config: OctopusMediaCardConfig,
-    mode: Exclude<CardMode, "carousel">,
+    mode: CardMode,
     language: string | undefined,
     resolvedLayout: Exclude<CardLayout, "auto">,
     effectiveHeight: number,
@@ -217,6 +221,12 @@ export class OctopusMediaCard extends LitElement {
     if (config.entry_id === SCAFFOLD_ENTRY_ID) {
       return html`<octopus-empty-state
         .message=${this.t("notConfigured", language)}
+      ></octopus-empty-state>`;
+    }
+    if (this.configurationMissing) {
+      return html`<octopus-empty-state
+        .message=${this.t("configurationNotFound", language)}
+        .secondary=${this.t("configurationNotFoundSecondary", language)}
       ></octopus-empty-state>`;
     }
     if (this.loading) {
@@ -328,8 +338,8 @@ export class OctopusMediaCard extends LitElement {
     `;
   }
 
-  private effectiveMode(config: OctopusMediaCardConfig): Exclude<CardMode, "carousel"> {
-    return config.mode === "carousel" ? (config.sections[0] ?? "recent") : config.mode;
+  private effectiveMode(config: OctopusMediaCardConfig): CardMode {
+    return config.mode;
   }
 
   private resolveAppearance(appearance: OctopusMediaCardConfig["appearance"]): "dark" | "light" {
@@ -339,7 +349,7 @@ export class OctopusMediaCard extends LitElement {
 
   private resolveLayout(
     config: OctopusMediaCardConfig,
-    mode: Exclude<CardMode, "carousel">,
+    mode: CardMode,
     height: number,
   ): Exclude<CardLayout, "auto"> {
     return config.layout === "auto"
@@ -347,12 +357,12 @@ export class OctopusMediaCard extends LitElement {
       : config.layout;
   }
 
-  private itemsForMode(mode: Exclude<CardMode, "carousel">): MediaItem[] {
+  private itemsForMode(mode: CardMode): MediaItem[] {
     if (mode === "playing") return this.localPlaying;
     return this.snapshot?.[mode].items ?? [];
   }
 
-  private t(key: TranslationKey | Exclude<CardMode, "carousel"> | "carousel", language?: string) {
+  private t(key: TranslationKey | CardMode, language?: string) {
     return translate(language, key);
   }
 
@@ -371,6 +381,7 @@ export class OctopusMediaCard extends LitElement {
     this.subscriptionPending = true;
     this.loading = true;
     this.error = undefined;
+    this.configurationMissing = false;
     try {
       const unsubscribe = await subscribeSnapshot(
         this.hassValue,
@@ -393,6 +404,7 @@ export class OctopusMediaCard extends LitElement {
       }
     } catch (error: unknown) {
       if (generation === this.subscriptionGeneration) {
+        this.configurationMissing = isConfigEntryNotFound(error);
         this.error = error instanceof Error ? error.message : "subscription_failed";
         this.loading = false;
         this.scheduleReconnect();
@@ -404,6 +416,7 @@ export class OctopusMediaCard extends LitElement {
 
   private resetSubscription(): void {
     this.subscriptionGeneration += 1;
+    this.subscriptionPending = false;
     this.unsubscribe?.();
     this.unsubscribe = undefined;
     this.clearReconnectTimer();
@@ -415,6 +428,7 @@ export class OctopusMediaCard extends LitElement {
     this.pendingAmbientArtwork = undefined;
     this.loading = true;
     this.error = undefined;
+    this.configurationMissing = false;
   }
 
   private scheduleReconnect(): void {

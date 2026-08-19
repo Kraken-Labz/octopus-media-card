@@ -17,6 +17,7 @@ from .const import (
     CONF_API_KEY,
     CONF_GROUP_EPISODES,
     CONF_INSTANCE_NAME,
+    CONF_JELLYFIN_CONFIG_ENTRY_ID,
     CONF_JELLYFIN_SERVER_ID,
     CONF_JELLYFIN_USER_ID,
     CONF_PLAYING_INTERVAL,
@@ -84,24 +85,33 @@ async def async_migrate_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntr
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntry) -> bool:
-    """Create one Jellyfin client and two shared coordinators per entry."""
+    """Create shared coordinators from selected Home Assistant ConfigEntries."""
     data = entry.data
     options = _synchronize_instance_name(hass, entry)
     service_config = {**data, **options}
-    secret = str(data[CONF_REF_SECRET])
+    selected_jellyfin_id = str(data.get(CONF_JELLYFIN_CONFIG_ENTRY_ID, "")).strip()
+    selected_jellyfin = hass.config_entries.async_get_entry(selected_jellyfin_id)
+    if selected_jellyfin is not None and selected_jellyfin.domain == "jellyfin":
+        client, user_id, server_id = JellyfinClient.from_home_assistant_entry(
+            hass, selected_jellyfin
+        )
+    else:
+        client = JellyfinClient(
+            async_get_clientsession(hass),
+            APIClientConfig(
+                url=str(data[CONF_URL]),
+                api_key=str(data[CONF_API_KEY]),
+                verify_ssl=bool(data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL)),
+                timeout=float(data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)),
+            ),
+        )
+        user_id = str(data[CONF_JELLYFIN_USER_ID])
+        server_id = str(data[CONF_JELLYFIN_SERVER_ID])
+    secret = str(data.get(CONF_REF_SECRET, entry.entry_id))
     image_store = ImageReferenceStore(
         secret,
         config_entry_id=entry.entry_id,
-        server_id=str(data[CONF_JELLYFIN_SERVER_ID]),
-    )
-    client = JellyfinClient(
-        async_get_clientsession(hass),
-        APIClientConfig(
-            url=str(data[CONF_URL]),
-            api_key=str(data[CONF_API_KEY]),
-            verify_ssl=bool(data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL)),
-            timeout=float(data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)),
-        ),
+        server_id=server_id,
     )
     device_catalog = JellyfinDeviceCatalog(client)
     recent_interval = int(options.get(CONF_RECENT_INTERVAL, DEFAULT_RECENT_INTERVAL))
@@ -110,7 +120,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntry)
         hass,
         entry,
         client,
-        user_id=str(data[CONF_JELLYFIN_USER_ID]),
+        user_id=user_id,
         secret=secret,
         image_store=image_store,
         interval=recent_interval,
@@ -191,6 +201,9 @@ def _synchronize_instance_name(
 
 async def async_unload_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntry) -> bool:
     """Unload coordinators, listeners, references, and refresh tasks."""
-    await entry.runtime_data.async_close()
+    runtime = getattr(entry, "runtime_data", None)
+    if runtime is None:
+        return True
+    await runtime.async_close()
     _LOGGER.debug("Jellyfin coordinators unloaded for config entry %s", entry.entry_id)
     return True

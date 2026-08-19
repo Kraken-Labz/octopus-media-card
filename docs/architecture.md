@@ -25,8 +25,6 @@ O produto exibe exclusivamente pôsteres e metadados de três categorias:
 1. `recent`: filmes e episódios recentemente incorporados ao Jellyfin;
 2. `upcoming`: filmes do calendário do Radarr e episódios do calendário do Sonarr;
 3. `playing`: sessões Jellyfin reproduzindo ou pausadas;
-4. `carousel`: configuração de seções; na implementação atual, a primeira seção configurada é
-   renderizada e a alternância completa entre múltiplas seções permanece pendente.
 
 A integração existe somente para guardar credenciais, consultar os três serviços, normalizar dados, compartilhar polling, entregar imagens autenticadas e expor o contrato ao card. O navegador não acessa Jellyfin, Radarr ou Sonarr diretamente.
 

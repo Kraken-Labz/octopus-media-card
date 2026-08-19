@@ -27,7 +27,7 @@ describe("official media strip", () => {
     document.body.append(strip);
     await strip.updateComplete;
     expect(strip.shadowRoot?.querySelector(".poster")).not.toBeNull();
-    expect(strip.shadowRoot?.textContent).toContain("AMANHÃ");
+    expect(strip.shadowRoot?.textContent).toContain("Tomorrow");
   });
   it("renders complete fictional items with overlay copy and no native tooltip", async () => {
     const strip = document.createElement("octopus-media-strip");
@@ -40,6 +40,7 @@ describe("official media strip", () => {
 
     const posters = strip.shadowRoot?.querySelectorAll(".poster");
     expect(posters).toHaveLength(7);
+    expect(strip.shadowRoot?.querySelector(".badge")).toBeNull();
     expect(posters?.[0]?.hasAttribute("title")).toBe(false);
     expect(posters?.[0]?.getAttribute("aria-label")).toContain("Harbor of Small Comets");
     expect(strip.shadowRoot?.querySelector(".copy-gradient")).not.toBeNull();
@@ -60,6 +61,7 @@ describe("official media strip", () => {
     expect(strip.shadowRoot?.querySelector(".episode-subtitle")?.textContent).toContain(
       "A Map of Quiet Water",
     );
+    expect(strip.shadowRoot?.querySelector(".badge")).toBeNull();
   });
 
   it("announces equivalent focus from keyboard and touch click", async () => {

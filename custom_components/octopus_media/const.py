@@ -1,9 +1,9 @@
-"""Constants for Octopus Media Card."""
+"""Constants for Octopus Media."""
 
 from typing import Final
 
 DOMAIN: Final = "octopus_media"
-NAME: Final = "Octopus Media Card"
+NAME: Final = "Octopus Media"
 VERSION: Final = "0.0.0"
 
 CONF_SCAFFOLD: Final = "scaffold"
@@ -14,6 +14,7 @@ CONF_VERIFY_SSL: Final = "verify_ssl"
 CONF_TIMEOUT: Final = "timeout"
 CONF_JELLYFIN_USER_ID: Final = "jellyfin_user_id"
 CONF_JELLYFIN_SERVER_ID: Final = "jellyfin_server_id"
+CONF_JELLYFIN_CONFIG_ENTRY_ID: Final = "jellyfin_config_entry_id"
 CONF_DEVICE_ALIASES: Final = "device_aliases"
 CONF_INSTANCE_NAME: Final = "instance_name"
 CONF_PLAYING_INTERVAL: Final = "playing_interval"
@@ -29,13 +30,13 @@ CONF_RADARR_DATE_POLICY: Final = "radarr_date_policy"
 CONF_RADARR_CONFIG_ENTRY_ID: Final = "radarr_config_entry_id"
 CONF_SONARR_CONFIG_ENTRY_ID: Final = "sonarr_config_entry_id"
 
-DEFAULT_NAME: Final = "Octopus Media Card"
+DEFAULT_NAME: Final = "Octopus Media"
 DEFAULT_VERIFY_SSL: Final = True
 DEFAULT_TIMEOUT: Final = 10
 DEFAULT_PLAYING_INTERVAL: Final = 10
 DEFAULT_RECENT_INTERVAL: Final = 180
 DEFAULT_UPCOMING_INTERVAL: Final = 600
-DEFAULT_RECENT_COUNT: Final = 12
+DEFAULT_RECENT_COUNT: Final = 50
 DEFAULT_UPCOMING_COUNT: Final = 12
 DEFAULT_FUTURE_DAYS: Final = 90
 DEFAULT_GROUP_EPISODES: Final = True

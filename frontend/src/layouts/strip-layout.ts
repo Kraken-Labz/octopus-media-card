@@ -42,7 +42,6 @@ export const renderStripLayout: LayoutRenderer = ({
       .showTitles=${config.show_titles}
       .showDates=${upcoming || config.show_dates}
       .showRatings=${upcoming ? false : config.show_ratings}
-      .showBadges=${config.show_badges}
       .showArrows=${config.show_arrows}
       .autoScroll=${config.auto_scroll}
       .autoScrollInterval=${config.auto_scroll_interval}

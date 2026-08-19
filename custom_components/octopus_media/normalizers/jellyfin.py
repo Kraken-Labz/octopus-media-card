@@ -57,9 +57,15 @@ def normalize_recent_items(
     normalized: list[RecentItem] = []
     partial = False
     for raw in raw_items:
-        item = _normalize_recent_item(raw, secret=secret, image_store=image_store)
-        if item is None:
+        try:
+            item = _normalize_recent_item(raw, secret=secret, image_store=image_store)
+        except Exception:
             partial = True
+            continue
+        if item is None:
+            reason = _recent_item_skip_reason(raw)
+            if reason != "unsupported_type":
+                partial = True
             continue
         normalized.append(item)
 
@@ -68,6 +74,17 @@ def normalize_recent_items(
         normalized = _group_recent_episodes(normalized, raw_items, secret)
         normalized.sort(key=lambda item: (_date_sort_key(item.added_at), item.ref), reverse=True)
     return NormalizedBatch(tuple(normalized[: max(1, limit)]), partial)
+
+
+def _recent_item_skip_reason(raw: JellyfinMediaItem) -> str:
+    """Classify a recent item rejected before it can become a card item."""
+    if _string(raw.get("Type")) not in ("Movie", "Episode"):
+        return "unsupported_type"
+    if _string(raw.get("Id")) is None:
+        return "missing_id"
+    if _string(raw.get("Name")) is None:
+        return "missing_name"
+    return "normalization_error"
 
 
 def normalize_sessions(
