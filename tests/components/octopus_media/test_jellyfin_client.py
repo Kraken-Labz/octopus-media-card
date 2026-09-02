@@ -20,7 +20,7 @@ from custom_components.octopus_media.exceptions import (
 )
 from custom_components.octopus_media.image_store import ImageCandidate, ImageKind, ImageVariant
 
-from tests.fixtures.jellyfin import MOVIE, SERVER_INFO, USERS, playing_session
+from tests.fixtures.jellyfin import EPISODE_NEWEST, MOVIE, SERVER_INFO, USERS, playing_session
 
 
 class FakeResponse:
@@ -87,14 +87,15 @@ class FakeHass:
 
 
 class FakeHomeAssistantJellyfin:
-    """Expose only the official recently-added operation used by the adapter."""
+    """Expose the authenticated low-level operation used by the adapter."""
 
-    def __init__(self) -> None:
+    def __init__(self, items: list[dict[str, Any]] | None = None) -> None:
         self.calls: list[tuple[str, dict[str, Any]]] = []
+        self.items = items if items is not None else [MOVIE]
 
-    def get_recently_added(self, **params: Any) -> list[dict[str, Any]]:
-        self.calls.append(("", params))
-        return [MOVIE]
+    def user_items(self, handler: str, params: dict[str, Any]) -> list[dict[str, Any]]:
+        self.calls.append((handler, params))
+        return self.items
 
 
 def client(session: FakeSession) -> JellyfinClient:
@@ -150,7 +151,7 @@ async def test_users_recent_and_sessions_are_typed_arrays() -> None:
     assert session.calls[3][0] == "https://media.invalid/base/Devices"
 
 
-async def test_recent_uses_loaded_home_assistant_client_operation() -> None:
+async def test_recent_uses_loaded_home_assistant_client_without_server_grouping() -> None:
     session = FakeSession()
     ha_jellyfin = FakeHomeAssistantJellyfin()
     jellyfin = JellyfinClient(
@@ -164,9 +165,26 @@ async def test_recent_uses_loaded_home_assistant_client_operation() -> None:
 
     assert items == [MOVIE]
     assert len(session.calls) == 0
-    assert ha_jellyfin.calls[0][0] == ""
-    assert ha_jellyfin.calls[0][1]["media"] == ["Movie", "Episode"]
-    assert ha_jellyfin.calls[0][1]["limit"] == 12
+    assert ha_jellyfin.calls[0][0] == "/Latest"
+    assert ha_jellyfin.calls[0][1]["IncludeItemTypes"] == "Movie,Episode"
+    assert ha_jellyfin.calls[0][1]["GroupItems"] == "false"
+    assert ha_jellyfin.calls[0][1]["Limit"] == 12
+
+
+async def test_recent_accepts_movie_and_episode_from_home_assistant_client() -> None:
+    ha_jellyfin = FakeHomeAssistantJellyfin([MOVIE, EPISODE_NEWEST])
+    jellyfin = JellyfinClient(
+        cast(aiohttp.ClientSession, FakeSession()),
+        APIClientConfig(url="https://media.invalid/base", api_key="<redacted>"),
+        home_assistant_api_client=type("ApiClient", (), {"jellyfin": ha_jellyfin})(),
+        hass=cast(Any, FakeHass()),
+    )
+
+    items = await jellyfin.async_get_recent_items(USERS[0]["Id"], limit=12)
+
+    assert [item["Type"] for item in items] == ["Movie", "Episode"]
+    assert ha_jellyfin.calls[0][1]["IncludeItemTypes"] == "Movie,Episode"
+    assert ha_jellyfin.calls[0][1]["GroupItems"] == "false"
 
 
 @pytest.mark.parametrize(

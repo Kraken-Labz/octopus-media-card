@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Mapping
-from functools import partial
 from typing import Any, cast
 
 import aiohttp
@@ -139,28 +138,26 @@ class JellyfinClient(BaseMediaClient):
     async def _async_get_recent_items_from_home_assistant(
         self, user_id: str, *, limit: int
     ) -> list[JellyfinMediaItem]:
-        """Use Home Assistant Jellyfin's public recently-added operation."""
+        """Use Home Assistant Jellyfin's authenticated low-level operation."""
         jellyfin = getattr(self._home_assistant_api_client, "jellyfin", None)
-        get_recently_added = getattr(jellyfin, "get_recently_added", None)
-        if not callable(get_recently_added):
-            raise InvalidResponseError("Home Assistant Jellyfin client lacks get_recently_added")
-        request = partial(
-            get_recently_added,
-            media=["Movie", "Episode"],
-            limit=max(1, min(limit, 200)),
-            fields=[
-                "DateCreated",
-                "ParentPrimaryImageItemId",
-                "ParentPrimaryImageTag",
-                "SeriesPrimaryImageTag",
-            ],
-            enable_image_types=["Primary", "Backdrop"],
-            image_type_limit=1,
-            enable_total_record_count=False,
-        )
+        user_items = getattr(jellyfin, "user_items", None)
+        if not callable(user_items):
+            raise InvalidResponseError("Home Assistant Jellyfin client lacks user_items")
+        params = {
+            "Limit": max(1, min(limit, 200)),
+            "UserId": "{UserId}",
+            "IncludeItemTypes": "Movie,Episode",
+            "Fields": (
+                "DateCreated,ParentPrimaryImageItemId,ParentPrimaryImageTag,SeriesPrimaryImageTag"
+            ),
+            "EnableImageTypes": "Primary,Backdrop",
+            "ImageTypeLimit": 1,
+            "EnableTotalRecordCount": "false",
+            "GroupItems": "false",
+        }
         hass = self._hass
         assert hass is not None
-        result = await hass.async_add_executor_job(request)
+        result = await hass.async_add_executor_job(user_items, "/Latest", params)
         return self._require_object_array(result, "recent items")
 
     async def async_get_sessions(self) -> list[JellyfinSession]:
