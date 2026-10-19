@@ -1,6 +1,7 @@
 """Aggregate Upcoming state tests for the two public Home Assistant providers."""
 
-from unittest.mock import AsyncMock
+from datetime import UTC
+from unittest.mock import AsyncMock, patch
 
 from custom_components.octopus_media.api.ha_services import (
     HomeAssistantRadarrProvider,
@@ -95,3 +96,38 @@ async def test_both_empty_sources_are_not_partial(hass: HomeAssistant) -> None:
 
     assert batch.items == ()
     assert batch.partial is False
+
+
+async def test_uses_home_assistant_default_timezone_for_both_sources(
+    hass: HomeAssistant,
+) -> None:
+    """Normalization reuses HA's loaded timezone object in the async update."""
+    from custom_components.octopus_media import coordinators
+
+    radarr = HomeAssistantRadarrProvider(hass, "radarr-entry")
+    sonarr = HomeAssistantSonarrProvider(hass, "sonarr-entry")
+    _replace_async_method(radarr, "async_get_movies", AsyncMock(return_value={}))
+    _replace_async_method(radarr, "async_get_calendar_events", AsyncMock(return_value=[]))
+    _replace_async_method(sonarr, "async_get_episodes", AsyncMock(return_value=[]))
+    timezone_obj = UTC
+
+    with (
+        patch.object(
+            coordinators.upcoming.dt_util, "get_default_time_zone", return_value=timezone_obj
+        ) as get_timezone,
+        patch.object(
+            coordinators.upcoming,
+            "normalize_radarr",
+            return_value=coordinators.upcoming.NormalizedBatch((), False),
+        ) as normalize_radarr,
+        patch.object(
+            coordinators.upcoming,
+            "normalize_sonarr",
+            return_value=coordinators.upcoming.NormalizedBatch((), False),
+        ) as normalize_sonarr,
+    ):
+        await _coordinator(hass, radarr, sonarr)._async_update_data()
+
+    get_timezone.assert_called_once_with()
+    assert normalize_radarr.call_args.kwargs["timezone"] is timezone_obj
+    assert normalize_sonarr.call_args.kwargs["timezone"] is timezone_obj

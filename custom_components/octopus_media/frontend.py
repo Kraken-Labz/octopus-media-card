@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.core import HomeAssistant
 
@@ -15,3 +16,4 @@ async def async_register_frontend(hass: HomeAssistant) -> None:
     await hass.http.async_register_static_paths([
         StaticPathConfig(FRONTEND_URL_PATH, str(_BUNDLE_PATH), False)
     ])
+    add_extra_js_url(hass, FRONTEND_URL_PATH)

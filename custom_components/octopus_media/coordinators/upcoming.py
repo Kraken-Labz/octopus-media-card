@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
-from zoneinfo import ZoneInfo
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from ..api.ha_services import HomeAssistantRadarrProvider, HomeAssistantSonarrProvider
 from ..const import DEFAULT_UPCOMING_COUNT, DEFAULT_UPCOMING_INTERVAL
@@ -54,6 +54,7 @@ class UpcomingCoordinator(DataUpdateCoordinator[NormalizedBatch[UpcomingItem]]):
         """Fetch available sources without allowing one failure to erase the other."""
         batches: list[NormalizedBatch[UpcomingItem]] = []
         configured = sum(client is not None for client in (self.radarr, self.sonarr))
+        timezone = dt_util.get_default_time_zone()
         for name, client in (
             ("radarr", self.radarr),
             ("sonarr", self.sonarr),
@@ -70,7 +71,7 @@ class UpcomingCoordinator(DataUpdateCoordinator[NormalizedBatch[UpcomingItem]]):
                     batch = normalize_radarr(
                         raw_movies,
                         calendar_events=calendar_events,
-                        timezone=ZoneInfo(self.hass.config.time_zone),
+                        timezone=timezone,
                         image_store=self.image_store,
                     )
                 else:
@@ -78,7 +79,7 @@ class UpcomingCoordinator(DataUpdateCoordinator[NormalizedBatch[UpcomingItem]]):
                     raw_episodes = await client.async_get_episodes()
                     batch = normalize_sonarr(
                         raw_episodes,
-                        timezone=ZoneInfo(self.hass.config.time_zone),
+                        timezone=timezone,
                         image_store=self.image_store,
                     )
             except Exception as err:

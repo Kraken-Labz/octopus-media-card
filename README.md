@@ -91,10 +91,8 @@ The card bundle is provided by the integration at:
 /octopus_media/octopus-media-card.js
 ```
 
-If the resource is not registered automatically by the current Home Assistant setup,
-add that URL under **Settings → Dashboards → Resources** as a JavaScript module.
-Manual installation is intended for development and fallback scenarios, not as the
-primary public path.
+The integration registers this bundle with the Home Assistant frontend automatically.
+No manual Lovelace resource entry is required.
 
 ## Configuration
 

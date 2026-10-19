@@ -13,6 +13,10 @@ class CannotConnectError(OctopusMediaError):
     """Raised when a configured service cannot be reached."""
 
 
+class JellyfinRuntimeNotReadyError(CannotConnectError):
+    """Raised when the selected Home Assistant Jellyfin runtime is not ready yet."""
+
+
 class InvalidAuthenticationError(OctopusMediaError):
     """Raised when a configured service rejects its credentials."""
 

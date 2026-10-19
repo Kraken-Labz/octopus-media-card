@@ -4,6 +4,7 @@ from types import SimpleNamespace
 from typing import Any, cast
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import pytest
 from custom_components.octopus_media.const import (
     CONF_GROUP_EPISODES,
     CONF_INSTANCE_NAME,
@@ -18,6 +19,7 @@ from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
+from homeassistant.exceptions import ConfigEntryError, ConfigEntryNotReady
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 
@@ -226,3 +228,126 @@ async def test_setup_entry_constructs_client_from_selected_jellyfin_entry(
         assert octopus.runtime_data.client._config.api_key == "fixture-token"
         assert octopus.runtime_data.recent_coordinator is coordinator
         await async_unload_entry(hass, octopus)
+
+
+@pytest.mark.parametrize("selected_id", ["", "removed-jellyfin-entry"])
+async def test_setup_entry_rejects_missing_selected_jellyfin(
+    hass: HomeAssistant, selected_id: str
+) -> None:
+    """A missing canonical source is a permanent config error, without legacy fallback."""
+    from custom_components.octopus_media import async_setup_entry
+
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_NAME,
+        data={CONF_JELLYFIN_CONFIG_ENTRY_ID: selected_id},
+    )
+    entry.add_to_hass(hass)
+
+    with (
+        patch(
+            "custom_components.octopus_media.JellyfinClient.from_home_assistant_entry"
+        ) as factory,
+        pytest.raises(ConfigEntryError),
+    ):
+        await async_setup_entry(hass, entry)
+
+    factory.assert_not_called()
+
+
+async def test_setup_entry_rejects_wrong_selected_domain(hass: HomeAssistant) -> None:
+    """A selected non-Jellyfin ConfigEntry cannot enter the legacy path."""
+    from custom_components.octopus_media import async_setup_entry
+
+    radarr = MockConfigEntry(domain="radarr", title="Fixture Radarr")
+    radarr.add_to_hass(hass)
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_NAME,
+        data={CONF_JELLYFIN_CONFIG_ENTRY_ID: radarr.entry_id},
+    )
+    entry.add_to_hass(hass)
+
+    with pytest.raises(ConfigEntryError):
+        await async_setup_entry(hass, entry)
+
+
+async def test_setup_entry_retries_when_jellyfin_entry_is_not_loaded(
+    hass: HomeAssistant,
+) -> None:
+    """Home Assistant retries Octopus when its selected source is still loading."""
+    from custom_components.octopus_media import async_setup_entry
+
+    jellyfin = MockConfigEntry(
+        domain="jellyfin", title="Fixture Jellyfin", state=ConfigEntryState.SETUP_ERROR
+    )
+    jellyfin.add_to_hass(hass)
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_NAME,
+        data={CONF_JELLYFIN_CONFIG_ENTRY_ID: jellyfin.entry_id},
+    )
+    entry.add_to_hass(hass)
+
+    with (
+        patch(
+            "custom_components.octopus_media.JellyfinClient.from_home_assistant_entry"
+        ) as factory,
+        pytest.raises(ConfigEntryNotReady),
+    ):
+        await async_setup_entry(hass, entry)
+
+    factory.assert_not_called()
+
+
+async def test_setup_entry_retries_when_loaded_jellyfin_runtime_is_not_ready(
+    hass: HomeAssistant,
+) -> None:
+    """Missing transient source runtime data is surfaced as a HA retry."""
+    from custom_components.octopus_media import async_setup_entry
+
+    jellyfin = MockConfigEntry(
+        domain="jellyfin",
+        title="Fixture Jellyfin",
+        state=ConfigEntryState.LOADED,
+        data={"url": "https://jellyfin.invalid"},
+    )
+    jellyfin.add_to_hass(hass)
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_NAME,
+        data={CONF_JELLYFIN_CONFIG_ENTRY_ID: jellyfin.entry_id},
+    )
+    entry.add_to_hass(hass)
+
+    with pytest.raises(ConfigEntryNotReady):
+        await async_setup_entry(hass, entry)
+
+
+async def test_setup_entry_does_not_retry_permanently_incomplete_jellyfin_config(
+    hass: HomeAssistant,
+) -> None:
+    """A loaded source with invalid runtime credentials needs reconfiguration, not retries."""
+    from custom_components.octopus_media import async_setup_entry
+
+    jellyfin = MockConfigEntry(
+        domain="jellyfin",
+        title="Fixture Jellyfin",
+        state=ConfigEntryState.LOADED,
+        data={"url": "https://jellyfin.invalid"},
+    )
+    jellyfin.runtime_data = SimpleNamespace(
+        api_client=SimpleNamespace(config=SimpleNamespace(data={})),
+        user_id="fixture-user",
+        server_id="fixture-server",
+    )
+    jellyfin.add_to_hass(hass)
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_NAME,
+        data={CONF_JELLYFIN_CONFIG_ENTRY_ID: jellyfin.entry_id},
+    )
+    entry.add_to_hass(hass)
+
+    with pytest.raises(ConfigEntryError):
+        await async_setup_entry(hass, entry)

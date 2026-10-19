@@ -1,14 +1,14 @@
 {
   "domain": "octopus_media",
   "name": "Octopus Media",
-  "after_dependencies": ["calendar", "radarr", "sonarr"],
+  "after_dependencies": ["calendar", "jellyfin", "radarr", "sonarr"],
   "codeowners": ["@phgsbr"],
   "config_flow": true,
-  "dependencies": ["http"],
+  "dependencies": ["frontend", "http"],
   "documentation": "https://github.com/Kraken-Labz/octopus-media-card",
   "integration_type": "service",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Kraken-Labz/octopus-media-card/issues",
   "requirements": [],
-  "version": "0.1.1"
+  "version": "0.1.2"
 }

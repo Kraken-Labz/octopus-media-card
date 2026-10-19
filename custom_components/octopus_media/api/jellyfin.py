@@ -20,6 +20,7 @@ from ..exceptions import (
     ImageTemporaryError,
     InvalidAuthenticationError,
     InvalidResponseError,
+    JellyfinRuntimeNotReadyError,
     RequestTimeoutError,
     UnexpectedHTTPError,
 )
@@ -58,15 +59,20 @@ class JellyfinClient(BaseMediaClient):
         """Reuse the authenticated client owned by HA's Jellyfin ConfigEntry."""
         runtime = getattr(entry, "runtime_data", None)
         api_client = getattr(runtime, "api_client", None)
+        user_id = getattr(runtime, "user_id", None)
+        server_id = getattr(runtime, "server_id", None)
+        if (
+            runtime is None
+            or api_client is None
+            or not all(isinstance(value, str) and value.strip() for value in (user_id, server_id))
+        ):
+            raise JellyfinRuntimeNotReadyError("Jellyfin runtime is not ready")
+
         config_data = getattr(getattr(api_client, "config", None), "data", {})
         token = config_data.get("auth.token") or config_data.get("auth.access_token")
         url = entry.data.get("url")
-        user_id = getattr(runtime, "user_id", None)
-        server_id = getattr(runtime, "server_id", None)
-        if not all(
-            isinstance(value, str) and value.strip() for value in (url, token, user_id, server_id)
-        ):
-            raise CannotConnectError("Jellyfin ConfigEntry is not ready")
+        if not all(isinstance(value, str) and value.strip() for value in (url, token)):
+            raise InvalidResponseError("Jellyfin runtime configuration is incomplete")
         return (
             cls(
                 async_get_clientsession(hass),

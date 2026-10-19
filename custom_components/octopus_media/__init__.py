@@ -6,41 +6,33 @@ import asyncio
 import logging
 from typing import Any
 
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.exceptions import ConfigEntryError, ConfigEntryNotReady
 
-from .api.base import APIClientConfig
 from .api.ha_services import HomeAssistantRadarrProvider, HomeAssistantSonarrProvider
 from .api.jellyfin import JellyfinClient
 from .const import (
-    CONF_API_KEY,
     CONF_GROUP_EPISODES,
     CONF_INSTANCE_NAME,
     CONF_JELLYFIN_CONFIG_ENTRY_ID,
-    CONF_JELLYFIN_SERVER_ID,
-    CONF_JELLYFIN_USER_ID,
     CONF_PLAYING_INTERVAL,
     CONF_RADARR_CONFIG_ENTRY_ID,
     CONF_RECENT_COUNT,
     CONF_RECENT_INTERVAL,
     CONF_REF_SECRET,
     CONF_SONARR_CONFIG_ENTRY_ID,
-    CONF_TIMEOUT,
-    CONF_URL,
-    CONF_VERIFY_SSL,
     DEFAULT_GROUP_EPISODES,
     DEFAULT_NAME,
     DEFAULT_PLAYING_INTERVAL,
     DEFAULT_RECENT_COUNT,
     DEFAULT_RECENT_INTERVAL,
-    DEFAULT_TIMEOUT,
-    DEFAULT_VERIFY_SSL,
 )
 from .coordinators.playing import JellyfinPlayingCoordinator
 from .coordinators.recent import JellyfinRecentCoordinator
 from .coordinators.upcoming import UpcomingCoordinator
 from .device_catalog import JellyfinDeviceCatalog
+from .exceptions import InvalidResponseError, JellyfinRuntimeNotReadyError
 from .frontend import async_register_frontend
 from .http import async_register_http_views
 from .image_cache import ImageMemoryCache
@@ -87,26 +79,31 @@ async def async_migrate_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntr
 async def async_setup_entry(hass: HomeAssistant, entry: OctopusMediaConfigEntry) -> bool:
     """Create shared coordinators from selected Home Assistant ConfigEntries."""
     data = entry.data
-    options = _synchronize_instance_name(hass, entry)
-    service_config = {**data, **options}
     selected_jellyfin_id = str(data.get(CONF_JELLYFIN_CONFIG_ENTRY_ID, "")).strip()
+    if not selected_jellyfin_id:
+        raise ConfigEntryError(
+            "The selected Jellyfin integration is missing; reconfigure Octopus Media."
+        )
     selected_jellyfin = hass.config_entries.async_get_entry(selected_jellyfin_id)
-    if selected_jellyfin is not None and selected_jellyfin.domain == "jellyfin":
+    if selected_jellyfin is None or selected_jellyfin.domain != "jellyfin":
+        raise ConfigEntryError(
+            "The selected Jellyfin integration no longer exists; reconfigure Octopus Media."
+        )
+    if selected_jellyfin.state is not ConfigEntryState.LOADED:
+        raise ConfigEntryNotReady("The selected Jellyfin integration is not loaded yet")
+    try:
         client, user_id, server_id = JellyfinClient.from_home_assistant_entry(
             hass, selected_jellyfin
         )
-    else:
-        client = JellyfinClient(
-            async_get_clientsession(hass),
-            APIClientConfig(
-                url=str(data[CONF_URL]),
-                api_key=str(data[CONF_API_KEY]),
-                verify_ssl=bool(data.get(CONF_VERIFY_SSL, DEFAULT_VERIFY_SSL)),
-                timeout=float(data.get(CONF_TIMEOUT, DEFAULT_TIMEOUT)),
-            ),
-        )
-        user_id = str(data[CONF_JELLYFIN_USER_ID])
-        server_id = str(data[CONF_JELLYFIN_SERVER_ID])
+    except JellyfinRuntimeNotReadyError as err:
+        raise ConfigEntryNotReady("The selected Jellyfin integration is not ready yet") from err
+    except InvalidResponseError as err:
+        raise ConfigEntryError(
+            "The selected Jellyfin integration has incomplete runtime data; reconfigure it."
+        ) from err
+
+    options = _synchronize_instance_name(hass, entry)
+    service_config = {**data, **options}
     secret = str(data.get(CONF_REF_SECRET, entry.entry_id))
     image_store = ImageReferenceStore(
         secret,

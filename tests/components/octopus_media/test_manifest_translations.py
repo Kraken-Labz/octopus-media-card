@@ -26,7 +26,9 @@ def test_manifest_has_public_metadata() -> None:
     """The manifest has public repository metadata and no scaffold placeholders."""
     manifest = json.loads((INTEGRATION / "manifest.json").read_text(encoding="utf-8"))
     assert manifest["domain"] == "octopus_media"
-    assert manifest["version"] == "0.1.1"
+    assert manifest["version"] == "0.1.2"
+    assert set(manifest["after_dependencies"]) == {"calendar", "jellyfin", "radarr", "sonarr"}
+    assert set(manifest["dependencies"]) == {"frontend", "http"}
     assert manifest["config_flow"] is True
     assert manifest["requirements"] == []
     documentation = urlparse(manifest["documentation"])
