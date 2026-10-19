@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from types import SimpleNamespace
 from typing import cast
 from unittest.mock import AsyncMock, Mock, patch
 
@@ -11,13 +12,8 @@ from custom_components.octopus_media.api.base import APIClientConfig
 from custom_components.octopus_media.api.jellyfin import JellyfinClient
 from custom_components.octopus_media.api.jellyfin_types import JellyfinMediaItem
 from custom_components.octopus_media.const import (
-    CONF_API_KEY,
-    CONF_JELLYFIN_SERVER_ID,
-    CONF_JELLYFIN_USER_ID,
+    CONF_JELLYFIN_CONFIG_ENTRY_ID,
     CONF_REF_SECRET,
-    CONF_TIMEOUT,
-    CONF_URL,
-    CONF_VERIFY_SSL,
     DOMAIN,
 )
 from custom_components.octopus_media.coordinators.playing import JellyfinPlayingCoordinator
@@ -38,6 +34,7 @@ from custom_components.octopus_media.models import (
 )
 from custom_components.octopus_media.normalizers import NormalizedBatch, normalize_recent_items
 from custom_components.octopus_media.runtime_data import OctopusMediaRuntimeData
+from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -222,16 +219,25 @@ async def test_setup_capabilities_polling_and_unload(
     hass: HomeAssistant, caplog: LogCaptureFixture
 ) -> None:
     caplog.set_level(logging.DEBUG, logger="custom_components.octopus_media")
+    jellyfin_entry = MockConfigEntry(
+        domain="jellyfin",
+        title="Fixture Jellyfin",
+        state=ConfigEntryState.LOADED,
+        data={"url": "https://media.invalid"},
+    )
+    jellyfin_entry.runtime_data = SimpleNamespace(
+        api_client=SimpleNamespace(
+            config=SimpleNamespace(data={"auth.token": "fixture-api-key-never-log"})
+        ),
+        user_id="fixture-user",
+        server_id="fixture-server",
+    )
+    jellyfin_entry.add_to_hass(hass)
     entry = MockConfigEntry(
         domain=DOMAIN,
         title="Fixture Harbor",
         data={
-            CONF_URL: "https://media.invalid",
-            CONF_API_KEY: "fixture-api-key-never-log",
-            CONF_VERIFY_SSL: True,
-            CONF_TIMEOUT: 10,
-            CONF_JELLYFIN_SERVER_ID: "fixture-server",
-            CONF_JELLYFIN_USER_ID: "fixture-user",
+            CONF_JELLYFIN_CONFIG_ENTRY_ID: jellyfin_entry.entry_id,
             CONF_REF_SECRET: SECRET,
         },
     )

@@ -1,6 +1,7 @@
 """Automatic frontend bundle registration tests."""
 
-from unittest.mock import AsyncMock, patch
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, PropertyMock, patch
 
 from custom_components.octopus_media.const import FRONTEND_URL_PATH
 from custom_components.octopus_media.frontend import async_register_frontend
@@ -11,8 +12,9 @@ from homeassistant.core import HomeAssistant
 async def test_registers_static_bundle_and_extra_module(hass: HomeAssistant) -> None:
     """The bundle is served and loaded by the HA frontend automatically."""
     register_static_paths = AsyncMock()
+    http = SimpleNamespace(async_register_static_paths=register_static_paths)
     with (
-        patch.object(hass.http, "async_register_static_paths", register_static_paths),
+        patch.object(HomeAssistant, "http", new_callable=PropertyMock, return_value=http),
         patch("custom_components.octopus_media.frontend.add_extra_js_url") as add_extra_js_url,
     ):
         await async_register_frontend(hass)
@@ -28,9 +30,12 @@ async def test_registers_static_bundle_and_extra_module(hass: HomeAssistant) -> 
 async def test_extra_module_url_remains_unique_across_repeated_setup(hass: HomeAssistant) -> None:
     """Home Assistant stores extra module URLs in a set across setup reloads."""
     module_urls: set[str] = set()
+    register_static_paths = AsyncMock()
+    http = SimpleNamespace(async_register_static_paths=register_static_paths)
     hass.data.update({DATA_EXTRA_MODULE_URL: module_urls})
-    with patch.object(hass.http, "async_register_static_paths", AsyncMock()):
+    with patch.object(HomeAssistant, "http", new_callable=PropertyMock, return_value=http):
         await async_register_frontend(hass)
         await async_register_frontend(hass)
 
+    assert register_static_paths.await_count == 2
     assert module_urls == {FRONTEND_URL_PATH}
